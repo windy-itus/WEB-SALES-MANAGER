@@ -1,11 +1,14 @@
 var express = require('express');
 var router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://bibinbodongti:newwind@itus@cluster0-wm9nk.mongodb.net/test?retryWrites=true&w=majority&socketTimeoutMS=90000";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const uri = "mongodb+srv://bibinbodongti:newwind@itus@cluster0-wm9nk.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  autoReconnect: true
+});
 
 router.get('/index.html', function (req, res, next) {
-  var resultArray = [];
   client.connect(err => {
     var collection = client.db("ManagerStore").collection("Product");
     // perform actions on the collection object
@@ -19,13 +22,10 @@ router.get('/index.html', function (req, res, next) {
 router.post('/index.html', function (req, res) {
   var selectedOpt = req.body.Category;
   var cateId = parseToInt(selectedOpt);
-  console.log(cateId);
   var query = { id_category: cateId };
-  console.log('connecting');
   client.connect(err => {
     var collection = client.db("ManagerStore").collection("Product");
     // perform actions on the collection object
-    console.log('start searching');
     if (cateId == 0) {
       collection.find({}).toArray().then(docs => {
         res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
