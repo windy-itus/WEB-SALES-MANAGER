@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://bibinbodongti:newwind@itus@cluster0-wm9nk.mongodb.net/test?retryWrites=true&w=majority";
+const uri = "mongodb+srv://bibinbodongti:newwind@itus@cluster0-wm9nk.mongodb.net/test?retryWrites=true&w=majority&socketTimeoutMS=90000";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 router.get('/index.html', function (req, res, next) {
@@ -16,16 +16,25 @@ router.get('/index.html', function (req, res, next) {
   client.close();
 });
 
-router.post('/filter', function (req, res) {
+router.post('/index.html', function (req, res) {
   var selectedOpt = req.body.Category;
   var cateId = parseToInt(selectedOpt);
+  console.log(cateId);
   var query = { id_category: cateId };
+  console.log('connecting');
   client.connect(err => {
     var collection = client.db("ManagerStore").collection("Product");
     // perform actions on the collection object
-    collection.find(query).toArray().then(docs => {
-      res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
-    });
+    console.log('start searching');
+    if (cateId == 0) {
+      collection.find({}).toArray().then(docs => {
+        res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
+      });
+    } else {
+      collection.find(query).toArray().then(docs => {
+        res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
+      });
+    }
   });
   client.close();
 });
