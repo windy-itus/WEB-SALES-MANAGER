@@ -1,57 +1,67 @@
 var express = require('express');
 var router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://bibinbodongti:newwind@itus@cluster0-wm9nk.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  autoReconnect: true
-});
-
+const uri = "mongodb+srv://bibinbodongti:newwind@itus@cluster0-wm9nk.mongodb.net/test?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true&autoReconnect=true";
 
 
 router.get('/product', function (req, res, next) {
-  client.connect(err => {
-    var collection = client.db("ManagerStore").collection("Product");
-    // perform actions on the collection object
-    collection.find({}).toArray().then(docs => {
-      res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
+  MongoClient.connect(uri, function (err, client) {
+    if (err) throw err;// throw if error
+    // Connect to DB 'ManagerStore'
+    var dbo = client.db("ManagerStore");
+    // Get data from document 'Product'
+    dbo.collection("Product").find({}).toArray(function (err, doc) {
+      if (err) throw err;// throw if error
+      // Render product.hbs with product data
+      res.render('product', { title: 'Trang chủ', data: doc });
+      client.close();// close connection
     });
   });
-  client.close();
 });
 
 router.post('/product', async function (req, res) {
   var selectedOpt = req.body.Category;
   var cateId = await parseToInt(selectedOpt);
   var query = { id_category: cateId };
-  client.connect(err => {
-    var collection = client.db("ManagerStore").collection("Product");
-    // perform actions on the collection object
+  MongoClient.connect(uri, function (err, client) {
+    if (err) throw err;// throw if error
+    // Connect to DB 'ManagerStore'
+    var dbo = client.db("ManagerStore");
+    // select 'All' option
     if (cateId == 0) {
-      collection.find({}).toArray().then(docs => {
-        res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
+      dbo.collection("Product").find({}).toArray(function (err, doc) {
+        if (err) throw err;// throw if error
+        // Render viewlistproducts.hbs with product data
+        res.render('viewlistproducts', { title: 'Trang chủ', data: doc });
+        client.close();// close connection
       });
-    } else {
-      collection.find(query).toArray().then(docs => {
-        res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
+    } else {  // other option
+      dbo.collection("Product").find(query).toArray(function (err, doc) {
+        if (err) throw err;// throw if error
+        // Render viewlistproducts.hbs with product data
+        res.render('viewlistproducts', { title: 'Trang chủ', data: doc });
+        client.close();// close connection
       });
     }
   });
-  client.close();
 });
 router.get('/product/:id', async function (req, res) {
   var id = req.params.id;
   var idproduct = await parseToInt(id);
   var query = { _id: idproduct };
-  client.connect(err => {
-    var collection = client.db("ManagerStore").collection("Product");
-    // perform actions on the collection object
-    collection.find(query).toArray().then(docs => {
-      res.render('product', { title: 'Trang chủ', data: docs });
+  
+  MongoClient.connect(uri, function (err, client) {
+    if (err) throw err;// throw if error
+    // Connect to DB 'ManagerStore'
+    var dbo = client.db("ManagerStore");
+    // Get data from document 'Product'
+    dbo.collection("Product").find(query).toArray(function (err, doc) {
+      if (err) throw err;// throw if error
+      // Render product.hbs with product data
+      res.render('product', { title: 'Trang chủ', data: doc });
+      client.close();// close connection
     });
   });
-  client.close();
 });
 
 function parseToInt(x) {
