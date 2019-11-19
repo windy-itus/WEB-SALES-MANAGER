@@ -8,7 +8,9 @@ const client = new MongoClient(uri, {
   autoReconnect: true
 });
 
-router.get('/index.html', function (req, res, next) {
+
+
+router.get('/product', function (req, res, next) {
   client.connect(err => {
     var collection = client.db("ManagerStore").collection("Product");
     // perform actions on the collection object
@@ -19,9 +21,9 @@ router.get('/index.html', function (req, res, next) {
   client.close();
 });
 
-router.post('/index.html', function (req, res) {
+router.post('/product', async function (req, res) {
   var selectedOpt = req.body.Category;
-  var cateId = parseToInt(selectedOpt);
+  var cateId = await parseToInt(selectedOpt);
   var query = { id_category: cateId };
   client.connect(err => {
     var collection = client.db("ManagerStore").collection("Product");
@@ -38,6 +40,19 @@ router.post('/index.html', function (req, res) {
   });
   client.close();
 });
+router.get('/product/:id', async function (req, res) {
+  var id=req.params.id;
+  var idproduct = await parseToInt(id);
+  var query = { _id: idproduct };
+  client.connect(err => {
+    var collection = client.db("ManagerStore").collection("Product");
+    // perform actions on the collection object
+      collection.find(query).toArray().then(docs => {
+        res.render('product', { title: 'Trang chủ', data: docs });
+      });
+  });
+  client.close();
+});
 
 function parseToInt(x) {
   const parsed = parseInt(x, 32);
@@ -48,8 +63,34 @@ function parseToInt(x) {
 }
 
 /* GET home page. */
-router.get('/home.html', function (req, res, next) {
-  res.render('index', { title: 'Trang Chủ' });
+router.get('/', function (req, res, next) {
+  client.connect(err => {
+    var collection = client.db("ManagerStore").collection("Product");
+    // perform actions on the collection object
+    collection.find({}).toArray().then(docs => {
+      res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
+    });
+  });
+  client.close();
+});
+router.post('/', async function (req, res) {
+  var selectedOpt = req.body.Category;
+  var cateId = await parseToInt(selectedOpt);
+  var query = { id_category: cateId };
+  client.connect(err => {
+    var collection = client.db("ManagerStore").collection("Product");
+    // perform actions on the collection object
+    if (cateId == 0) {
+      collection.find({}).toArray().then(docs => {
+        res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
+      });
+    } else {
+      collection.find(query).toArray().then(docs => {
+        res.render('viewlistproducts', { title: 'Trang chủ', data: docs });
+      });
+    }
+  });
+  client.close();
 });
 router.get('/about.html', function (req, res, next) {
   res.render('about', { title: 'Về Chúng Tôi' });
@@ -65,9 +106,6 @@ router.get('/preview.html', function (req, res, next) {
 });
 router.get('/preview-2.html', function (req, res, next) {
   res.render('preview2', { title: 'Chi tiết sản phẩm' });
-});
-router.get('/preview-3.html', function (req, res, next) {
-  res.render('preview3', { title: 'Chi tiết sản phẩm' });
 });
 router.get('/preview-4.html', function (req, res, next) {
   res.render('preview4', { title: 'Chi tiết sản phẩm' });
@@ -101,9 +139,6 @@ router.get('/productspurchased.html', function (req, res, next) {
 });
 router.get('/informationaccount.html', function (req, res, next) {
   res.render('informationaccount', { title: 'Thông tin giao hàng' });
-});
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Trang chủ' });
 });
 router.get('/typeproducts.html', function (req, res, next) {
   res.render('typeproducts', { title: 'Các loại sản phẩm' });

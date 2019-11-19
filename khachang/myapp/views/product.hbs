@@ -35,16 +35,19 @@
     		</div>
     		<div class="clear"></div>
     	</div>
+
     	<div class="section group">
+				{{#if data}}
+			{{#each data}}
 				<div class="cont-desc span_1_of_2">				
 					<div class="grid images_3_of_2">
-						<img src="images/preview-img.jpg" alt="" />
+						<img src="{{this.image_link}}" alt="Hình ảnh đang load" />
 					</div>
 				<div class="desc span_3_of_2">
-					<h2>Tivi</h2>
-					<p>Đây là 1 sản phẩm vô cùng hiện đại</p>					
+					<h2>{{this.name}}</h2>
+					<p>{{this.description}}</p>					
 					<div class="price">
-						<p>Giá: <span>20 000 000đ</span></p>
+						<p>Giá: <span>{{this.price}}</span></p>
 					</div>
 					<div class="available">
 						<p>Tùy chọn có sẵn :</p>
@@ -73,15 +76,15 @@
 					<div class="share">
 						<p>Chia sẻ sản phẩm :</p>
 						<ul>
-					    	<li><a href="#"><img src="images/youtube.png" alt=""></a></li>
-					    	<li><a href="#"><img src="images/facebook.png" alt=""></a></li>
-					    	<li><a href="#"><img src="images/twitter.png" alt=""></a></li>
-					    	<li><a href="#"><img src="images/linkedin.png" alt=""></a></li>
+					    	<li><a href="#"><img src="../images/youtube.png" alt=""></a></li>
+					    	<li><a href="#"><img src="../images/facebook.png" alt=""></a></li>
+					    	<li><a href="#"><img src="../images/twitter.png" alt=""></a></li>
+					    	<li><a href="#"><img src="../images/linkedin.png" alt=""></a></li>
 			    		</ul>
 					</div>
 				<div class="add-cart">
 					<div class="rating">
-						<p>Xếp hạng:<img src="images/rating.png"><span>[3 of 5 Sao]</span></p>
+						<p>Xếp hạng:<img src="../images/rating.png"><span>[3 of 5 Sao]</span></p>
 					</div>
 					<div class="button"><span><a href="#">Thêm vào giỏ hàng</a></span></div>
 					<div class="clear"></div>
@@ -89,8 +92,8 @@
 			</div>
 			<div class="product-desc">
 			<h2>Chi tiết sản phẩm</h2>
-			<p>Thông tin chi tiết 1</p>
-	        <p>Thông tin chi tiết 2</p>
+			<p>{{this.description}}</p>
+	        <p> {{this.description}}</p>
 	    </div>
 	    <div class="product-tags">
 			<h2>Thẻ sản phẩm</h2>
@@ -101,22 +104,24 @@
 			<div class="button"><span><a href="#">Thêm thẻ</a></span></div>
 	    </div>				
 	</div>
+		 	{{/each}}
+			{{/if}}
+
 				<div class="rightsidebar span_3_of_1">
 					<h2>Danh mục</h2>
 					<ul>
 				      <li><a href="#">Điện thoại</a></li>
 				      <li><a href="#">Desktop</a></li>
 				      <li><a href="#">Laptop</a></li>
-				      <li><a href="#">Tủ lạnh</a></li>
-				      <li><a href="#">Máy giặt</a></li>
-				       <li><a href="#">Máy lạnh</a></li>
-				       <li><a href="#">Đồng hồ</a></li>
-				       <li><a href="#">Két sắt</a></li>
-				       <li><a href="#">Máy ảnh</a></li>
-				       <li><a href="#">Camera</a></li>
-				       <li><a href="#">Máy xay sinh tố</a></li>
-					   <li><a href="#">Bàn ủi</a></li>
-				       <li><a href="#">Other</a></li>
+				      <li><a href="#">Accessories</a></li>
+				      <li><a href="#">Phần mềm</a></li>
+				       <li><a href="#">Đồ thể thao</a></li>
+				       <li><a href="#">Đồ dùng gia đình</a></li>
+				       <li><a href="#">Sim,card</a></li>
+				       <li><a href="#">Quần áo</a></li>
+				       <li><a href="#">Đồ chơi trẻ em</a></li>
+				       <li><a href="#">Thiết bị văn phòng</a></li>
+				       <li><a href="#">Vệ sinh nhà cửa</a></li>
     				</ul>
     				<div class="subscribe">
     					<h2>Bản tin đăng kí</h2>
@@ -163,5 +168,6 @@
       				 </div>
  				</div>
  		</div>
+
  	</div>
 	</div>
