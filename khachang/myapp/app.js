@@ -1,10 +1,10 @@
-var dotenv = require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var bodyParser = require('body-parser');//database
+var bodyParser = require('body-parser');//databasevar dotenv = require('dotenv').config();
+var createError = require('http-errors');
 
 
 
@@ -44,4 +44,3 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
