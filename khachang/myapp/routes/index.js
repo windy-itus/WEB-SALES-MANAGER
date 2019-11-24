@@ -1,8 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
+<<<<<<< HEAD
 var notes = require('../models/notes');
 const uri = "mongodb+srv://bibinbodongti:newwind@itus@cluster0-wm9nk.mongodb.net/test?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true&autoReconnect=true";
+=======
+const uri = process.env.DATA;
+>>>>>>> 1efe5f611eb9adefc3fc2717a15c6bec49d1af3a
 
 
 router.get('/product', function (req, res, next) {
