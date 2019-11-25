@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-
+const MongoClient = require('mongodb').MongoClient;
 var notes = require('../models/notes');
 const uri = process.env.DATA;
-const MongoClient = require('mongodb').MongoClient;
+
 
 
 

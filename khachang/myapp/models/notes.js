@@ -14,7 +14,7 @@ exports.create =function(){
       client.close();// close connection
     });
   });
-  return notes[0];
+  return notes;
 }
 exports.update =  function(key, title, body) {
     notes[key] = { title: title, body: body };

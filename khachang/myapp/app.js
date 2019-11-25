@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');//databasevar dotenv = require('dotenv').config();
 var createError = require('http-errors');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
 
 
@@ -43,4 +45,4 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+module.exports = app;
