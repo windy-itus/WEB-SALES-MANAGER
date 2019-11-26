@@ -124,55 +124,55 @@ router.post('/', async function (req, res) {
   });
 });
 
-router.get('/about.html', function (req, res, next) {
+router.get('/about', function (req, res, next) {
   res.render('about', { title: 'Về Chúng Tôi' });
 });
-router.get('/login.html', function (req, res, next) {
+router.get('/login', function (req, res, next) {
   res.render('login', { title: 'Đăng nhập' });
 });
-router.get('/contact.html', function (req, res, next) {
+router.get('/contact', function (req, res, next) {
   res.render('contact', { title: 'Liên hệ' });
 });
-router.get('/preview.html', function (req, res, next) {
+router.get('/preview', function (req, res, next) {
   res.render('preview', { title: 'Chi tiết sản phẩm' });
 });
-router.get('/preview-2.html', function (req, res, next) {
+router.get('/preview-2', function (req, res, next) {
   res.render('preview2', { title: 'Chi tiết sản phẩm' });
 });
-router.get('/preview-4.html', function (req, res, next) {
+router.get('/preview-4', function (req, res, next) {
   res.render('preview4', { title: 'Chi tiết sản phẩm' });
 });
-router.get('/preview-5.html', function (req, res, next) {
+router.get('/preview-5', function (req, res, next) {
   res.render('preview5', { title: 'Chi tiết sản phẩm' });
 });
-router.get('/preview-6.html', function (req, res, next) {
+router.get('/preview-6', function (req, res, next) {
   res.render('preview6', { title: 'Chi tiết sản phẩm' });
 });
-router.get('/products.html', function (req, res, next) {
+router.get('/products', function (req, res, next) {
   res.render('products', { title: 'Sản phẩm' });
 });
-router.get('/faq.html', function (req, res, next) {
+router.get('/faq', function (req, res, next) {
   res.render('faq', { title: 'Faq' });
 });
-router.get('/forgetpassword.html', function (req, res, next) {
+router.get('/forgetpassword', function (req, res, next) {
   res.render('forgetpassword', { title: 'Quên mật khẩu' });
 });
-router.get('/confirmcode.html', function (req, res, next) {
+router.get('/confirmcode', function (req, res, next) {
   res.render('confirmcode', { title: 'Xác thực tài khoản' });
 });
-router.get('/cart.html', function (req, res, next) {
+router.get('/cart', function (req, res, next) {
   res.render('cart', { title: 'Quản lý giỏ hàng' });
 });
-router.get('/delivery.html', function (req, res, next) {
+router.get('/delivery', function (req, res, next) {
   res.render('delivery', { title: 'Thông tin giao hàng' });
 });
-router.get('/productspurchased.html', function (req, res, next) {
+router.get('/productspurchased', function (req, res, next) {
   res.render('productspurchased', { title: 'Thông tin giao hàng' });
 });
-router.get('/informationaccount.html', function (req, res, next) {
+router.get('/informationaccount', function (req, res, next) {
   res.render('informationaccount', { title: 'Thông tin giao hàng' });
 });
-router.get('/typeproducts.html', function (req, res, next) {
+router.get('/typeproducts', function (req, res, next) {
   res.render('typeproducts', { title: 'Các loại sản phẩm' });
 });
 
