@@ -11,7 +11,7 @@
     	<div class="header">
 		<div class="header_top">
 			<div class="logo">
-				<a href="index.html"><img src="images/logo.png" alt="" /></a>
+				<a href="index"><img src="images/logo.png" alt="" /></a>
 			</div>
 			  <div class="header_top_right">
 			    <div class="search_box">
@@ -21,7 +21,7 @@
 			    </div>
 			    <div class="shopping_cart">
 					<div class="cart">
-						<a href="cart.html" title="View my shopping cart" rel="nofollow">
+						<a href="cart" title="View my shopping cart" rel="nofollow">
 							<strong class="opencart"> </strong>
 								<span class="cart_title">Giỏ hàng</span>
 									<span class="no_product">(Trống)</span>
@@ -67,25 +67,19 @@
 			DropDown.prototype = {
 				initEvents : function() {
 					var obj = this;
-
 					obj.dd.on('click', function(event){
 						$(this).toggleClass('active');
 						event.stopPropagation();
 					});	
 				}
 			}
-
 			$(function() {
-
 				var dd = new DropDown( $('#language') );
-
 				$(document).click(function() {
 					// all dropdowns
 					$('.wrapper-dropdown').removeClass('active');
 				});
-
 			});
-
 		</script>
 		 </div>
 			<div class="currency">
@@ -104,29 +98,23 @@
 			DropDown.prototype = {
 				initEvents : function() {
 					var obj = this;
-
 					obj.dd.on('click', function(event){
 						$(this).toggleClass('active');
 						event.stopPropagation();
 					});	
 				}
 			}
-
 			$(function() {
-
 				var dd = new DropDown( $('#currency') );
-
 				$(document).click(function() {
 					// all dropdowns
 					$('.wrapper-dropdown').removeClass('active');
 				});
-
 			});
-
 		</script>
    </div>
 		  <div class="login">
-		   	   <span><a href="login.html"><img src="images/login.png" alt="" title="Đăng nhập"/></a></span>
+		   	   <span><a href="login"><img src="images/login.png" alt="" title="Đăng nhập"/></a></span>
 		   </div>
 		 <div class="clear"></div>
 	   </div>
@@ -136,44 +124,44 @@
 		<a id="touch-menu" class="mobile-menu" href="#">Menu</a>
 		<nav>
 		<ul class="menu list-unstyled">
-			<li><a href="home.html">TRANG CHỦ</a></li>
-			<li class="activate"><a href="typeproducts.html">CÁC LOẠI SẢN PHẨM</a>
+			<li><a href="home">TRANG CHỦ</a></li>
+			<li class="activate"><a href="typeproducts">CÁC LOẠI SẢN PHẨM</a>
 				<ul class="sub-menu list-unstyled">
 				 <div class="nag-mother-list">
 				   <div class="navg-drop-main">
 					<div class="nav-drop"> 
-						<li><a href="products.html">Điện thoại</a></li>
-						<li><a href="products.html">Desktop</a></li>
-						<li><a href="products.html">Laptop</a>
+						<li><a href="products">Điện thoại</a></li>
+						<li><a href="products">Desktop</a></li>
+						<li><a href="products">Laptop</a>
 						</li>
 					</div>
 					<div class="nav-drop"> 
-						<li><a href="products.html">Tủ lạnh</a></li>
-						<li><a href="products.html">Máy giặt</a></li>
-						<li><a href="products.html">Máy lạnh</a>
+						<li><a href="products">Tủ lạnh</a></li>
+						<li><a href="products">Máy giặt</a></li>
+						<li><a href="products">Máy lạnh</a>
 								</li>
 					</div>
 					<div class="nav-drop"> 
-						<li><a href="products.html">Đồng hồ</a></li>
-						<li><a href="products.html">Két sắt</a></li>
-						<li><a href="products.html">Máy ảnh</a></li>
+						<li><a href="products">Đồng hồ</a></li>
+						<li><a href="products">Két sắt</a></li>
+						<li><a href="products">Máy ảnh</a></li>
 					</div>
 					<div class="nav-drop"> 
-						<li><a href="products.html">Máy xay sinh tố</a></li>
-						<li><a href="products.html">Bàn ủi</a></li>
-						<li><a href="products.html">Camera</a></li>
+						<li><a href="products">Máy xay sinh tố</a></li>
+						<li><a href="products">Bàn ủi</a></li>
+						<li><a href="products">Camera</a></li>
 					</div>
 					<div class="clear"> </div>
 				</div>
 				</div>
 			  </ul>
 			</li>
-			<li><a href="about.html">Về chúng tôi</a></li>
-			<li><a href="delivery.html">Giao hàng</a></li>
-			<li><a href="faq.html">Câu hỏi</a></li>
-			<li><a href="contact.html">Liên hệ</a></li>
-			<li><a href="productspurchased.html">Sản phẩm đã mua</a></li>
-			<li><a href="informationaccount.html">Tài khoản</a></li>
+			<li><a href="about">Về chúng tôi</a></li>
+			<li><a href="delivery">Giao hàng</a></li>
+			<li><a href="faq">Câu hỏi</a></li>
+			<li><a href="contact">Liên hệ</a></li>
+			<li><a href="productspurchased">Sản phẩm đã mua</a></li>
+			<li><a href="informationaccount">Tài khoản</a></li>
 			<div class="clear"> </div>
 		</ul>
 		</nav> 
@@ -197,7 +185,7 @@
 				<div class="col_1_of_4 span_1_of_4">
 					<h4>Tại sao mua hàng của chúng tôi</h4>
 						<ul>
-						<li><a href="about.html">Về chúng tôi</a></li>
+						<li><a href="about">Về chúng tôi</a></li>
 						<li><a href="#">Dịch vụ khách hàng</a></li>
 						<li><a href="#">Chính sách bảo mật</a></li>
 						<li><a href="#"><span>Sơ đồ trang web</span></a></li>
@@ -207,11 +195,11 @@
 				<div class="col_1_of_4 span_1_of_4">
 					<h4>Tài khoản của tôi</h4>
 						<ul>
-							<li><a href="login.html">Đăng nhập</a></li>
-							<li><a href="cart.html">Xem giỏ hàng</a></li>
+							<li><a href="login">Đăng nhập</a></li>
+							<li><a href="cart">Xem giỏ hàng</a></li>
 							<li><a href="#">Sản phẩm yêu thích</a></li>
 							<li><a href="#">Theo dõi đơn hàng</a></li>
-							<li><a href="faq.html">Giúp đỡ</a></li>
+							<li><a href="faq">Giúp đỡ</a></li>
 						</ul>
 				</div>
 				<div class="col_1_of_4 span_1_of_4">
