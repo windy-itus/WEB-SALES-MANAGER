@@ -1,3 +1,4 @@
+var dotenv = require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -7,6 +8,7 @@ var bodyParser = require('body-parser');//databasevar dotenv = require('dotenv')
 var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 
 
 
