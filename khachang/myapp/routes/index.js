@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 var notes = require('../models/notes');
-const uri = process.env.DATA;
+const uri = "mongodb+srv://bibinbodongti:newwind@itus@cluster0-wm9nk.mongodb.net/test?retryWrites=true&w=majority&useNewUrlParser=true&useUnifiedTopology=true&autoReconnect=true";
 
 
 
@@ -77,21 +77,19 @@ function parseToInt(x) {
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  var doc=notes.create;
-  res.render('viewlistproducts',{title:'Test', data:doc});
+  MongoClient.connect(uri, function (err, client) {
+    if (err) throw err;// throw if error
+    // Connect to DB 'ManagerStore'
+    var dbo = client.db("ManagerStore");
+    // Get data from document 'Product'
+    dbo.collection("Product").find({}).toArray(function (err, doc) {
+      if (err) throw err;// throw if error
+      // Render viewlistproducts.hbs with product data
+      res.render('viewlistproducts', { title: 'Trang chủ', data: doc });
+      client.close();// close connection
+    });
+  });
 });
-  // MongoClient.connect(uri, function (err, client) {
-  //   if (err) throw err;// throw if error
-  //   // Connect to DB 'ManagerStore'
-  //   var dbo = client.db("ManagerStore");
-  //   // Get data from document 'Product'
-  //   dbo.collection("Product").find({}).toArray(function (err, doc) {
-  //     if (err) throw err;// throw if error
-  //     // Render viewlistproducts.hbs with product data
-  //     res.render('viewlistproducts', { title: 'Trang chủ', data: doc });
-  //     client.close();// close connection
-  //   });
-  // });
 
 /* POST filter */
 router.post('/', async function (req, res) {
