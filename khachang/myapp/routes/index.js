@@ -78,8 +78,8 @@ function parseToInt(x) {
 /* GET home page. */
 router.get('/', function (req, res, next) {
   var doc=notes.create;
-res.render('viewlistproducts',{title:'Tets', data:doc});
-
+  res.render('viewlistproducts',{title:'Test', data:doc});
+});
   // MongoClient.connect(uri, function (err, client) {
   //   if (err) throw err;// throw if error
   //   // Connect to DB 'ManagerStore'
@@ -92,7 +92,7 @@ res.render('viewlistproducts',{title:'Tets', data:doc});
   //     client.close();// close connection
   //   });
   // });
-});
+
 /* POST filter */
 router.post('/', async function (req, res) {
   // get selected category

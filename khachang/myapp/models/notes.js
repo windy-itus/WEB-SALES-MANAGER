@@ -1,6 +1,7 @@
 var notes = [];
-const uri = process.env.DATA;
 const MongoClient = require('mongodb').MongoClient;
+const uri = process.env.DATA;
+
 exports.create =function(){
     MongoClient.connect(uri, function (err, client) {
     if (err) throw err;// throw if error
