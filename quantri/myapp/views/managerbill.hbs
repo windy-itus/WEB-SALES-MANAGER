@@ -1,0 +1,158 @@
+<div class="main">
+    <div class="content container-fluid">
+        <div class="heading">
+    		<h3>Quản lý đơn hàng</h3>
+            <br>
+    	</div>
+        <div class="sort">
+    		<p>Sắp xếp theo:
+    			<select>
+    				<option>Ngày gần nhất</option>
+    				<option>Đã giao</option>
+    				<option>Chưa giao</option>  
+                    <option>Đang giao</option> 				   				
+    			</select>
+    		</p>
+    		</div>
+    		<div class="show">
+    		<p>Số lượng hiển thị:
+    			<select>
+    				<option>5</option>
+    				<option>10</option>
+    				<option>15</option>
+    				<option>20</option>
+    				<option>25</option>
+    				<option>Tất cả</option>  				   				
+    			</select>
+    		</p>
+    		</div>
+    		<div class="page-no">
+    			<p>Trang:<ul>
+    				<li><a href="#">1</a></li>
+    				<li class="active"><a href="#">2</a></li>
+    				<li><a href="#">3</a></li>
+    				<li>[<a href="#"> Tiếp theo>>></a >]</li>
+    				</ul></p>
+    		</div>
+    		<div class="clear"></div>
+      <div class=" content_top table-responsive col-md-12">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Người dùng</th>
+              <th>Người Nhận</th>
+              <th>Ngày đặt hàng</th>
+              <th>Địa chi</th>
+              <th>Số điện thoại</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>DH001</td>
+              <td>dangkhoa</td>
+              <td>Đăng Khoa</td>
+              <td>15/11/2019</td>
+              <td>TP HCM</td>
+              <td>0354629479</td>
+              <td>
+                  	<div class="radio-inline">
+	                    <label><input type="radio" name="trangthai" id="" checked>Đã giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai" id="">Chưa giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai" id="">Đang giao</label>
+	                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>DH002</td>
+              <td>nhukha02</td>
+              <td>Trần Nhựt Kha</td>
+              <td>15/1/2019</td>
+              <td>TP HCM</td>
+              <td>0354629479</td>
+              <td>
+                  	<div class="radio-inline">
+	                    <label><input type="radio" name="trangthai1" id="" checked>Đã giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai1" id="">Chưa giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai1" id="">Đang giao</label>
+	                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>DH003</td>
+              <td>xuanhien96</td>
+              <td>Võ Xuân Hiển</td>
+              <td>22/8/2019</td>
+              <td>TP HCM</td>
+              <td>0369584267</td>
+              <td>
+                  	<div class="radio-inline">
+	                    <label><input type="radio" name="trangthai2" id="">Đã giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai2" id="">Chưa giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai2" id="" checked>Đang giao</label>
+	                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>DH004</td>
+              <td>chidungface</td>
+              <td>Chí Dũng</td>
+              <td>11/6/2019</td>
+              <td>TP HCM</td>
+              <td>0988264587</td>
+              <td>
+                  	<div class="radio-inline">
+	                    <label><input type="radio" name="trangthai3" id="" checked>Đã giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai3" id="">Chưa giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai3" id="">Đang giao</label>
+	                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>DH005</td>
+              <td>nguyenlonghai</td>
+              <td>LongHai</td>
+              <td>15/11/2019</td>
+              <td>TP HCM</td>
+              <td>0988246065</td>
+              <td>
+                  	<div class="radio-inline">
+	                    <label><input type="radio" name="trangthai4" id="">Đã giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai4" id="" checked>Chưa giao</label>
+	                </div>
+                    <div class="radio-inline">
+	                    <label><input type="radio" name="trangthai4" id="">Đang giao</label>
+	                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="buttons col-md-3"><div><button class="grey">THÊM HÓA ĐƠN</button></div></div>
+            <div class="buttons col-md-3"><div><button class="grey">XÓA HÓA ĐƠN</button></div></div>
+            <div class="col-md-3"></div>
+          </div>
+      </div>
+
+    </div>
+</div>

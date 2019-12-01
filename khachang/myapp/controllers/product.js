@@ -1,24 +1,33 @@
-const db = require('../models/product');
-const dbd=require('../models/detailproduct')
+const db = require('../models/product').getDBProduct();
+
 /**
  * Class Articles Controller
  */
 class Product {
   ShowList(req, res) {
-      res.render('viewlistproducts', { data:db.getFullProduct})
+      res.render('viewlistproducts', { data:db});
   }
   async ShowIf(req,res){
-    var selectedOpt = req.body.Category;
+    var dbif=[];
+    var selectedOpt = req.body.Category;  
     var cateId = await parseToInt(selectedOpt);
-    var query = { id_category: cateId };
-    res.render('viewlistproducts',{data:db.getProductByIf(query)});
+    if(cateId==0) res.render('viewlistproducts',{data:db});
+    else{
+      db.forEach(function(doc){
+        if(doc.id_category==cateId) dbif.push(doc);
+      });
+      res.render('viewlistproducts',{data:dbif});
+    }
+    
   }
   async ShowDetail(req,res){
+    var dbdetail=[];
     var id = req.params.id;
     var idproduct = await parseToInt(id);
-    var query = { _id: idproduct };
-    res.render('product',{data:dbd.getDetailProduct(query)});
-
+    db.forEach(function(doc){
+      if(doc._id==idproduct) dbdetail.push(doc);
+    });
+    res.render('product',{data:dbdetail});
   }
 }
 function parseToInt(x) {
