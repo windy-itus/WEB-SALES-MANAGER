@@ -1,4 +1,5 @@
 var db=require('../models/account').register();
+var account=require('../models/account');
 class Account {
     Register(req, res) {
         const username = req.body.username;
@@ -35,6 +36,7 @@ class Account {
         });
         }else{
           res.render('login',{success});
+          account.addAccount(name,username,password,address,email,phone);
         }
         
     }

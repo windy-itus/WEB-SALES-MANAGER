@@ -1,82 +1,10 @@
 var express = require('express');
 var router = express.Router();
-const MongoClient = require('mongodb').MongoClient;
-const uri = process.env.DATA;
+const Product = require("../controllers/product");
+const controller = new Product();
 
 
-router.get('/product/:id', async function (req, res) {
-  var id = req.params.id;
-  var idproduct = await parseToInt(id);
-  var query = { _id: idproduct };
-  
-  MongoClient.connect(uri, function (err, client) {
-    if (err) throw err;// throw if error
-    // Connect to DB 'ManagerStore'
-    var dbo = client.db("ManagerStore");
-    // Get data from document 'Product'
-    dbo.collection("Product").find(query).toArray(function (err, doc) {
-      if (err) throw err;// throw if error
-      // Render product.hbs with product data
-      res.render('product', { title: 'Trang chủ', data: doc });
-      client.close();// close connection
-    });
-  });
-});
-
-function parseToInt(x) {
-  const parsed = parseInt(x, 32);
-  if (isNaN(parsed)) {
-    return 0;
-  }
-  return parsed;
-}
-
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  MongoClient.connect(uri, function (err, client) {
-    if (err) throw err;// throw if error
-    // Connect to DB 'ManagerStore'
-    var dbo = client.db("ManagerStore");
-    // Get data from document 'Product'
-    dbo.collection("Product").find({}).toArray(function (err, doc) {
-      if (err) throw err;// throw if error
-      // Render viewlistproducts.hbs with product data
-      res.render('viewlistproducts', { title: 'Trang chủ', data: doc });
-      client.close();// close connection
-    });
-  });
-});
-
-/* POST filter */
-router.post('/', async function (req, res) {
-  // get selected category
-  var selectedOpt = req.body.Category;
-  var cateId = await parseToInt(selectedOpt);
-  // create condition query
-  var query = { id_category: cateId };
-
-  MongoClient.connect(uri, function (err, client) {
-    if (err) throw err;// throw if error
-    // Connect to DB 'ManagerStore'
-    var dbo = client.db("ManagerStore");
-    // select 'All' option
-    if (cateId == 0) {
-      dbo.collection("Product").find({}).toArray(function (err, doc) {
-        if (err) throw err;// throw if error
-        // Render viewlistproducts.hbs with product data
-        res.render('viewlistproducts', { title: 'Trang chủ', data: doc });
-        client.close();// close connection
-      });
-    } else {  // other option
-      dbo.collection("Product").find(query).toArray(function (err, doc) {
-        if (err) throw err;// throw if error
-        // Render viewlistproducts.hbs with product data
-        res.render('viewlistproducts', { title: 'Trang chủ', data: doc });
-        client.close();// close connection
-      });
-    }
-  });
-});
+router.get('/', (req, res) => controller.ShowList(req, res));
 
 router.get('/about', function (req, res, next) {
   res.render('about', { title: 'Về Chúng Tôi' });

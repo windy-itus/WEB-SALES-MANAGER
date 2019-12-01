@@ -4,8 +4,10 @@ const db = require('../models/product').getDBProduct();
  * Class Articles Controller
  */
 class Product {
-  ShowList(req, res) {
-      res.render('viewlistproducts', { data:db});
+   ShowList(req, res) {
+    var fullproduct=db;
+    //console.log(fullproduct);
+      res.render('viewlistproducts', { data:fullproduct});
   }
   async ShowIf(req,res){
     var dbif=[];

@@ -7,9 +7,7 @@ const controller = new Account();
 router.get('/login', function (req, res, next) {
   res.render('login', { title: 'Đăng nhập/Đăng ký' });
 });
-//Handle register
 router.post('/login/register-form', async function (req, res) {
   controller.Register(req,res);
-  // get selected category
 });
 module.exports = router;

@@ -50,7 +50,7 @@
 			{{#each data}}
 			<div class="grid_1_of_4 images_1_of_4">
 				
-				<a href="/products/{{this._id}}"><img
+				<a href="products/{{this._id}}"><img
 									src="{{this.image_link}}"	
 									alt="" /></a>
 				<div class="discount">
@@ -59,9 +59,9 @@
 				<h2>{{ this.name }} </h2>
 				<p>{{ this.description }}</p>
 				<p><span class="strike">50 000 000</span><span class="price">{{this.price}}</span></p>
-				<div class="button"><span><img src="images/cart.jpg" alt="" /><a href="/products/{{this._id}}"
+				<div class="button"><span><img src="images/cart.jpg" alt="" /><a href="products/{{this._id}}"
 							class="cart-button">Thêm vào giỏ hàng</a></span> </div>
-				<div class="button"><span><a href="/products/{{this._id}}" class="details">Chi tiết</a></span></div>
+				<div class="button"><span><a href="products/{{this._id}}" class="details">Chi tiết</a></span></div>
 			</div>
 			{{/each}}
 			{{/if}}

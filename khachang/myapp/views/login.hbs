@@ -1,65 +1,57 @@
-	
 <div class="main">
-    <div class="content">
-    	 <div class="login_panel">
-        	<h3>Đã có tài khoản</h3>
-        	<p>Đăng nhập bên dưới.</p>
-        	<form action="hello" method="get" id="member">
-                	<input name="Domain" type="text" value="Username" class="field" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Username';}">
-                    <input name="Domain" type="password" value="Password" class="field" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}">
-                 </form>
-                 <p class="note">Nếu bạn quên mật khẩu của mình thì nhấn vào <a href="forgetpassword.html">đây</a></p>
-                    <div class="buttons"><div><button class="grey">Đăng Nhập</button></div></div>
-                    </div>
-    	<div class="register_account">
-    		<h3>Đăng kí tài khoản mới</h3>
+	<div class="content">
+		<div class="login_panel">
+			<h3>Đã có tài khoản</h3>
+			<p>Đăng nhập bên dưới.</p>
+			<form action="hello" method="get" id="member">
+				<input name="Domain" type="text" value="Username" class="field" onfocus="this.value = '';"
+					onblur="if (this.value == '') {this.value = 'Username';}">
+				<input name="Domain" type="password" value="Password" class="field" onfocus="this.value = '';"
+					onblur="if (this.value == '') {this.value = 'Password';}">
+			</form>
+			<p class="note">Nếu bạn quên mật khẩu của mình thì nhấn vào <a href="#">đây</a></p>
+			<div class="buttons">
+				<div><button class="grey">Đăng Nhập</button></div>
+			</div>
+		</div>
+		<div class="register_account">
+			<h3>Đăng kí tài khoản mới</h3>
 			{{#if data}}
 			{{#each data}}
-				<div style="color: red;">{{this.msg}}</div>
+			<div style="color: red;">{{this.msg}}</div>
 			{{/each}}
 			{{/if}}
 			<p>{{success}}</p>
-    		<form method="POST" action="/users/login/register-form">
-		   			 <table>
-		   				<tbody><tr><td>
-							   <div>
-								    <label for="name">Họ và tên</label>
-									<input id="name" name="name" type="text" value="{{name}}">
-							   </div>
-		    				<div>
-								<label for="username">Tài khoản</label>
-								<input id="username" name="username" type="text" value="{{username}}">
-							</div>
-		    			<div>
-							<label for="password">Mật khẩu</label>
-							<input id="password" name="password" type="password" value="{{password}}">
-						</div>
-		    			<div>
-							<label for="repassword">Nhập lại Mật khẩu</label>
-							<input id="repassword" name="repassword" type="password" value="{{repassword}}">
-						</div>
-		    			</td>
-		    			<td><div>
-							<label for="address">Địa chỉ</label>
-							<input id="address" name="address" type="text" value="{{address}}">
-							</div>	        
-		          <div>
-					  <label for="email">Email</label>
-					  <input id="email" name="email" type="email" value="{{email}}">
-					  </div>
-		          <div>
-					  <label for="phone">Số điện thoại</label>
-					  <input id="phone" name="phone" type="number" value="{{phone}}"></div>
-		    	</td>
-		    </tr> 
-		    </tbody>
-			</table> 
-		   	<div class="search"><div><button type="submit" class="grey" >Tạo tài khoản</button></div></div>
-		    <p class="terms">Bấm click 'Tạo tài khoản' nếu bạn đồng ý với điểu khoản và điều kiện <a href="#">Điều khoản &amp; Điều kiện</a>.</p>
-		    <div class="clear"></div>
-		    </form>
-    	</div>  	
-       <div class="clear"></div>
-    </div>
- </div>
+			<form method="POST" action="/users/login/register-form">
+				<div class="row">
+					<div class="form-group col-md-6">
+							<div><label class="control-label" for="name">Họ và tên</label></div>
+							<div><input id="name" name="name" type="text" value="{{name}}"></div>
+							<div><label class="control-label" for="username">Tài khoản</label></div>
+							<div><input id="username" name="username" type="text" value="{{username}}"></div>
+							<div><label class="control-label" for="password">Mật khẩu</label></div>
+							<div><input id="password" name="password" type="password" value="{{password}}"></div>
+							<div><label class="control-label" for="repassword">Nhập lại Mật khẩu</label></div>
+							<div><input id="repassword" name="repassword" type="password" value="{{repassword}}"></div>
+					</div>
+					<div class="form-group col-md-6">
+							<div><label class="control-label" for="address">Địa chỉ</label></div>
+							<div><input id="address" name="address" type="text" value="{{address}}"></div>
+							<div><label class="control-label " for="email">Email</label></div>
+							<div><input id="email" name="email" type="email" value="{{email}}"></div>
+							<div><label class="control-label " for="phone">Số điện thoại</label></div>
+							<div><input id="phone" name="phone" type="number" value="{{phone}}"></div>
+					</div>
+				</div>
+		<div class="search">
+			<div><button type="submit" class="grey">Tạo tài khoản</button></div>
+		</div>
+		<p class="terms">Bấm click 'Tạo tài khoản' nếu bạn đồng ý với điểu khoản và điều kiện <a href="#">Điều
+				khoản &amp; Điều kiện</a>.</p>
+		<div class="clear"></div>
+		</form>
+	</div>
+	<div class="clear"></div>
+</div>
+</div>
 </div>

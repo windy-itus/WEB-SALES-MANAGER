@@ -32,14 +32,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());//database
 
-app.use(session({
-  secret : "secret",
-  saveUninitialized: true,
-  resave: true
-}))
+// app.use(session({
+//   secret : "secret",
+//   saveUninitialized: true,
+//   resave: true
+// }))
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

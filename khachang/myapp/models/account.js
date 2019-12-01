@@ -17,3 +17,22 @@ module.exports.register=function(){
 });
 return user;
 }
+module.exports.addAccount=function(name,username,password,address,email,phone){
+  MongoClient.connect(uri, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("ManagerStore");
+    var myobj = {
+        name: name,
+        username:username,
+        password:password,
+        address:address,
+        email:email,
+        phone:phone
+    };
+    dbo.collection("Account").insertOne(myobj, function (err, res) {
+        if (err) throw err;
+        console.log("1 document inserted");
+        db.close();
+    });
+});
+}
