@@ -5,7 +5,6 @@ const controller = new Product();
 
 
 router.get('/', (req, res) => controller.ShowList(req, res));
-
 router.get('/about', function (req, res, next) {
   res.render('about', { title: 'Về Chúng Tôi' });
 });

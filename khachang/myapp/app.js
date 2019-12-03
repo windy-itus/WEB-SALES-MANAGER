@@ -7,11 +7,10 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');//databasevar 
 var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-// var passport=require('passport');
-// var session = require('express-session');
+var passport=require('passport');
+var session = require('express-session');
 
-
+require('./config/passport')(passport);
 
 
 var indexRouter = require('./routes/index');
@@ -32,14 +31,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());//database
 
-// app.use(session({
-//   secret : "secret",
-//   saveUninitialized: true,
-//   resave: true
-// }))
 
-// app.use(passport.initialize());
-// app.use(passport.session());
+//express session
+app.use(session({
+  secret : "secret",
+  saveUninitialized: true,
+  resave: true
+}));
+//connect flash
+
+//passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
