@@ -31,7 +31,7 @@ router.get('/login', function (req, res, next) {
   res.render('login', { title: 'Đăng nhập'});
 });
 router.get('/logout', function (req, res, next) {
-  var user="";
+  if(req.user != null) req.user=null;
   controllerProduct.ShowList(req, res);
 });
 

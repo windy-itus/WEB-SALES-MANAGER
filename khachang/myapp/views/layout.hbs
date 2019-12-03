@@ -124,11 +124,12 @@
 				</div>
 				<div class="login">
 					{{#if user}}
-						<a href="/logout">
-							<button type="button" class="btn-btn-primary btn-sm">Đăng xuất</button>
-						</a>
+					<a href="/logout">
+						<script> alert("Đăng nhập thành công") </script>
+						<button type="button" class="btn-btn-primary btn-sm">Đăng xuất</button>
+					</a>
 					{{else}}
-						<a href="/login"><button type="button" class="btn-btn-primary btn-sm">Đăng nhập</button></a>
+					<a href="/login"><button type="button" class="btn-btn-primary btn-sm">Đăng nhập</button></a>
 					{{/if}}
 
 				</div>
@@ -242,4 +243,5 @@
 		</div>
 	</div>
 </body>
+
 </html>

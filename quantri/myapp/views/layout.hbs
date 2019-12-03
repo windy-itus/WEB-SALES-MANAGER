@@ -80,9 +80,17 @@
 
 		</script>
 		 </div>
-		  <div class="login">
-		   	   <span><a href="login.html"><img src="images/login.png" alt="" title="Đăng nhập"/></a></span>
-		   </div>
+				<div class="login">
+					{{#if user}}
+					<a href="/logout">
+						<script> alert("Đăng nhập thành công") </script>
+						<button type="button" class="btn-btn-primary btn-sm">Đăng xuất</button>
+					</a>
+					{{else}}
+					<a href="/login"><button type="button" class="btn-btn-primary btn-sm">Đăng nhập</button></a>
+					{{/if}}
+
+				</div>
 		 <div class="clear"></div>
 	   </div>
 	 <div class="clear"></div>
@@ -91,12 +99,12 @@
 		<a id="touch-menu" class="mobile-menu" href="#">Menu</a>
 		<nav>
 		<ul class="menu list-unstyled">
-			<li><a href="home.html">TRANG CHỦ</a></li>
-			<li><a href="managerbill.html">ĐƠN ĐẶT HÀNG</a></li>
-			<li><a href="systemstall.html">HỆ THỐNG GIAN HÀNG</a></li>
-			<li><a href="useraccounts.html">TÀI KHOẢN NGƯỜI DÙNG</a></li>
-			<li><a href="statistical.html">THỐNG KÊ</a></li>
-			<li><a href="informationaccount.html">TÀI KHOẢN</a></li>
+			<li><a href="home">TRANG CHỦ</a></li>
+			<li><a href="#">ĐƠN ĐẶT HÀNG</a></li>
+			<li><a href="#">HỆ THỐNG GIAN HÀNG</a></li>
+			<li><a href="#">TÀI KHOẢN NGƯỜI DÙNG</a></li>
+			<li><a href="#">THỐNG KÊ</a></li>
+			<li><a href="#">TÀI KHOẢN</a></li>
 			<li><a href="https://app-banhangdk.herokuapp.com/">VÀO TRANG BÁN HÀNG</a></li>VÀO TRANG BÁN HÀNG
 			<div class="clear"> </div>
 		</ul>
