@@ -82,39 +82,9 @@
 			});
 		</script>
 		 </div>
-			<div class="currency">
-					<div id="currency" class="wrapper-dropdown" tabindex="1">VNĐ
-						<strong class="opencart"> </strong>
-						<ul class="dropdown">
-							<li><a href="#"><span>$</span>Dollar</a></li>
-							<li><a href="#"><span>VND</span>Đồng</a></li>
-						</ul>
-					</div>
-					 <script type="text/javascript">
-			function DropDown(el) {
-				this.dd = el;
-				this.initEvents();
-			}
-			DropDown.prototype = {
-				initEvents : function() {
-					var obj = this;
-					obj.dd.on('click', function(event){
-						$(this).toggleClass('active');
-						event.stopPropagation();
-					});	
-				}
-			}
-			$(function() {
-				var dd = new DropDown( $('#currency') );
-				$(document).click(function() {
-					// all dropdowns
-					$('.wrapper-dropdown').removeClass('active');
-				});
-			});
-		</script>
-   </div>
+			
 		  <div class="login">
-		   	   <span><a href="login"><img src="images/login.png" alt="" title="Đăng nhập"/></a></span>
+		   	   <a href="/login"><button type="button" class="btn btn-primary btn-sm ml-5">Đăng Nhập</button></a>
 		   </div>
 		 <div class="clear"></div>
 	   </div>
@@ -124,15 +94,15 @@
 		<a id="touch-menu" class="mobile-menu" href="#">Menu</a>
 		<nav>
 		<ul class="menu list-unstyled">
-			<li><a href="home">TRANG CHỦ</a></li>
-			<li class="activate"><a href="typeproducts">CÁC LOẠI SẢN PHẨM</a>
+			<li><a href="/home">TRANG CHỦ</a></li>
+			<li class="activate"><a href="/products">CÁC LOẠI SẢN PHẨM</a>
 				<ul class="sub-menu list-unstyled">
 				 <div class="nag-mother-list">
 				   <div class="navg-drop-main">
 					<div class="nav-drop"> 
-						<li><a href="products">Điện thoại</a></li>
-						<li><a href="products">Desktop</a></li>
-						<li><a href="products">Laptop</a>
+						<li><a href="/products">Điện thoại</a></li>
+						<li><a href="/products">Desktop</a></li>
+						<li><a href="/products">Laptop</a>
 						</li>
 					</div>
 					<div class="nav-drop"> 
@@ -156,12 +126,12 @@
 				</div>
 			  </ul>
 			</li>
-			<li><a href="about">Về chúng tôi</a></li>
-			<li><a href="delivery">Giao hàng</a></li>
-			<li><a href="faq">Câu hỏi</a></li>
-			<li><a href="contact">Liên hệ</a></li>
-			<li><a href="productspurchased">Sản phẩm đã mua</a></li>
-			<li><a href="informationaccount">Tài khoản</a></li>
+			<li><a href="/about">Về chúng tôi</a></li>
+			<li><a href="/delivery">Giao hàng</a></li>
+			<li><a href="/faq">Câu hỏi</a></li>
+			<li><a href="/contact">Liên hệ</a></li>
+			<li><a href="/productspurchased">Sản phẩm đã mua</a></li>
+			<li><a href="/informationaccount">Tài khoản</a></li>
 			<div class="clear"> </div>
 		</ul>
 		</nav> 

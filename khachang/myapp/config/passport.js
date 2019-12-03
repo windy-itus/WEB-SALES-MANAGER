@@ -37,11 +37,15 @@ passport.deserializeUser(function (name, done) {
 module.exports = function (passport) {
     passport.use(new LocalStrategy(
         (username, password, done) => {
+            if(!username||!password) 
+                return done(null, false,{message:'Vui lòng điền đầy đủ thông tin'});
             User.findOne({
                 username:username
             }).then(function (user) {    
-                if(!user) return done(null,false,{message:'Tài khoản chưa được đăng ký'});
-                if(password!=user.password) return done(null, false,{message:'mật khẩu không đúng'});
+                if(!user)
+                    return done(null,false,{message:'Tài khoản chưa được đăng ký'});
+                if(password!=user.password) return done(null, false,{message:'Mật khẩu không đúng'});
+                notice="Đăng nhập thành công";
                 return done(null,user);
             }).catch(function (err) {
                 return done(err);

@@ -6,7 +6,6 @@ const db = require('../models/product').getDBProduct();
 class Product {
    ShowList(req, res) {
     var fullproduct=db;
-    //console.log(fullproduct);
       res.render('viewlistproducts', { data:fullproduct});
   }
   async ShowIf(req,res){
