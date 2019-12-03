@@ -4,20 +4,13 @@ const db = require('../models/product').getDBProduct();
  * Class Articles Controller
  */
 class Product {
-<<<<<<< HEAD
-   ShowList(req, res) {
-    var fullproduct=db;
-      res.render('viewlistproducts', { data:fullproduct});
-=======
   ShowList(req, res) {
     var fullproduct = db;
-    //console.log(fullproduct);
     var user = "";
     if (req.user != undefined && req.user != null) {
       user = req.user._doc.name;
     }
     res.render('viewlistproducts', { data: fullproduct, user: user });
->>>>>>> 0739f1f71c1cd5904d650dfc53b6f3aba404122c
   }
   async ShowIf(req, res) {
     var dbif = [];

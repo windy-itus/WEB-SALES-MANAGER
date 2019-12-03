@@ -47,94 +47,6 @@
 									<span><img src="images/au.png" alt="fr" width="26" height="26"></span><span
 										class="lang">VietNam</span>
 								</a>
-<<<<<<< HEAD
-							 </li>
-								<li>
-									<a href="#" title="Français">
-										<span><img src="images/au.png" alt="fr" width="26" height="26"></span><span class="lang">VietNam</span>
-									</a>
-								</li>
-						<li>
-							<a href="#" title="Español">
-								<span><img src="images/bm.png" alt="es" width="26" height="26"></span><span class="lang">Español</span>
-							</a>
-						</li>
-								<li>
-									<a href="#" title="Deutsch">
-										<span><img src="images/ck.png" alt="de" width="26" height="26"></span><span class="lang">Deutsch</span>
-									</a>
-								</li>
-						<li>
-							<a href="#" title="Russian">
-								<span><img src="images/cu.png" alt="ru" width="26" height="26"></span><span class="lang">Russian</span>
-							</a>
-						</li>					
-				   </ul>
-		     </div>
-		     <script>
-			function DropDown(el) {
-				this.dd = el;
-				this.initEvents();
-			}
-			DropDown.prototype = {
-				initEvents : function() {
-					var obj = this;
-					obj.dd.on('click', function(event){
-						$(this).toggleClass('active');
-						event.stopPropagation();
-					});	
-				}
-			}
-			$(function() {
-				var dd = new DropDown( $('#language') );
-				$(document).click(function() {
-					// all dropdowns
-					$('.wrapper-dropdown').removeClass('active');
-				});
-			});
-		</script>
-		 </div>
-			
-		  <div class="login">
-		   	   <a href="/login"><button type="button" class="btn btn-primary btn-sm ml-5">Đăng Nhập</button></a>
-		   </div>
-		 <div class="clear"></div>
-	   </div>
-	 <div class="clear"></div>
-   </div>
-	<div class="h_menu">
-		<a id="touch-menu" class="mobile-menu" href="#">Menu</a>
-		<nav>
-		<ul class="menu list-unstyled">
-			<li><a href="/home">TRANG CHỦ</a></li>
-			<li class="activate"><a href="/products">CÁC LOẠI SẢN PHẨM</a>
-				<ul class="sub-menu list-unstyled">
-				 <div class="nag-mother-list">
-				   <div class="navg-drop-main">
-					<div class="nav-drop"> 
-						<li><a href="/products">Điện thoại</a></li>
-						<li><a href="/products">Desktop</a></li>
-						<li><a href="/products">Laptop</a>
-						</li>
-					</div>
-					<div class="nav-drop"> 
-						<li><a href="products">Tủ lạnh</a></li>
-						<li><a href="products">Máy giặt</a></li>
-						<li><a href="products">Máy lạnh</a>
-								</li>
-					</div>
-					<div class="nav-drop"> 
-						<li><a href="products">Đồng hồ</a></li>
-						<li><a href="products">Két sắt</a></li>
-						<li><a href="products">Máy ảnh</a></li>
-					</div>
-					<div class="nav-drop"> 
-						<li><a href="products">Máy xay sinh tố</a></li>
-						<li><a href="products">Bàn ủi</a></li>
-						<li><a href="products">Camera</a></li>
-					</div>
-					<div class="clear"> </div>
-=======
 							</li>
 							<li>
 								<a href="#" title="Español">
@@ -209,36 +121,17 @@
 							});
 						});
 					</script>
->>>>>>> 0739f1f71c1cd5904d650dfc53b6f3aba404122c
 				</div>
 				<div class="login">
 					{{#if user}}
-					<span>
-						<a href="/informationaccount"><img src="images/login.png" alt="" title="{{user}}" />
-							{{user}}
+						<a href="/logout">
+							<button type="button" class="btn-btn-primary btn-sm">Đăng xuất</button>
 						</a>
-					</span>
 					{{else}}
-					<span>
-						<a href="/login"><img src="images/login.png" alt="" title="Đăng nhập" /></a>
-					</span>
+						<a href="/login"><button type="button" class="btn-btn-primary btn-sm">Đăng nhập</button></a>
 					{{/if}}
 
 				</div>
-<<<<<<< HEAD
-			  </ul>
-			</li>
-			<li><a href="/about">Về chúng tôi</a></li>
-			<li><a href="/delivery">Giao hàng</a></li>
-			<li><a href="/faq">Câu hỏi</a></li>
-			<li><a href="/contact">Liên hệ</a></li>
-			<li><a href="/productspurchased">Sản phẩm đã mua</a></li>
-			<li><a href="/informationaccount">Tài khoản</a></li>
-			<div class="clear"> </div>
-		</ul>
-		</nav> 
-		<script src="js/menu.js" type="text/javascript"></script>
-=======
 				<div class="clear"></div>
 			</div>
 			<div class="clear"></div>
@@ -247,8 +140,8 @@
 			<a id="touch-menu" class="mobile-menu" href="#">Menu</a>
 			<nav>
 				<ul class="menu list-unstyled">
-					<li><a href="/">TRANG CHỦ</a></li>
-					<li class="activate"><a href="/typeproducts">CÁC LOẠI SẢN PHẨM</a>
+					<li><a href="/home">TRANG CHỦ</a></li>
+					<li class="activate"><a href="/products">CÁC LOẠI SẢN PHẨM</a>
 						<ul class="sub-menu list-unstyled">
 							<div class="nag-mother-list">
 								<div class="navg-drop-main">
@@ -289,7 +182,6 @@
 				</ul>
 			</nav>
 			<script src="js/menu.js" type="text/javascript"></script>
->>>>>>> 0739f1f71c1cd5904d650dfc53b6f3aba404122c
 		</div>
 	</div>
 	{{{body}}}
@@ -350,5 +242,4 @@
 		</div>
 	</div>
 </body>
-
 </html>
