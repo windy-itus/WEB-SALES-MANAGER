@@ -8,8 +8,8 @@ var bodyParser = require('body-parser');//databasevar
 var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var passport=require('passport');
-var session = require('express-session');
+// var passport=require('passport');
+// var session = require('express-session');
 
 
 

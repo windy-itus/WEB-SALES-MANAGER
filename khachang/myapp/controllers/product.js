@@ -24,8 +24,9 @@ class Product {
   }
   async ShowDetail(req,res){
     var dbdetail=[];
-    var id = req.params.id;
-    var idproduct = await parseToInt(id);
+    var idproduct = Number(req.params.id);
+    //var idproduct = await parseToInt(id);
+    //console.log(idproduct);
     db.forEach(function(doc){
       if(doc._id==idproduct) dbdetail.push(doc);
     });
