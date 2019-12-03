@@ -3,7 +3,7 @@
 		<div class="login_panel">
 			<h3>Đã có tài khoản</h3>
 			<p>Đăng nhập bên dưới.</p>
-			<form action="/users/login" method="POST" id="member">
+			<form action="/login" method="POST" id="member">
 				<input name="username" type="text">
 				<input name="password" type="password">
 				<div class="buttons">
@@ -21,7 +21,7 @@
 			{{/each}}
 			{{/if}}
 			<p>{{success}}</p>
-			<form method="POST" action="/users/login/register-form">
+			<form method="POST" action="/login/register-form">
 				<div class="row">
 					<div class="form-group col-md-6">
 						<div><label class="control-label" for="name">Họ và tên</label></div>
