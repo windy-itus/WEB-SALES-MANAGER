@@ -1,7 +1,24 @@
 const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.DATA;
+var mongoose = require('mongoose');
+const bcrypt=require('bcryptjs');
 
-module.exports.register=function(){
+mongoose.connect(uri, {
+  useNewUrlParser: true
+});
+
+var db = mongoose.connection;
+var inforSchema = new mongoose.Schema({
+  username: String,
+  password: String,
+}, {
+  collection: 'Account'
+});
+const User = db.useDb("ManagerStore").model("User", inforSchema);
+module.exports.getAccount=User;
+
+
+module.exports.getListUser=function(){
   var user=[];
     MongoClient.connect(uri, function (err, client) {
     if (err) throw err;// throw if error
@@ -17,6 +34,7 @@ module.exports.register=function(){
 });
 return user;
 }
+
 module.exports.addAccount=function(name,username,password,address,email,phone){
   MongoClient.connect(uri, function (err, db) {
     if (err) throw err;
@@ -35,4 +53,14 @@ module.exports.addAccount=function(name,username,password,address,email,phone){
         db.close();
     });
 });
+}
+
+module.exports.hashPassword = async (password) => {
+    try {
+        const salt = await bcrypt.genSalt(10);
+        var result =await bcrypt.hash(password, salt);
+        return result;
+    } catch (error) {
+        throw new Error('Hashing failed', error)
+    }
 }

@@ -1,62 +1,52 @@
 var express = require('express');
 var router = express.Router();
-const Account = require("../controllers/account");
+const passport = require('passport');
+
+//call controller account
+const Account = require("../controllers/user");
 const controller = new Account();
+
+// call controller product
 const Product = require("../controllers/product");
 const controllerProduct = new Product();
 
+// call controller home
+const Home = require("../controllers/main");
+const controllerHome = new Home();
 
-router.get('/home', (req, res) => controllerProduct.ShowList(req, res));
-const notice="Vui lòng nhập đúng tài khoản và mật khẩu đã đăng kí";
 
 
-/* GET users listing. */
-const passport=require('passport');
-require('../config/passport')(passport);
+/* GET  */
 
-router.post('/login',function(req,res,next){
- passport.authenticate('local', { successRedirect: '/home', failureRedirect: '/login-fail' })(req,res,next);
-});
+
+
 
 router.post('/register-form', async function (req, res) {
-  controller.Register(req,res);
+  controller.Register(req, res);
 });
-router.get('/login-fail', function (req, res, next) {
-  res.render('login', { title: 'Đăng nhập',notice});
+
+// handler login
+router.get('/', (req, res) => controller.ShowLogin(req, res, null));
+router.get('/login', (req, res) => controller.ShowLogin(req, res, null));
+router.post('/login', function (req, res, next) {
+  passport.authenticate('local', { successRedirect: '/home', failureRedirect: '/login-fail' })(req, res, next);
 });
-router.get('/', function (req, res, next) {
-  res.render('login', { title: 'Đăng nhập'});
-});
-router.get('/login', function (req, res, next) {
-  res.render('login', { title: 'Đăng nhập'});
-});
-router.get('/logout', function (req, res, next) {
-  if(req.user != null) req.user=null;
-  controllerProduct.ShowList(req, res);
-});
+router.get('/login-fail', (req, res) => controller.ShowLogin(req, res, "Vui lòng nhập đúng tài khoản và mật khẩu đã đăng kí"));
+
+//handler logout
+router.get('/logout', (req, res) => controllerProduct.ShowList(req, res, true));
+
+//handler get home
+router.get('/home', (req, res) => controllerProduct.ShowList(req, res));
 
 
 
 // chưa xử lí
-router.get('/about', function (req, res, next) {
-  res.render('about', { title: 'Về Chúng Tôi' });
-});
+router.get('/about', (req, res, next) => controllerHome.ShowAbout(req, res));
+router.get('/contact', (req, res, next) => controllerHome.ShowContact(req, res));
+router.get('/faq', (req, res, next) => controllerHome.ShowFaq(req, res));
 
-router.get('/contact', function (req, res, next) {
-  var user = "";
-  if (req.user != undefined && req.user != null) {
-    user = req.user._doc.name;
-  }
-  res.render('contact', { title: 'Liên hệ', user: user });
-});
 
-router.get('/faq', function (req, res, next) {
-  var user = "";
-  if (req.user != undefined && req.user != null) {
-    user = req.user._doc.name;
-  }
-  res.render('faq', { title: 'Faq', user: user });
-});
 
 router.get('/forgetpassword', function (req, res, next) {
   var user = "";

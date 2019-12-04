@@ -4,7 +4,8 @@ const db = require('../models/product').getDBProduct();
  * Class Articles Controller
  */
 class Product {
-  ShowList(req, res) {
+  ShowList(req, res,logout) {
+    if(logout) if(req.user != null) req.user=null;
     var fullproduct = db;
     var user = "";
     if (req.user != undefined && req.user != null) {
