@@ -31,17 +31,34 @@ class Product {
   }
   async ShowDetail(req, res) {
     var dbdetail = [];
+    let dbrecommand=[];
     var idproduct = Number(req.params.id);
+    let cateId;
+
+    //var selectedOpt = req.body.Category;
+    
     //var idproduct = await parseToInt(id);
-    //console.log(idproduct);
+    console.log(idproduct);
     var user = "";
     if (req.user != undefined && req.user != null) {
       user = req.user._doc.name;
     }
     db.forEach(function (doc) {
-      if (doc._id == idproduct) dbdetail.push(doc);
+      if (doc._id == idproduct) {
+        dbdetail.push(doc);
+        cateId=doc.id_category;
+       }
     });
-    res.render('product', { data: dbdetail, user: user });
+    
+    db.forEach(function(doc){
+      if(doc.id_category==cateId&&doc._id!=idproduct)
+      {
+        dbrecommand.push(doc);
+      }
+    })
+    
+
+    res.render('product', { data: dbdetail, user: user,recommand:dbrecommand });
   }
 }
 function parseToInt(x) {
