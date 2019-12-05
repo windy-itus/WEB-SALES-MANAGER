@@ -49,25 +49,46 @@ class Account {
 
   }
   ShowLogin(req,res,msg){
-    res.render('login',{title:'Đăng nhập/Đăng ký',notice:msg});
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+    }
+    res.render('login',{title:'Đăng nhập/Đăng ký',notice:msg,user});
   }
   ForGetPassWord(req,res){
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+    }
     res.render('forgetpassword', { title: 'Quên mật khẩu'});
   }
   ConfirmPassWord(req,res){
-    res.render('confirmcode', { title: 'Xác thực tài khoản'});
-  }
-  ShowCart(req,res){
-    res.render('cart',{ title: 'Quản lý giỏ hàng' });
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+    }
+    res.render('confirmcode', { title: 'Xác thực tài khoản',user});
   }
   ShowDelivery(req,res){
-    res.render('delivery', { title: 'Thông tin giao hàng'});
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+    }
+    res.render('delivery', { title: 'Thông tin giao hàng',user});
   }
   ShowProductPurchased(req,res){
-    res.render('productspurchased', { title: 'Lịch sử giao hàng'});
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+    }
+    res.render('productspurchased', { title: 'Lịch sử giao hàng',user});
   }
   ShowInfoUser(req,res){
-    res.render('informationaccount', { title: 'Thông tin giao hàng'});
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+    }
+    res.render('informationaccount', { title: 'Thông tin tài khoản',user});
   }
 }
 module.exports = Account;

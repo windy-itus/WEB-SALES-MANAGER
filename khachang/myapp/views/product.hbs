@@ -1,196 +1,199 @@
 <div class="main">
-    <div class="content">
-    	<div class="content_top">
-    		<div class="back-links">
-    		<p><a href="#">Trang chủ</a> >> <a href="#">Thiết bị điện tử</a></p>
-    	    </div>
-    		<div class="sort">
-    		<p>Sắp xếp theo:
-    			<select>
-    				<option>Giá tăng</option>
-    				<option>Giá giảm</option>
-    				<option>Trong kho</option>  				   				
-    			</select>
-    		</p>
-    		</div>
-    		<div class="show">
-    		<p>Số lượng hiển thị:
-    			<select>
-    				<option>4</option>
-    				<option>8</option>
-    				<option>12</option>
-    				<option>16</option>
-    				<option>20</option>
-    				<option>Tất cả trong kho</option>  				   				
-    			</select>
-    		</p>
-    		</div>
-    		<div class="page-no">
-    			<p>Trang:<ul>
-    				<li><a href="#">1</a></li>
-    				<li class="active"><a href="#">2</a></li>
-    				<li><a href="#">3</a></li>
-    				<li>[<a href="#"> Tiếp theo>>></a >]</li>
-    				</ul></p>
-    		</div>
-    		<div class="clear"></div>
-    	</div>
-
-    	<div class="section group">
-				{{#if data}}
+	<div class="content">
+		<div class="content_top">
+			<div class="back-links">
+				<p><a href="#">Trang chủ</a> >> <a href="#">Thiết bị điện tử</a></p>
+			</div>
+			<div class="sort">
+				<p>Sắp xếp theo:
+					<select>
+						<option>Giá tăng</option>
+						<option>Giá giảm</option>
+						<option>Trong kho</option>
+					</select>
+				</p>
+			</div>
+			<div class="show">
+				<p>Số lượng hiển thị:
+					<select>
+						<option>4</option>
+						<option>8</option>
+						<option>12</option>
+						<option>16</option>
+						<option>20</option>
+						<option>Tất cả trong kho</option>
+					</select>
+				</p>
+			</div>
+			<div class="page-no">
+				<p>Trang:<ul>
+						<li><a href="#">1</a></li>
+						<li class="active"><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li>[<a href="#"> Tiếp theo>>></a>]</li>
+					</ul>
+				</p>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="section group">
+			{{#if data}}
 			{{#each data}}
-				<div class="cont-desc span_1_of_2">				
-					<div class="grid images_3_of_2">
-						<img src="{{this.image_link}}" alt="Hình ảnh đang load" />
-					</div>
+			<form method="POST" action="/add-in-cart/{{this._id}}">	
+			<div class="cont-desc span_1_of_2">
+				<div class="grid images_3_of_2">
+					<img src="{{this.image_link}}" alt="Hình ảnh đang load" />
+				</div>
 				<div class="desc span_3_of_2">
 					<h2>{{this.name}}</h2>
-					<p>{{this.description}}</p>					
+					<p>{{this.description}}</p>
 					<div class="price">
 						<p>Giá: <span>{{this.price}}</span></p>
 					</div>
 					<div class="available">
 						<p>Tùy chọn có sẵn :</p>
-					<ul>
-						<li>Màu sắc:
-							<select>
-							<option>Bạc</option>
-							<option>Đen</option>
-							<option>Tối đen</option>
-							<option>Đỏ</option>
-						</select></li>
-						<li>Size:<select>
-							<option>Lớn</option>
-							<option>Trung bình</option>
-							<option>Nhỏ</option>
-						</select></li>
-						<li>Chất lượng:<select>
-							<option>1</option>
-							<option>2</option>
-							<option>3</option>
-							<option>4</option>
-							<option>5</option>
-						</select></li>
-					</ul>
+						<ul>
+							<li>Màu sắc:
+								<select>
+									<option>Bạc</option>
+									<option>Đen</option>
+									<option>Tối đen</option>
+									<option>Đỏ</option>
+								</select></li>
+							<li>Size:<select>
+									<option>Lớn</option>
+									<option>Trung bình</option>
+									<option>Nhỏ</option>
+								</select></li>
+							<li>Chất lượng:<select>
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</select></li>
+						</ul>
 					</div>
 					<div class="share">
 						<p>Chia sẻ sản phẩm :</p>
 						<ul>
-					    	<li><a href="#"><img src="../images/youtube.png" alt=""></a></li>
-					    	<li><a href="#"><img src="../images/facebook.png" alt=""></a></li>
-					    	<li><a href="#"><img src="../images/twitter.png" alt=""></a></li>
-					    	<li><a href="#"><img src="../images/linkedin.png" alt=""></a></li>
-			    		</ul>
+							<li><a href="#"><img src="images/youtube.png" alt=""></a></li>
+							<li><a href="#"><img src="images/facebook.png" alt=""></a></li>
+							<li><a href="#"><img src="images/twitter.png" alt=""></a></li>
+							<li><a href="#"><img src="images/linkedin.png" alt=""></a></li>
+						</ul>
 					</div>
-				<div class="add-cart">
-					<div class="rating">
-						<p>Xếp hạng:<img src="../images/rating.png"><span>[3 of 5 Sao]</span></p>
+					<div class="add-cart">
+						<div class="rating">
+							<p>Xếp hạng:<img src="images/rating.png"><span>[3 of 5 Sao]</span></p>
+						</div>
+						<div class="button"><span><button type="submit" class="btn btn-primary btn-lg"> Thêm vào giỏ hàng</button></span></div>
+						<div class="clear"></div>
 					</div>
-					<div class="button"><span><a href="#">Thêm vào giỏ hàng</a></span></div>
-					<div class="clear"></div>
 				</div>
-			</div>
-			<div class="product-desc">
-			<h2>Chi tiết sản phẩm</h2>
-			<p>{{this.description}}</p>
-	        <p> {{this.description}}</p>
-	    </div>
-	    <div class="product-tags">
-			<h2>Thẻ sản phẩm</h2>
-			<h4>Thêm vào thẻ của bạn:</h4>
-			<div class="input-box">
-				<input type="text" value="" />
-			</div>
-			<div class="button"><span><a href="#">Thêm thẻ</a></span></div>
-	    </div>				
-	</div>
-		 	{{/each}}
-			{{/if}}
-
-				<div class="rightsidebar span_3_of_1">
-					<h2>Danh mục</h2>
-					<ul>
-				      <li><a href="#">Điện thoại</a></li>
-				      <li><a href="#">Desktop</a></li>
-				      <li><a href="#">Laptop</a></li>
-				      <li><a href="#">Accessories</a></li>
-				      <li><a href="#">Phần mềm</a></li>
-				       <li><a href="#">Đồ thể thao</a></li>
-				       <li><a href="#">Đồ dùng gia đình</a></li>
-				       <li><a href="#">Sim,card</a></li>
-				       <li><a href="#">Quần áo</a></li>
-				       <li><a href="#">Đồ chơi trẻ em</a></li>
-				       <li><a href="#">Thiết bị văn phòng</a></li>
-				       <li><a href="#">Vệ sinh nhà cửa</a></li>
-    				</ul>
-    				<div class="subscribe">
-    					<h2>Bản tin đăng kí</h2>
-    						<p>Hãy đăng kí thứ bạn muốn tại đây</p>
-						    <div class="signup">
-							    <form>
-							    	<input type="text" value="E-mail address" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Địa chỉ E-mail';"><input type="submit" value="Đăng kí">
-							    </form>
-						    </div>
-      				</div>
-      				 <div class="community-poll">
-      				 	<h2>Tham khảo nhu cầu</h2>
-      				 	<p>Lý do chính để bạn mua sản phẩm trực tuyến là gì?</p>
-      				 	<div class="poll">
-      				 		<form>
-      				 			<ul>
-									<li>
-									<input type="radio" name="vote" class="radio" value="1">
-									<span class="label"><label>Vận chuyển thuận tiện hơn và giao hàng </label></span>
-									</li>
-									<li>
-									<input type="radio" name="vote" class="radio" value="2">
-									<span class="label"><label for="vote_2">Giá thấp hơn</label></span>
-									</li>
-									<li>
-									<input type="radio" name="vote" class="radio"  value="3">
-									<span class="label"><label for="vote_3">Nhiều lựa chọn hơn</label></span>
-									</li>
-									<li>
-									<input type="radio" name="vote" class="radio"  value="5">
-									<span class="label"><label for="vote_5">Bảo đảm thanh toán </label></span>
-									</li>
-									<li>
-									<input type="radio" name="vote" class="radio" value="6">
-									<span class="label"><label for="vote_6">Đảm bảo hoàn tiền trong 30 ngày </label></span>
-									</li>
-									<li>
-									<input type="radio" name="vote" class="radio" value="7">
-									<span class="label"><label for="vote_7">Những cái khác.</label></span>
-									</li>
-									</ul>
-      				 		</form>
-      				 	</div>
-      				 </div>
- 				</div>
- 		</div>
-
- 	</div>
-	</div>
-
-	<div class="section group">
-			<span></span>
-			{{#if recommand}}
-			{{#each recommand}}
-			<div class="grid_1_of_4 images_1_of_4">
-				
-				<a href="/products/{{this._id}}"><img
-									src="{{this.image_link}}"	
-									alt="" /></a>
-				<div class="discount">
-					<span class="percentage">{{this.discount}}</span>
+				<div class="product-desc">
+					<h2>Chi tiết sản phẩm</h2>
+					<p>{{this.description}}</p>
+					<p> {{this.description}}</p>
 				</div>
-				<h2>{{ this.name }} </h2>
-				<p>{{ this.description }}</p>
-				<p><span class="strike">50 000 000</span><span class="price">{{this.price}}</span></p>
-				<div class="button" onclick="addCart({{this._id}})"><span><img src="images/cart.jpg" alt="" /><a href="/products/{{this._id}}"
-							class="cart-button">Thêm vào giỏ hàng</a></span> </div>
-				<div class="button"><span><a href="/products/{{this._id}}" class="details">Chi tiết</a></span></div>
+				<div class="product-tags">
+					<h2>Thẻ sản phẩm</h2>
+					<h4>Thêm vào thẻ của bạn:</h4>
+					<div class="input-box">
+						<input type="text" value="" />
+					</div>
+					<div class="button"><span><a href="#">Thêm thẻ</a></span></div>
+				</div>
 			</div>
 			{{/each}}
 			{{/if}}
+			</form>
+
+			<div class="rightsidebar span_3_of_1">
+				<h2>Danh mục</h2>
+				<ul>
+					<li><a href="#">Điện thoại</a></li>
+					<li><a href="#">Desktop</a></li>
+					<li><a href="#">Laptop</a></li>
+					<li><a href="#">Accessories</a></li>
+					<li><a href="#">Phần mềm</a></li>
+					<li><a href="#">Đồ thể thao</a></li>
+					<li><a href="#">Đồ dùng gia đình</a></li>
+					<li><a href="#">Sim,card</a></li>
+					<li><a href="#">Quần áo</a></li>
+					<li><a href="#">Đồ chơi trẻ em</a></li>
+					<li><a href="#">Thiết bị văn phòng</a></li>
+					<li><a href="#">Vệ sinh nhà cửa</a></li>
+				</ul>
+				<div class="subscribe">
+					<h2>Bản tin đăng kí</h2>
+					<p>Hãy đăng kí thứ bạn muốn tại đây</p>
+					<div class="signup">
+						<form>
+							<input type="text" value="E-mail address" onfocus="this.value = '';"
+								onblur="if (this.value == '') {this.value = 'Địa chỉ E-mail';"><input type="submit"
+								value="Đăng kí">
+						</form>
+					</div>
+				</div>
+				<div class="community-poll">
+					<h2>Tham khảo nhu cầu</h2>
+					<p>Lý do chính để bạn mua sản phẩm trực tuyến là gì?</p>
+					<div class="poll">
+						<form>
+							<ul>
+								<li>
+									<input type="radio" name="vote" class="radio" value="1">
+									<span class="label"><label>Vận chuyển thuận tiện hơn và giao hàng </label></span>
+								</li>
+								<li>
+									<input type="radio" name="vote" class="radio" value="2">
+									<span class="label"><label for="vote_2">Giá thấp hơn</label></span>
+								</li>
+								<li>
+									<input type="radio" name="vote" class="radio" value="3">
+									<span class="label"><label for="vote_3">Nhiều lựa chọn hơn</label></span>
+								</li>
+								<li>
+									<input type="radio" name="vote" class="radio" value="5">
+									<span class="label"><label for="vote_5">Bảo đảm thanh toán </label></span>
+								</li>
+								<li>
+									<input type="radio" name="vote" class="radio" value="6">
+									<span class="label"><label for="vote_6">Đảm bảo hoàn tiền trong 30 ngày
+										</label></span>
+								</li>
+								<li>
+									<input type="radio" name="vote" class="radio" value="7">
+									<span class="label"><label for="vote_7">Những cái khác.</label></span>
+								</li>
+							</ul>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
+
+	</div>
+</div>
+
+<div class="section group">
+	<span></span>
+	{{#if recommand}}
+	{{#each recommand}}
+	<div class="grid_1_of_4 images_1_of_4">
+
+		<a href="/products/{{this._id}}"><img src="{{this.image_link}}" alt="" /></a>
+		<div class="discount">
+			<span class="percentage">{{this.discount}}</span>
+		</div>
+		<h2>{{ this.name }} </h2>
+		<p>{{ this.description }}</p>
+		<p><span class="strike">50 000 000</span><span class="price">{{this.price}}</span></p>
+		<div class="button" onclick="addCart({{this._id}})"><span><img src="images/cart.jpg" alt="" /><a
+					href="/products/{{this._id}}" class="cart-button">Thêm vào giỏ hàng</a></span> </div>
+		<div class="button"><span><a href="/products/{{this._id}}" class="details">Chi tiết</a></span></div>
+	</div>
+	{{/each}}
+	{{/if}}
+</div>

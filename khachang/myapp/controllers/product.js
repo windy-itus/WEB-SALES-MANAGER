@@ -1,17 +1,24 @@
 const db = require('../models/product').getDBProduct();
 
+
 /**
  * Class Articles Controller
  */
 class Product {
   ShowList(req, res,logout) {
-    if(logout) if(req.user != null) req.user=null;
+    var login=req.session; 
+    if(logout) 
+    {
+      login.username=null;
+      if(req.user != null) req.user=null;
+    }
     var fullproduct = db;
     var user = "";
     if (req.user != undefined && req.user != null) {
-      user = req.user._doc.name;
+      login.username= req.user._doc.name;
     }
-    res.render('viewlistproducts', { data: fullproduct, user: user });
+    console.log(req.session.username);
+    res.render('viewlistproducts', { data: fullproduct, user: login.username });
   }
   async ShowIf(req, res) {
     var dbif = [];
@@ -35,11 +42,6 @@ class Product {
     let dbrecommand=[];
     var idproduct = Number(req.params.id);
     let cateId;
-
-    //var selectedOpt = req.body.Category;
-    
-    //var idproduct = await parseToInt(id);
-    console.log(idproduct);
     var user = "";
     if (req.user != undefined && req.user != null) {
       user = req.user._doc.name;
