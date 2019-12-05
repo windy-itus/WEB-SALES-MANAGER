@@ -1,9 +1,7 @@
 var LocalStrategy = require('passport-local').Strategy;
 const passport = require('passport');
-var mongoose = require('mongoose');
 const bcrypt=require('bcryptjs');
 var User= require('../models/account').getAccount;
-
 
 
 passport.serializeUser(function (user, done) {
@@ -19,8 +17,7 @@ passport.deserializeUser(function (name, done) {
 });
 module.exports =function (passport) {
     passport.use(new LocalStrategy(
-        (username, password, done) => {
-            
+        (username, password, done) => {       
             if(!username||!password)
                 return done(null, false,{message:'Vui lòng điền đầy đủ thông tin'});
             User.findOne({
@@ -35,7 +32,7 @@ module.exports =function (passport) {
                 });    
             }).catch(function (err) {
                 return done(err);
-            })
+            });
         }
     ));
 }

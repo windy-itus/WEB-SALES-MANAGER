@@ -4,36 +4,23 @@ var mongoose = require('mongoose');
 const bcrypt=require('bcryptjs');
 
 mongoose.connect(uri, {
-  useNewUrlParser: true
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
 });
 
 var db = mongoose.connection;
 var inforSchema = new mongoose.Schema({
+  name: String,
   username: String,
   password: String,
+  address: String,
+  email: String,
+  phone: String
 }, {
   collection: 'Account'
 });
 const User = db.useDb("ManagerStore").model("User", inforSchema);
 module.exports.getAccount=User;
-
-
-module.exports.getListUser=function(){
-  var user=[];
-    MongoClient.connect(uri, function (err, client) {
-    if (err) throw err;// throw if error
-    // Connect to DB 'ManagerStore'
-    var dbo = client.db("ManagerStore");
-    // Get data from document 'Product'
-
-    var cursor=dbo.collection("Account").find({});
-    cursor.forEach(function(doc){
-      user.push(doc);
-    });
-      client.close();// close connection     
-});
-return user;
-}
 
 module.exports.addAccount=function(name,username,password,address,email,phone){
   MongoClient.connect(uri, function (err, db) {
@@ -49,7 +36,6 @@ module.exports.addAccount=function(name,username,password,address,email,phone){
     };
     dbo.collection("Account").insertOne(myobj, function (err, res) {
         if (err) throw err;
-        console.log("1 document inserted");
         db.close();
     });
 });

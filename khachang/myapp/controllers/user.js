@@ -1,5 +1,6 @@
 var User = require('../models/account');
-var listuser=require('../models/account').getListUser();
+var account=User.getAccount;
+
 class Account {
   async Register(req, res) {
     const username = req.body.username;
@@ -21,10 +22,11 @@ class Account {
     if (password != repassword) {
       errors.push({ msg: 'Mật khẩu không khớp' });
     }
-    listuser.forEach(function(doc){
-      if(doc.username==username) errors.push({msg:'Tên tài khoản đã tồn tại'});
-    });
-
+    await account.find({}).then(function(doc){
+      doc.forEach(function(data){
+        if(data.username==username) errors.push({msg:'Tên tài khoản đã tồn tại'});
+      })
+    });   
     if (errors.length > 0) {
       res.render('login', {
         data: errors
@@ -48,6 +50,24 @@ class Account {
   }
   ShowLogin(req,res,msg){
     res.render('login',{title:'Đăng nhập/Đăng ký',notice:msg});
+  }
+  ForGetPassWord(req,res){
+    res.render('forgetpassword', { title: 'Quên mật khẩu'});
+  }
+  ConfirmPassWord(req,res){
+    res.render('confirmcode', { title: 'Xác thực tài khoản'});
+  }
+  ShowCart(req,res){
+    res.render('cart',{ title: 'Quản lý giỏ hàng' });
+  }
+  ShowDelivery(req,res){
+    res.render('delivery', { title: 'Thông tin giao hàng'});
+  }
+  ShowProductPurchased(req,res){
+    res.render('productspurchased', { title: 'Lịch sử giao hàng'});
+  }
+  ShowInfoUser(req,res){
+    res.render('informationaccount', { title: 'Thông tin giao hàng'});
   }
 }
 module.exports = Account;
