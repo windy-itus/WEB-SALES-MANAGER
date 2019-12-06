@@ -65,12 +65,18 @@ class Account {
     res.render('forgetpassword', { title: 'Quên mật khẩu'});
   }
   ConfirmPassWord(req,res){
+    const email=req.body.email;
     var msg="";
     var errorr="";
     var user = "";
     if (req.user != undefined && req.user != null) {
       user = req.user._doc.name;
     }
+    if(email.search("@gmail.com")==-1){
+      errorr="Email bạn nhập vào không tồn, vui lòng kiếm tra lại. Email có dạng: Example@gmail.com";
+      res.render('forgetpassword', { title: 'Xác thực tài khoản',user,errorr});
+    }
+    else{
     var transporter =  nodemailer.createTransport({ // config mail server
       service: 'Gmail',
       auth: {
@@ -80,7 +86,7 @@ class Account {
   });
   var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
       from: 'Đăng Khoa Store',
-      to: 'phamdangdangkhoa2802@gmail.com',
+      to: email,
       subject: '[XÁC MINH TÀI KHOẢN VÀ LẤY LẠI MẬT KHẨU]',
       text: '<a href="http://localhost:3000/reset-password/"><b>Click here to reset password</b></a>',
       html: '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/reset-password/"><b>Click here to reset password</b></a></li>'
@@ -89,14 +95,14 @@ class Account {
       if (err) {
           console.log(err);
           errorr="Hiện tại hệ thống không thể hỗ trợ bạn khôi phục mật khẩu. Bạn có thể thử lại lần sau!";
-          res.render('confirmcode', { title: 'Xác thực tài khoản',user,msg:msg,errorr:errorr});
+          res.render('confirmcode', { title: 'Xác thực tài khoản',user,msg,errorr});
       } else {
           console.log('Message sent: ' +  info.response);
           msg="Hệ thống đã gửi mã xác minh đến tài khoản của bạn, vui lòng check mail để xác minh và lấy lại lại khoản";
-          res.render('confirmcode', { title: 'Xác thực tài khoản',user,msg:msg,errorr:errorr});
+          res.render('confirmcode', { title: 'Xác thực tài khoản',user,msg,errorr});
       }
   });
-  
+  }
   }
   ShowDelivery(req,res){
     var user = "";
