@@ -1,5 +1,7 @@
 var User = require('../models/account');
 var account=User.getAccount;
+//test gui mail
+var nodemailer =  require('nodemailer');
 
 class Account {
   async Register(req, res) {
@@ -63,11 +65,38 @@ class Account {
     res.render('forgetpassword', { title: 'Quên mật khẩu'});
   }
   ConfirmPassWord(req,res){
+    var msg="";
+    var errorr="";
     var user = "";
     if (req.user != undefined && req.user != null) {
       user = req.user._doc.name;
     }
-    res.render('confirmcode', { title: 'Xác thực tài khoản',user});
+    var transporter =  nodemailer.createTransport({ // config mail server
+      service: 'Gmail',
+      auth: {
+          user: 'ad.appcreater@gmail.com',
+          pass: 'qwertyuiop@123456789'
+      }
+  });
+  var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
+      from: 'Đăng Khoa Store',
+      to: 'phamdangdangkhoa2802@gmail.com',
+      subject: '[XÁC MINH TÀI KHOẢN VÀ LẤY LẠI MẬT KHẨU]',
+      text: '<a href="http://localhost:3000/reset-password/"><b>Click here to reset password</b></a>',
+      html: '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/reset-password/"><b>Click here to reset password</b></a></li>'
+  }
+  transporter.sendMail(mainOptions, function(err, info){
+      if (err) {
+          console.log(err);
+          errorr="Hiện tại hệ thống không thể hỗ trợ bạn khôi phục mật khẩu. Bạn có thể thử lại lần sau!";
+          res.render('confirmcode', { title: 'Xác thực tài khoản',user,msg:msg,errorr:errorr});
+      } else {
+          console.log('Message sent: ' +  info.response);
+          msg="Hệ thống đã gửi mã xác minh đến tài khoản của bạn, vui lòng check mail để xác minh và lấy lại lại khoản";
+          res.render('confirmcode', { title: 'Xác thực tài khoản',user,msg:msg,errorr:errorr});
+      }
+  });
+  
   }
   ShowDelivery(req,res){
     var user = "";
