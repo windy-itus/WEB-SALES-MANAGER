@@ -66,6 +66,32 @@ class Home {
         console.log("1 sản phẩm đã được thêm vào giỏ hàng");
         res.render('product', { title: 'Sản phẩm', data: pro,recommand:recom,user:dbsession.username});
     }
+
+
+
+    DeleteProductInCart(req, res)
+    {       
+        const id=req.params.id;
+        req.session.cart.splice(req.session.cart.indexOf(id), 1);
+        let dbsession=req.session;
+        let data=[];
+        let sum=0;
+
+        if (dbsession.cart) {
+            db.forEach(function (doc) {
+                req.session.cart.forEach(function(idproduct){
+                    let price=xulyChuoi(doc.price)
+                    if(Number(idproduct)==doc._id)
+                     {
+                        data.push(doc);
+                        sum=sum+price;
+                    }
+                });
+            });
+        }
+
+        res.render('cart', { title: 'Quản lý giỏ hàng', user: dbsession.username,data:data,sum:sum});
+    }
 }
 
 function xulyChuoi(x)

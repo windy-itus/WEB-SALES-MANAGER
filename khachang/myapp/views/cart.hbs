@@ -13,7 +13,8 @@
             </tr>
         </thead>
         <tbody style="background-color:white;">
-            <tr>
+            <form method="POST" action="/delete/{{this._id}}">
+                <tr>
                 <td data-th="Product">
                     <div class="row">
                         <div class="col-sm-2 hidden-xs"><img src="{{this.image_link}}" alt="Sản phẩm 1"
@@ -36,6 +37,7 @@
                     </button>
                 </td>
             </tr>
+            </form>
             {{/each}}
             {{else}} <div class="text-center">Không có gì trong giỏ hàng</div>
             {{/if}}

@@ -21,5 +21,6 @@ router.get('/contact', (req, res, next) => controllerHome.ShowContact(req, res))
 router.get('/faq', (req, res, next) => controllerHome.ShowFaq(req, res));
 router.get('/cart', (req, res, next)=>controllerHome.ShowCart(req, res));
 router.post('/add-in-cart/:id', (req, res, next) => controllerHome.AddProductInCart(req, res));
+router.post('/delete/:id',(req, res, next) => controllerHome.DeleteProductInCart(req, res))
 
 module.exports = router;
