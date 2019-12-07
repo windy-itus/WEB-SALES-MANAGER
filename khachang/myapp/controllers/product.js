@@ -53,6 +53,72 @@ class Product {
     })
     res.render('product', { data: dbdetail,recommand:dbrecommand,user:dbsession.username });
   }
+
+  async ShowDienthoai(req,res){
+    var dbif = [];
+    //var selectedOpt = 1;
+    //var cateId = await parseToInt(selectedOpt);
+    db.forEach(function(doc){
+      if(doc.id_category==1)
+      {
+        dbif.push(doc);
+      }
+    })
+    res.render('viewtype', { data: dbif});
+  }
+
+  async ShowLaptop(req,res){
+    var dbif = [];
+    //var selectedOpt = 2;
+    //var cateId = await parseToInt(selectedOpt);
+    db.forEach(function(doc){
+      if(doc.id_category==2)
+      {
+        dbif.push(doc);
+      }
+    })
+    res.render('viewtype', { data: dbif});
+  }
+
+  async ShowMayanh(req,res){
+    var dbif = [];
+    //var selectedOpt = 1;
+    //var cateId = await parseToInt(selectedOpt);
+    db.forEach(function(doc){
+      if(doc.id_category==6)
+      {
+        dbif.push(doc);
+      }
+    })
+    res.render('viewtype', { data: dbif});
+  }
+
+  async ShowTulanh(req,res){
+    var dbif = [];
+    //var selectedOpt = 1;
+    //var cateId = await parseToInt(selectedOpt);
+    db.forEach(function(doc){
+      if(doc.id_category==4)
+      {
+        dbif.push(doc);
+      }
+    })
+    res.render('viewtype', { data: dbif});
+  }
+
+  async ShowDongho(req,res){
+    var dbif = [];
+    //var selectedOpt = 1;
+    //var cateId = await parseToInt(selectedOpt);
+    db.forEach(function(doc){
+      if(doc.id_category==5)
+      {
+        dbif.push(doc);
+      }
+    })
+    res.render('viewtype', { data: dbif});
+  }
+
 }
 function parseToInt(x) {
   const parsed = parseInt(x, 32);
@@ -61,5 +127,7 @@ function parseToInt(x) {
   }
   return parsed;
 }
+
+
 
 module.exports = Product;

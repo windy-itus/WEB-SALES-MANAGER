@@ -19,22 +19,67 @@ class Home {
     ShowCart(req, res) {
         var data=[];
         var dbsession = req.session;
+        var sum=0;
         if (dbsession.cart) {
             db.forEach(function (doc) {
-                dbsession.cart.forEach(function(idproduct){
-                    if(Number(idproduct)==doc._id) data.push(doc);
+                req.session.cart.forEach(function(idproduct){
+                    let price=xulyChuoi(doc.price)
+                    if(Number(idproduct)==doc._id)
+                     {
+                        data.push(doc);
+                        sum=sum+price;
+                    }
                 });
             });
         }
-        res.render('cart', { title: 'Quản lý giỏ hàng', user: dbsession.username,data:data});
+        res.render('cart', { title: 'Quản lý giỏ hàng', user: dbsession.username,data:data,sum:sum});
     }
     AddProductInCart(req, res) {
-        var dbsession = req.session;
-        dbsession.cart = [];
+        let pro=[];
+        let recom=[];
+        let cateid;
+        //var dbsession = req.session;
+        //dbsession.cart = [];
         var idproduct = req.params.id;
-        dbsession.cart.push(idproduct);
+        if(req.session.cart==null)
+        {
+            req.session.cart=[];
+        }
+        req.session.cart.push(idproduct);
+        //req.session.cart.push(5);
+
+        db.forEach(function(doc){
+            if(doc._id==idproduct)
+            {
+                pro.push(doc);
+                cateid=pro.id_category;
+            }
+        });
+
+        db.forEach(function(doc){
+            if(doc.id_category==cateid)
+            {
+                recom.push(doc);
+            }
+        });
+        var dbsession=req.session;
         console.log("1 sản phẩm đã được thêm vào giỏ hàng");
-        res.render('product', { title: 'Sản phẩm', user: dbsession.username });
+        res.render('product', { title: 'Sản phẩm', data: pro,recommand:recom,user:dbsession.username});
     }
+}
+
+function xulyChuoi(x)
+{
+    //xoa "đ" cuối
+    var len=x.length-1;
+    x=x.substr(0,len);
+
+    //xoa khoang cach
+    while(x.indexOf(" ")!=-1)
+    {
+        x=x.substr(0,x.indexOf(" "))+x.substr(x.indexOf(" ")+1)
+    }
+
+    return Number(x);
 }
 module.exports = Home;
