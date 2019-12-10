@@ -7,63 +7,59 @@
 			<form action="/products" method="POST">
 				<div class="sort">
 					<p>Lọc theo:
-						<select id="cate" name="Category">
-							<option value="0" selected="true">All</option>
-							<option value="1">Điện thoại</option>
-							<option value="2">Laptop</option>
-							<option value="3">Loa</option>
-							<option value="4">Tủ lạnh</option>
-							<option value="5">Đồng hồ</option>
-							<option value="6">Máy ảnh</option>
+						<select id="cate" name="Category" onchange="this.form.submit();">
+							{{#if categories}}
+							{{#each categories}}
+							<option value="{{this.id}}">{{this.name}}</option>
+							{{/each}}
+							{{/if}}
 						</select>
 					</p>
 				</div>
-				<div class="search">
-					<div><button class="grey" type="submit">Lọc</button></div>
+				<div class="show">
+					<p>Sắp xếp theo:
+						<select id="sort" name="SortBy" onchange="this.form.submit();">
+							{{#if sortOpts}}
+							{{#each sortOpts}}
+							<option value="{{this.id}}">{{this.name}}</option>
+							{{/each}}
+							{{/if}}
+						</select>
+					</p>
+				</div>
+				<div class="page-no">
+					<p>
+						<ul>
+							<li><button class="btn" type="submit" id="pagePrev" name="pagePrev"
+									value="{{currentPage}}">Trang trước</button></li>
+							Trang:
+							<li>{{currentPage}}</li>
+							/
+							<li>{{pages}}</li>
+							<li><button class="btn" type="submit" id="pageNext" name="pageNext"
+									value="{{currentPage}}">Trang sau</button></li>
+						</ul>
+					</p>
 				</div>
 			</form>
-			<div class="show">
-				<p>Số lượng hiển thị:
-					<select>
-						<option>4</option>
-						<option>8</option>
-						<option>12</option>
-						<option>16</option>
-						<option>20</option>
-						<option>Tất cả trong kho</option>
-					</select>
-				</p>
-
-			</div>
-			<div class="page-no">
-				<p>Trang:<ul>
-						<li><a href="#">1</a></li>
-						<li class="active"><a href="#">2</a></li>
-						<li><a href="#">3</a></li>
-						<li>[<a href="#"> Tiếp theo>>></a>]</li>
-					</ul>
-				</p>
-			</div>
 			<div class="clear"></div>
 		</div>
-		
+
 		<div class="section group">
 			<span></span>
 			{{#if data}}
 			{{#each data}}
 			<div class="grid_1_of_4 images_1_of_4">
-				
-				<a href="/products/{{this._id}}"><img
-									src="{{this.image_link}}"	
-									alt="" /></a>
+
+				<a href="/products/{{this._id}}"><img src="{{this.image_link}}" alt="" /></a>
 				<div class="discount">
 					<span class="percentage">{{this.discount}}</span>
 				</div>
 				<h2>{{ this.name }} </h2>
 				<p>{{ this.description }}</p>
 				<p><span class="strike">50 000 000</span><span class="price">{{this.price}}</span></p>
-				<div class="button" onclick="addCart({{this._id}})"><span><img src="images/cart.jpg" alt="" /><a href="/products/{{this._id}}"
-							class="cart-button">Thêm vào giỏ hàng</a></span> </div>
+				<div class="button" onclick="addCart({{this._id}})"><span><img src="/images/cart.jpg" alt="" /><a
+							href="/products/{{this._id}}" class="cart-button">Thêm vào giỏ hàng</a></span> </div>
 				<div class="button"><span><a href="/products/{{this._id}}" class="details">Chi tiết</a></span></div>
 			</div>
 			{{/each}}
@@ -72,11 +68,9 @@
 	</div>
 </div>
 
-{{!-- <script>
-	function addCart(id)
-	{
-		$.post('../product.js',('id':id),function(data){
-
-		})
-	}
-</script> --}}
+<script>
+	var selCate = "{{selectedCate}}";
+	var selSort = "{{selectedSort}}";
+	document.getElementById("cate").selectedIndex = selCate;
+	document.getElementById("sort").selectedIndex = selSort;
+</script>
