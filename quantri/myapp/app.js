@@ -34,9 +34,10 @@ app.use(bodyParser.json());//database
 
 //express session
 app.use(session({
-  secret : "secret",
+  secret: "secret",
   saveUninitialized: true,
-  resave: true
+  resave: false,
+  cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
 //connect flash
 

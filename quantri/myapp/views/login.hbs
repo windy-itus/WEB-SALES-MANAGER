@@ -4,14 +4,16 @@
 			<h3>Đã có tài khoản</h3>
 			<p>Đăng nhập bên dưới.</p>
 			<div style="color: red;">{{notice}}</div>
-			<form action="/login" method="POST" id="member">
-				<input name="username" type="text">
-				<input name="password" type="password">
+			<form action="/users/login" method="POST" id="member">
+				<div><label class="control-label" for="user">Tài khoản</label></div>
+				<input id="user" name="username" type="text">
+				<div><label class="control-label" for="pw">Mật khẩu</label></div>
+				<input id="pw" name="password" type="password">
 				<div class="buttons">
 					<div><button type="submit" class="grey">Đăng Nhập</button></div>
 				</div>
 			</form>
-			<p class="note">Nếu bạn quên mật khẩu của mình thì nhấn vào <a href="#">đây</a></p>
+			<p class="note">Nếu bạn quên mật khẩu của mình thì nhấn vào <a href="/users/forgetpassword">đây</a></p>
 
 		</div>
 		<div class="register_account">
@@ -22,7 +24,7 @@
 			{{/each}}
 			{{/if}}
 			<p>{{success}}</p>
-			<form method="POST" action="/register-form">
+			<form method="POST" action="/users/register-form">
 				<div class="row">
 					<div class="form-group col-md-6">
 						<div><label class="control-label" for="name">Họ và tên</label></div>

@@ -1,28 +1,9 @@
 var LocalStrategy = require('passport-local').Strategy;
-var passport = require('passport');
-//var bcrypt = require('bcrypt');
-var mongoose = require('mongoose');
+const passport = require('passport');
+const bcrypt=require('bcryptjs');
+var User= require('../models/account').getAccount;
 
-mongoose.connect('mongodb+srv://bibinbodongti:newwind@itus@cluster0-wm9nk.mongodb.net/test?retryWrites=true&w=majority', {
-    useNewUrlParser: true
-});
 
-var db = mongoose.connection;
-var inforSchema = new mongoose.Schema({
-    username: String,
-    password: String,
-    // job: String
-}, {
-    collection: 'Account'
-});
-const User = db.useDb("ManagerStore").model("User", inforSchema);
-// User.findOne({username:"bibinbodongti"}, (err, value) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//         console.log(value.username);
-//     }
-//   })
 passport.serializeUser(function (user, done) {
     done(null, user.username);
 });
@@ -34,21 +15,24 @@ passport.deserializeUser(function (name, done) {
         console.log(err);
     })
 });
-module.exports = function (passport) {
+module.exports =function (passport) {
     passport.use(new LocalStrategy(
-        (username, password, done) => {
-            if(!username||!password) 
+        (username, password, done) => {       
+            if(!username||!password)
                 return done(null, false,{message:'Vui lòng điền đầy đủ thông tin'});
             User.findOne({
                 username:username
-            }).then(function (user) {    
+            }).then(async function (user) {    
                 if(!user)
                     return done(null,false,{message:'Tài khoản chưa được đăng ký'});
-                if(password!=user.password) return done(null, false,{message:'Mật khẩu không đúng'});
-                return done(null,user);
+                bcrypt.compare(password,user.password,(err,isMatch)=>{
+                    if(err) throw err;
+                    if(isMatch) return done(null,user);
+                    else return done(null, false,{message:'Mật khẩu không đúng'});
+                });    
             }).catch(function (err) {
                 return done(err);
-            })
+            });
         }
     ));
 }
