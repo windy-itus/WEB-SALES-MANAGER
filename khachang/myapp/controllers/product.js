@@ -156,27 +156,27 @@ class Product {
   }
 
   async ShowDienthoai(req, res) {
-    var dbif = product.find({ id_category: 1 });
+    var dbif = await product.find({ id_category: 1 });
     res.render('viewtype', { data: dbif });
   }
 
   async ShowLaptop(req, res) {
-    var dbif = product.find({ id_category: 2 });
+    var dbif = await product.find({ id_category: 2 });
     res.render('viewtype', { data: dbif });
   }
 
   async ShowMayanh(req, res) {
-    var dbif = product.find({ id_category: 6 });
+    var dbif = await product.find({ id_category: 6 });
     res.render('viewtype', { data: dbif });
   }
 
   async ShowTulanh(req, res) {
-    var dbif = product.find({ id_category: 4 });
+    var dbif = await product.find({ id_category: 4 });
     res.render('viewtype', { data: dbif });
   }
 
   async ShowDongho(req, res) {
-    var dbif = product.find({ id_category: 5 });
+    var dbif = await product.find({ id_category: 5 });
     res.render('viewtype', { data: dbif });
   }
 
