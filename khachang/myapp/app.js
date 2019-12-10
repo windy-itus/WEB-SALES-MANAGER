@@ -7,8 +7,9 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');//databasevar 
 var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
-var passport=require('passport');
+var passport = require('passport');
 var session = require('express-session');
+var hbs = require('hbs');
 
 require('./config/passport')(passport);
 
@@ -34,10 +35,10 @@ app.use(bodyParser.json());//database
 
 //express session
 app.use(session({
-  secret : "secret",
+  secret: "secret",
   saveUninitialized: true,
   resave: false,
-  cookie: {maxAge:1000*60*60*24}
+  cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
 
 
@@ -49,15 +50,15 @@ app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/products',productRouter);
+app.use('/products', productRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
