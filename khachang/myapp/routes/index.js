@@ -15,6 +15,7 @@ router.get('/logout', (req, res) => controllerProduct.ShowList(req, res, true));
 
 //handler get home
 router.get('/', (req, res) => controllerProduct.ShowList(req, res));
+router.get('/up', (req, res) => controllerProduct.Show(req, res));
 router.get('/home', (req, res) => controllerProduct.ShowList(req, res));
 router.get('/about', (req, res, next) => controllerHome.ShowAbout(req, res));
 router.get('/contact', (req, res, next) => controllerHome.ShowContact(req, res));

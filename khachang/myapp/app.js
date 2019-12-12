@@ -10,6 +10,8 @@ var cookieParser = require('cookie-parser');
 var passport = require('passport');
 var session = require('express-session');
 var hbs = require('hbs');
+//var firebase=require('firebase-app');
+var storage = require('@google-cloud/storage');
 
 require('./config/passport')(passport);
 

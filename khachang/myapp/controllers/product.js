@@ -165,6 +165,11 @@ class Product {
     res.render('viewtype', { data: dbif });
   }
 
+  Show(req,res)
+  {
+    res.render('upload');
+  }
+
   async ShowMayanh(req, res) {
     var dbif = await product.find({ id_category: 6 });
     res.render('viewtype', { data: dbif });

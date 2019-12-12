@@ -1,0 +1,38 @@
+
+    <form enctype="multipart/form-data">
+        <label>select image</label>
+        <input type="file" id="image" accept="image/*"/><br><br>
+        <button type="button" onclick="Upload()">Upload</button>
+
+    </form>
+    <script src='https://cdn.firebase.com/js/client/1.0.6/firebase.js'></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.5.2/firebase-analytics.js"></script>
+
+
+    <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCVyZRlfEFd2-_66REx-UwW2r3xwlCYRXU",
+    authDomain: "image-d8f46.firebaseapp.com",
+    databaseURL: "https://image-d8f46.firebaseio.com",
+    projectId: "image-d8f46",
+    storageBucket: "image-d8f46.appspot.com",
+    messagingSenderId: "530316710384",
+    appId: "1:530316710384:web:a44b753240f4ffc3ff0d35",
+    measurementId: "G-ML9FXW6XND"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+//firebase.analytics();
+
+
+</script>
+<script src='/javascripts/upload.js' ></script>
