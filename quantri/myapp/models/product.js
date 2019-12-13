@@ -42,3 +42,24 @@ module.exports.getDBProduct = function () {
   });
   return db;
 }
+
+module.exports.Addproduct=function(nameproduct,category,price,count,countsell,decription,discount,image)
+{
+  MongoClient.connect(uri,function(error,db){
+    var dbo = db.db("ManagerStore");
+    var myobj = {
+        name: nameproduct,
+        id_category:category,
+        price:price,
+        count:count,
+        count_sell:countsell,
+        image_link:image,
+        description:decription,
+        discount:discount
+    };
+    dbo.collection("Product").insertOne(myobj, function (err, res) {
+        if (err) throw err;
+        db.close();
+    });
+  });
+}

@@ -1,0 +1,53 @@
+
+<div class="main">
+	<div class="content">
+		
+		<div class="register_account">
+			<h3>Thêm sản phẩm mới</h3>
+			{{#if data}}
+			{{#each data}}
+			<div style="color: red;">{{this.msg}}</div><br>
+			{{/each}}
+			{{/if}}
+
+			{{#if success}}			
+			<div style="color: green;">{{success}}</div><br>
+			{{/if}}
+	<form action="/products/addproduct" method="POST" >
+	<div class="row">
+		<div class="form-group col-md-6">
+			<div><label class="control-label" for="nameproduct">Tên sản phẩm</label></div>
+			<div><input id="nameproduct" name="nameproduct" type="text" value="{{nameproduct}}"></div>
+
+			<div><label class="control-label" for="category">Loại</label></div>
+			<div><input id="category" name="category" type="number" value="{{category}}"></div>
+
+            <div><label class="control-label" for="price">Giá cả</label></div>
+			<div><input id="price" name="price" type="number" value="{{price}}"></div>
+
+			<div><label class="control-label" for="count">Số lượng</label></div>
+			<div><input id="count" type="number" name="count" value="{{count}}"></div>
+		</div>
+		<div class="form-group col-md-6">
+			<div><label class="control-label" for="decription">Mô tả</label></div>
+			<div><input id="decription" name="decription" type="text" value="{{decription}}"></div>
+
+			<div><label class="control-label " for="discount">Giảm giá</label></div>
+			<div><input id="discount" name="discount" value="{{discount}}"></div>
+
+			<div><label class="control-label " for="image">Hình ảnh</label></div>
+			<div><input id="image" name="image"value="{{image}}"></div>
+		    </div>
+	        </div>
+	        <div class="search">
+		        <div><button type="submit" class="grey">Thêm sản phẩm</button></div>
+	        </div>
+	        <p class="terms">Bấm click 'thêm sant phẩm' nếu bạn đồng ý với điểu khoản và điều kiện <a href="#">Điều
+			        khoản &amp; Điều kiện</a>.</p>
+	        <div class="clear"></div>
+        </form>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+</div>

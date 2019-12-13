@@ -5,7 +5,7 @@ const controller = new Account();
 const Product = require("../controllers/product");
 const controllerProduct = new Product();
 
-
+router.get('/up', (req, res)=>controllerProduct.Show(req,res));
 router.get('/home', (req, res) => controllerProduct.ShowList(req, res));
 router.get('/', (req, res) => controllerProduct.ShowList(req, res));
 
