@@ -48,7 +48,7 @@
 					<h2>{{this.name}}</h2>
 					<p>{{this.description}}</p>
 					<div class="price">
-						<p>Giá: <span>{{this.price}}</span></p>
+						<p>Giá: <span>{{this.price}}đ</span></p>
 					</div>
 					<div class="available">
 						<p>Tùy chọn có sẵn :</p>
@@ -77,15 +77,15 @@
 					<div class="share">
 						<p>Chia sẻ sản phẩm :</p>
 						<ul>
-							<li><a href="#"><img src="images/youtube.png" alt=""></a></li>
-							<li><a href="#"><img src="images/facebook.png" alt=""></a></li>
-							<li><a href="#"><img src="images/twitter.png" alt=""></a></li>
-							<li><a href="#"><img src="images/linkedin.png" alt=""></a></li>
+							<li><a href="#"><img src="/images/youtube.png" alt=""></a></li>
+							<li><a href="#"><img src="/images/facebook.png" alt=""></a></li>
+							<li><a href="#"><img src="/images/twitter.png" alt=""></a></li>
+							<li><a href="#"><img src="/images/linkedin.png" alt=""></a></li>
 						</ul>
 					</div>
 					<div class="add-cart">
 						<div class="rating">
-							<p>Xếp hạng:<img src="images/rating.png"><span>[3 of 5 Sao]</span></p>
+							<p>Xếp hạng:<img src="/images/rating.png"><span>[3 of 5 Sao]</span></p>
 						</div>
 						<div class="button"><span><button type="submit" class="btn btn-primary btn-lg"> Thêm vào giỏ hàng</button></span></div>
 						<div class="clear"></div>
@@ -112,11 +112,11 @@
 			<div class="rightsidebar span_3_of_1">
 				<h2>Danh mục</h2>
 				<ul>
-					<li><a href="/products/type=dien-thoai">Điện thoại</a></li>
-					<li><a href="/products/type=dong-ho">Đồng hồ</a></li>
-					<li><a href="/products/type=laptop">Laptop</a></li>
-					<li><a href="/products/type=may-anh">Máy ảnh</a></li>
-					<li><a href="/products/type=tu-lanh">Tủ lạnh</a></li>
+					<li><a href="/products/dien-thoai">Điện thoại</a></li>
+					<li><a href="/products/dong-ho">Đồng hồ</a></li>
+					<li><a href="/products/laptop">Laptop</a></li>
+					<li><a href="/products/may-anh">Máy ảnh</a></li>
+					<li><a href="/products/tu-lanh">Tủ lạnh</a></li>
 					<li><a href="#">loa</a></li>
 					<li><a href="#">Đồ dùng gia đình</a></li>
 					<li><a href="#">Sim,card</a></li>
@@ -186,8 +186,8 @@
 		</div>
 		<h2>{{ this.name }} </h2>
 		<p>{{ this.description }}</p>
-		<p><span class="strike">50 000 000</span><span class="price">{{this.price}}</span></p>
-		<div class="button" onclick="addCart({{this._id}})"><span><img src="images/cart.jpg" alt="" /><a
+		<p><span class="strike">50 000 000</span><span class="price">{{this.price}}đ</span></p>
+		<div class="button" onclick="addCart({{this._id}})"><span><img src="/images/cart.jpg" alt="" /><a
 					href="/products/{{this._id}}" class="cart-button">Thêm vào giỏ hàng</a></span> </div>
 		<div class="button"><span><a href="/products/{{this._id}}" class="details">Chi tiết</a></span></div>
 	</div>

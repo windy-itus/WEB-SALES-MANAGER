@@ -1,5 +1,5 @@
 // class Home (commom)
-const db = require('../models/product').getDBProduct();
+const db = require('../models/product').getProduct;
 class Home {
     ShowAbout(req, res) {
         var user;
@@ -22,96 +22,55 @@ class Home {
         }
         res.render('faq', { title: 'Hỗ trợ', user});
     }
-    ShowCart(req, res) {
-        var data=[];
-        var dbsession = req.session;
-        var sum=0;
-        if (dbsession.cart) {
-            db.forEach(function (doc) {
-                req.session.cart.forEach(function(idproduct){
-                    let price=xulyChuoi(doc.price)
-                    if(Number(idproduct)==doc._id)
-                     {
-                        data.push(doc);
-                        sum=sum+price;
-                    }
+
+    async ShowCart(req, res) {
+        var data = [];
+        var sum = 0;
+        if (req.session.cart) {
+            await db.find({ _id: { $in: req.session.cart } }).then(function (_data) {
+                data = _data;
+                _data.forEach(function (doc) {
+                    sum = sum + doc.price;
                 });
             });
         }
-        res.render('cart', { title: 'Quản lý giỏ hàng', user: dbsession.username,data:data,sum:sum});
+        res.render('cart', { title: 'Quản lý giỏ hàng', user: req.session.username, data: data, sum: sum });
     }
-    AddProductInCart(req, res) {
-        let pro=[];
-        let recom=[];
-        let cateid;
-        //var dbsession = req.session;
-        //dbsession.cart = [];
+
+    async AddProductInCart(req, res) {
+        let pro = [];
+        let recom = [];
         var idproduct = req.params.id;
-        if(req.session.cart==null)
-        {
-            req.session.cart=[];
+        if (req.session.cart == null) {
+            req.session.cart = [];
         }
         req.session.cart.push(idproduct);
-        //req.session.cart.push(5);
 
-        db.forEach(function(doc){
-            if(doc._id==idproduct)
-            {
-                pro.push(doc);
-                cateid=pro.id_category;
-            }
-        });
+        pro = await db.find({ _id: idproduct });
 
-        db.forEach(function(doc){
-            if(doc.id_category==cateid)
-            {
-                recom.push(doc);
-            }
-        });
-        var dbsession=req.session;
+        recom = await db.find({ _id: pro.id_category });
+
         console.log("1 sản phẩm đã được thêm vào giỏ hàng");
-        res.render('product', { title: 'Sản phẩm', data: pro,recommand:recom,user:dbsession.username});
+        res.render('product', { title: 'Sản phẩm', data: pro, recommand: recom, user: req.session.username });
     }
 
-
-
-    DeleteProductInCart(req, res)
-    {       
-        const id=req.params.id;
+    async DeleteProductInCart(req, res) {
+        const id = req.params.id;
         req.session.cart.splice(req.session.cart.indexOf(id), 1);
-        let dbsession=req.session;
-        let data=[];
-        let sum=0;
+        let data = [];
+        let sum = 0;
 
-        if (dbsession.cart) {
-            db.forEach(function (doc) {
-                req.session.cart.forEach(function(idproduct){
-                    let price=xulyChuoi(doc.price)
-                    if(Number(idproduct)==doc._id)
-                     {
-                        data.push(doc);
-                        sum=sum+price;
-                    }
+        if (req.session.cart) {
+            await db.find({ _id: { $in: req.session.cart } }).then(function (_data) {
+                data = _data;
+                _data.forEach(function (doc) {
+                    sum = sum + doc.price;
                 });
             });
         }
 
-        res.render('cart', { title: 'Quản lý giỏ hàng', user: dbsession.username,data:data,sum:sum});
+        res.render('cart', { title: 'Quản lý giỏ hàng', user: req.session.username, data: data, sum: sum });
     }
 }
 
-function xulyChuoi(x)
-{
-    //xoa "đ" cuối
-    var len=x.length-1;
-    x=x.substr(0,len);
-
-    //xoa khoang cach
-    while(x.indexOf(" ")!=-1)
-    {
-        x=x.substr(0,x.indexOf(" "))+x.substr(x.indexOf(" ")+1)
-    }
-
-    return Number(x);
-}
 module.exports = Home;
