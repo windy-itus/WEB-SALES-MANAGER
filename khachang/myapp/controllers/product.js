@@ -1,5 +1,6 @@
 
 const product = require('../models/product').getProduct;
+//const products=require('../models/product').getDBProduct();
 
 var categories = [
   { id: 0, name: "Tất cả" },
@@ -165,8 +166,7 @@ class Product {
     res.render('viewtype', { data: dbif });
   }
 
-  Show(req,res)
-  {
+  Show(req, res) {
     res.render('upload');
   }
 
@@ -185,6 +185,23 @@ class Product {
     res.render('viewtype', { data: dbif });
   }
 
+  async Search(req, res) {
+    let key = req.query.key.toString();
+    key = key.toLowerCase();
+    console.log(key);
+    let data = [];
+    let name;
+
+    await product.find({}).then(function (doc) {
+      doc.forEach(function (data1) {
+        name = data1.name.toString().toLowerCase();
+        if (name.indexOf(key) >= 0) {
+          data.push(data1);
+        }
+      });
+    });
+    res.render('viewlistproducts', { data: data });
+  }
 }
 function parseToInt(x) {
   const parsed = parseInt(x, 32);

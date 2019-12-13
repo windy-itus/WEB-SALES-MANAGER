@@ -1,6 +1,7 @@
 
 const product = require('../models/product').getProduct;
-const newProduct=require('../models/product');
+const products = require('../models/product').getDBProduct();
+const newProduct = require('../models/product');
 
 var categories = [
   { id: 0, name: "Tất cả" },
@@ -156,8 +157,7 @@ class Product {
     res.render('product', { data: dbdetail, recommand: dbrecommand, user: dbsession.username });
   }
 
-  Show(req,res)
-  {
+  Show(req, res) {
     res.render('addproduct');
   }
   async ShowDienthoai(req, res) {
@@ -185,31 +185,44 @@ class Product {
     res.render('viewtype', { data: dbif });
   }
 
-  Addproduct(req,res)
-  {
-    const nameproduct=req.body.nameproduct;
-    const category=req.body.category;
-    const price=req.body.category;
-    const count=req.body.count;
-    const decription=req.body.decription;
-    const discount=req.body.discount;
-    const image=req.body.image;
-    const countsell=0;
-    let erorr=[];
-    erorr.push({msg : "nhập đầy đủ thông tin"});
-    const success="thêm sản phẩm thành công"
+  Addproduct(req, res) {
+    const nameproduct = req.body.nameproduct;
+    const category = req.body.category;
+    const price = req.body.category;
+    const count = req.body.count;
+    const decription = req.body.decription;
+    const discount = req.body.discount;
+    const image = req.body.image;
+    const countsell = 0;
+    let erorr = [];
+    erorr.push({ msg: "nhập đầy đủ thông tin" });
+    const success = "thêm sản phẩm thành công"
 
-    if(!nameproduct||!category||!price||!count||!decription||!discount||!image)
-    {
-        res.render('addproduct',{data:erorr,nameproduct,category,price,count,decription,discount,image});
+    if (!nameproduct || !category || !price || !count || !decription || !discount || !image) {
+      res.render('addproduct', { data: erorr, nameproduct, category, price, count, decription, discount, image });
     }
-    else
-    {
-      newProduct.Addproduct(nameproduct,category,price,count,countsell,decription,discount,image);
-      res.render('addproduct',{success,nameproduct,category,price,count,decription,discount,image});
+    else {
+      newProduct.Addproduct(nameproduct, category, price, count, countsell, decription, discount, image);
+      res.render('addproduct', { success, nameproduct, category, price, count, decription, discount, image });
     }
   }
 
+  async Search(req, res) {
+    let key = req.query.key.toString();
+    key=key.toLowerCase();
+    console.log(key);
+    let data = [];
+    let name;
+    //let data1=[];
+    //console.log(data1);
+    products.forEach(function (doc) {
+      name=doc.name.toLowerCase();
+      if (name.indexOf(key) >= 0) {
+        data.push(doc);
+      }
+    })
+    res.render('viewlistproducts', { data: data });
+  }
 
 }
 

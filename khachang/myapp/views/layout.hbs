@@ -17,11 +17,9 @@
 			</div>
 			<div class="header_top_right">
 				<div class="search_box">
-					<form>
-						<input type="text" value="Tìm kiếm" onfocus="this.value = '';"
-							onblur="if (this.value == '') {this.value = 'TÌM KIẾM SẢN PHẨM';}"><input type="submit"
-							value="TÌM KIẾM">
-					</form>
+					<form action="/search" method="GET">
+				    	<input type="text" id="key" name="key" value="{{key}}" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'TÌM KIẾM SẢN PHẨM';}"><a href="/search?key={{key}}"><input type="submit" value="TÌM KIẾM"></a>
+				    </form>
 				</div>
 				<div class="shopping_cart">
 					<div class="cart">
