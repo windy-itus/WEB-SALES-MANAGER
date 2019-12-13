@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 router.use(express.static("public"));
 const passport = require('passport');
+const {ensureAuthenticated}=require('../config/auth');
 
 
 //call controller account
@@ -18,15 +19,18 @@ router.post('/login', function (req, res, next) {
 router.get('/login-fail', (req, res) => controller.ShowLogin(req, res, "Vui lòng nhập đúng tài khoản và mật khẩu đã đăng kí"));
 
 //Handler register
-router.post('/register-form', async (req, res) => controller.Register(req, res));
+router.post('/register-form',(req, res) => controller.Register(req, res));
 
 // Handler get info user
 router.get('/forgetpassword', (req, res, next)=>controller.ForGetPassWord(req, res));
 router.post('/confirm-account-to-reset-password', (req, res, next)=>controller.ConfirmPassWord(req, res));
-router.get('/delivery', (req, res, next)=>controller.ShowDelivery(req, res));
+router.get('/delivery',ensureAuthenticated, (req, res, next)=>controller.ShowDelivery(req, res));
 router.get('/productspurchased', (req, res, next)=>controller.ShowProductPurchased(req, res));
-router.get('/info-user', (req, res, next)=>controller.ShowInfoUser(req, res));
-
+router.get('/info-user',ensureAuthenticated, (req, res, next)=>controller.ShowInfoUser(req, res));
+router.get('/change-info-user', (req, res) => controller.ShowChangeInfoUser(req, res));
+router.post('/change-info-user', (req, res) => controller.ChangeInfo(req, res));
+router.get('/changepassword',ensureAuthenticated,(req, res, next)=>controller.ShowChangePassword(req, res));
+router.post('/changepassword', (req, res) => controller.ChangePassword(req, res));
 
 
 module.exports = router;
