@@ -1,53 +1,70 @@
-
-<div class="main">
-	<div class="content">
-		
-		<div class="register_account">
-			<h3>Thêm sản phẩm mới</h3>
-			{{#if data}}
-			{{#each data}}
-			<div style="color: red;">{{this.msg}}</div><br>
-			{{/each}}
-			{{/if}}
-
-			{{#if success}}			
-			<div style="color: green;">{{success}}</div><br>
-			{{/if}}
-	<form action="/products/addproduct" method="POST" >
+<div class="container-fluid" id="content">
 	<div class="row">
-		<div class="form-group col-md-6">
-			<div><label class="control-label" for="nameproduct">Tên sản phẩm</label></div>
-			<div><input id="nameproduct" name="nameproduct" type="text" value="{{nameproduct}}"></div>
+		<!-- List of products -->
+		<div class="col-12 col-md-8 col-xl-9">
+			<form id="uploadProductForm" method="POST">
+				<div>
+					<h3>Nhập sản phẩm mới</h3>
+				</div>
 
-			<div><label class="control-label" for="category">Loại</label></div>
-			<div><input id="category" name="category" type="number" value="{{category}}"></div>
+				<div class="form-group row">
+					<label for="masp" class="col-sm-2 col-form-label">Tên Sản Phẩm</label>
+					<div class="col-sm-7">
+						<input type="text" id="name" name="name" class="form-control form-control-sm">
+					</div>
+				</div>
 
-            <div><label class="control-label" for="price">Giá cả</label></div>
-			<div><input id="price" name="price" type="number" value="{{price}}"></div>
+				<div class="form-group row">
+					<label for="tensp" class="col-sm-2 col-form-label">Loại Sản Phẩm</label>
+					<div class="col-sm-7">
+						<input type="text" id="tensp" name="tensp" class="form-control form-control-sm">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="soluong" class="col-sm-2 col-form-label">Giá</label>
+					<div class="col-sm-7">
+						<input type="number" id="soluong" name="soluong" class="form-control form-control-sm">
+					</div>
+				</div>
 
-			<div><label class="control-label" for="count">Số lượng</label></div>
-			<div><input id="count" type="number" name="count" value="{{count}}"></div>
+				<div class="form-group row">
+					<label for="dongia" class="col-sm-2 col-form-label">Giảm giá</label>
+					<div class="col-sm-7">
+						<input type="text" id="dongia" name="dongia" class="form-control form-control-sm">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="giadaily" class="col-sm-2 col-form-label">Số lượng</label>
+					<div class="col-sm-7">
+						<input type="text" id="count" name="count" class="form-control form-control-sm">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="giadaily" class="col-sm-2 col-form-label">Mô tả</label>
+					<div class="col-sm-7">
+						<input type="text" id="description" name="description" class="form-control form-control-sm">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="process" class="col-sm-2 col-form-label">Process</label>
+					<div class="col-sm-7">
+						<progress class="col-sm-12" value="0" id="process" max="100">0%</progress>
+						<input id="photo" class="file" type="file" name="mainimage" value="" onchange="getfile()">
+						<input id="url" name="url" hidden></input>
+
+						<img src="https://www.onlygfx.com/wp-content/uploads/2016/04/old-photo-camera.png" alt=""
+							id="image" width="150px" height="auto">
+					</div>
+				</div>
+				<div class="search" style="margin-bottom: 5%;">
+					<div><button id="submit_link" type="submit" class="grey" disabled>Tạo sản phẩm</button></div>
+				</div>
+				<br>
+				<br>
+			</form>
 		</div>
-		<div class="form-group col-md-6">
-			<div><label class="control-label" for="decription">Mô tả</label></div>
-			<div><input id="decription" name="decription" type="text" value="{{decription}}"></div>
-
-			<div><label class="control-label " for="discount">Giảm giá</label></div>
-			<div><input id="discount" name="discount" value="{{discount}}"></div>
-
-			<div><label class="control-label " for="image">Hình ảnh</label></div>
-			<div><input id="image" name="image"value="{{image}}"></div>
-		    </div>
-	        </div>
-	        <div class="search">
-		        <div><button type="submit" class="grey">Thêm sản phẩm</button></div>
-	        </div>
-	        <p class="terms">Bấm click 'thêm sant phẩm' nếu bạn đồng ý với điểu khoản và điều kiện <a href="#">Điều
-			        khoản &amp; Điều kiện</a>.</p>
-	        <div class="clear"></div>
-        </form>
-		</div>
-		<div class="clear"></div>
 	</div>
 </div>
-</div>
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<script src="/public/javascripts/import-new-products.js"></script>

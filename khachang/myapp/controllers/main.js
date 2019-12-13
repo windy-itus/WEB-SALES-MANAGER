@@ -2,19 +2,25 @@
 const db = require('../models/product').getDBProduct();
 class Home {
     ShowAbout(req, res) {
-        var dbsession = req.session;
+        var user;
         if (req.user != undefined && req.user != null) {
-            dbsession.username = req.user._doc.name;
+            user = req.user.name;
         }
-        res.render('about', { title: 'Về Chúng Tôi', user: dbsession.username });
+        res.render('about', { title: 'Về Chúng Tôi', user });
     }
     ShowContact(req, res) {
-        var dbsession = req.session;
-        res.render('contact', { title: 'Liên hệ', user: dbsession.username });
+        var user;
+        if (req.user != undefined && req.user != null) {
+            user = req.user.name;
+        }
+        res.render('contact', { title: 'Liên hệ', user});
     }
     ShowFaq(req, res) {
-        var dbsession = req.session;
-        res.render('faq', { title: 'Hỗ trợ', user: dbsession.username });
+        var user;
+        if (req.user != undefined && req.user != null) {
+            user = req.user.name;
+        }
+        res.render('faq', { title: 'Hỗ trợ', user});
     }
     ShowCart(req, res) {
         var data=[];

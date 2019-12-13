@@ -22,17 +22,17 @@ const prodPerPage = 8; // product per page
 const PREV = "page-prev";
 const NEXT = "page-next";
 /**
- * Class Articles Controller
+ * Class Product Controller
  */
 class Product {
   async ShowList(req, res, logout) {
-    var login = req.session;
+    var user;
     if (logout) {
-      login.username = null;
-      if (req.user != null) req.user = null;
+      req.logout();
+      req.session.destroy();
     }
     if (req.user != undefined && req.user != null) {
-      login.username = req.user._doc.name;
+      user = req.user.name;
     }
     // Get all product
     const fullproduct = await product.find({}).limit(prodPerPage);
@@ -41,7 +41,7 @@ class Product {
     // Render the page
     res.render('viewlistproducts', {
       data: fullproduct,
-      user: login.username,
+      user,
       categories: categories,
       sortOpts: sortOpts,
       selectedCate: 0,
@@ -51,13 +51,16 @@ class Product {
     });
   }
   async ShowIf(req, res) {
+    var user;
+    if (req.user != undefined && req.user != null) {
+      user = req.user.name;
+    }
     var query = {};
     var sort = {};
     var pageNo = 1;
     var pageDirect = "";
     var cateId = await parseToInt(req.body.Category);
     var sortId = await parseToInt(req.body.SortBy);
-    var dbsession = req.session;
     // Check if previous or next page was click, then change page number
     if (req.body.pageNext != undefined && req.body.pageNext != null && req.body.pageNext !== "") {
       pageNo = await parseToInt(req.body.pageNext);
@@ -92,7 +95,7 @@ class Product {
     // Render page
     res.render('viewlistproducts', {
       data: dbIf,
-      user: dbsession.username,
+      user,
       categories: categories,
       sortOpts: sortOpts,
       selectedCate: cateId,
@@ -140,10 +143,13 @@ class Product {
   //   });
   // }
   async ShowDetail(req, res) {
+    var user;
+    if (req.user != undefined && req.user != null) {
+      user = req.user.name;
+    }
     var dbdetail = [];
     var dbrecommand = [];
     var idproduct = Number(req.params.id);
-    var dbsession = req.session;
     // Get product detail
     dbdetail = await product.find({ _id: idproduct });
     // Get recommended products
@@ -152,7 +158,7 @@ class Product {
       _id: { $not: { $eq: idproduct } }
     });
     // Render page
-    res.render('product', { data: dbdetail, recommand: dbrecommand, user: dbsession.username });
+    res.render('product', { data: dbdetail, recommand: dbrecommand, user});
   }
 
   async ShowDienthoai(req, res) {
