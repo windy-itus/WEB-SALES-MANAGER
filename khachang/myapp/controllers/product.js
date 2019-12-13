@@ -167,25 +167,23 @@ class Product {
       _id: { $not: { $eq: idproduct } }
     });
     // Render page
-    res.render('product', { data: dbdetail, recommand: dbrecommand, user});
+    res.render('product', { data: dbdetail, recommand: dbrecommand, user });
   }
 
   async Search(req, res) {
-    let key = req.query.key.toString();
-    key = key.toLowerCase();
-    console.log(key);
-    let data = [];
-    let name;
-
-    await product.find({}).then(function (doc) {
-      doc.forEach(function (data1) {
-        name = data1.name.toString().toLowerCase();
-        if (name.indexOf(key) >= 0) {
-          data.push(data1);
-        }
-      });
+    var regex = new RegExp(escapeRegex(req.query.key), 'gi');
+    const data = await product.find({ name: regex });
+    res.render('viewlistproducts', {
+      data: data,
+      user: req.session.username,
+      priceRange: priceRange,
+      sortOpts: sortOpts,
+      selPriceRange: 0,
+      selectedSort: 0,
+      currentPage: 1,
+      pages: 1,
+      title: "Tìm kiếm"
     });
-    res.render('viewlistproducts', { data: data });
   }
 }
 
@@ -197,5 +195,9 @@ function parseToInt(x) {
 function isEmpty(val) {
   return (val === undefined || val == null || val.length <= 0) ? true : false;
 }
+
+function escapeRegex(str) {
+  return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = Product;
