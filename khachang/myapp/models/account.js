@@ -17,7 +17,8 @@ var inforSchema = new mongoose.Schema({
   address: String,
   email: String,
   phone: String,
-  type: String
+  type: String,
+  token: String
 }, {
   collection: 'Account'
 });
@@ -58,4 +59,11 @@ module.exports.hashPassword = async (password) => {
     } catch (error) {
         throw new Error('Hashing failed', error)
     }
+}
+
+module.exports.checkToken=function(token){
+  User.findOne({token:token}).then(function(doc){
+    return true;
+  });
+  return false;
 }
