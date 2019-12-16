@@ -75,17 +75,22 @@ class Account {
   }
   ConfirmPassWord(req, res) {
     const email = req.body.email;
+    var code=Array(16+1).join((Math.random().toString(36)+'00000000000000000').slice(2, 18)).slice(0, 16);
+    account.findOne({email:email}).then(function(userdb){
+      User.UpdateInfoAccount({token:code},userdb._id);
+    });
     var msg = "";
     var errorr = "";
     var user = "";
     if (req.user != undefined && req.user != null) {
-      user = req.user._doc.name;
+      user = req.user;
     }
     if (email.search("@gmail.com") == -1) {
       errorr = "Email bạn nhập vào không tồn, vui lòng kiếm tra lại. Email có dạng: Example@gmail.com";
       res.render('forgetpassword', { title: 'Xác thực tài khoản', user, errorr });
     }
     else {
+      
       var transporter = nodemailer.createTransport({ // config mail server
         service: 'Gmail',
         auth: {
@@ -97,8 +102,8 @@ class Account {
         from: 'Đăng Khoa Store',
         to: email,
         subject: '[XÁC MINH TÀI KHOẢN VÀ LẤY LẠI MẬT KHẨU]',
-        text: '<a href="http://localhost:3000/reset-password/"><b>Click here to reset password</b></a>',
-        html: '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/reset-password/"><b>Click here to reset password</b></a></li>'
+        text: '<a href="http://localhost:3000/users/resetpassword/"><b>Click here to reset password</b></a>',
+        html: '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/resetpassword/'+ code+'"><b>Click here to reset password</b></a></li>'
       }
       transporter.sendMail(mainOptions, function (err, info) {
         if (err) {
@@ -113,6 +118,17 @@ class Account {
       });
     }
   }
+
+  ResetPassword(req,res){
+    const checktoken= User.checkToken(req.params.token);
+    console.log(checktoken);
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+    }
+    res.render('resetpassword', { title: 'Reset Password', user });
+  }
+
   ShowDelivery(req, res) {
     var user = "";
     if (req.user != undefined && req.user != null) {
