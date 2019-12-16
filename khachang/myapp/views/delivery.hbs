@@ -1,25 +1,39 @@
 <div class="main">
+    {{#if User}}
     <div class="content container-fluid">
         <div class="heading">
     		<h3>Thông tin khách hàng</h3>
     	</div>
-        <div class="content_top col-md-12">
-            <div class="form-group">
+       <form action="/order" method="POST">
+            
+                <div class="content_top col-md-12">
+                <div class="form-group">
                 <label class="control-label" for="name">Họ và tên</label>
                 <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="name"></div>  
+                    <div class="col-md-6"><input class="form-control" type="text" id="name" name="name" value="{{name}}"></div>  
                 </div>
                 <label class="control-label" for="sdt">Số điện thoại</label>
                 <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="sdt"></div>  
+                    <div class="col-md-6"><input class="form-control" type="text" id="sdt" name="sdt" value="{{sdt}}"></div>  
                 </div>
                 <label class="control-label" for="adress">Địa chỉ nhận</label>
                 <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="adress"></div>  
+                    <div class="col-md-6"><input class="form-control" type="text" id="address" name="address" value="{{address}}"></div>  
                 </div>
+                <label class="control-label" for="adress">Tổng tiền</label>
+                <div class="row">
+                    <div class="col-md-6"><input class="form-control" type="input" id="sum" name="sum" value="{{sum}}"/></div>  
                 <br>
-                <a href="#"><button class="btn btn-primary btn-sm" type="button">Xác nhận</button></a>
+                <br>
+                <button class="btn btn-primary btn-sm" type="submit">Xác nhận</button>
             </div>
-        </div>
+            </div>
+        
+       </form>
+       {{#if status}}
+            <div>{{status}}</div>
+       {{/if}}
     </div>
+    {{else}} <br><br><br><div align="center" style="color:red; font-size: 30px;">Vui lòng đăng nhập trước khi thanh toán</div><br><br><br>
+    {{/if}}
 </div>

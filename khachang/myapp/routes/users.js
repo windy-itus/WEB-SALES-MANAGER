@@ -24,7 +24,7 @@ router.post('/register-form',(req, res) => controller.Register(req, res));
 // Handler get info user
 router.get('/forgetpassword', (req, res, next)=>controller.ForGetPassWord(req, res));
 router.post('/confirm-account-to-reset-password', (req, res, next)=>controller.ConfirmPassWord(req, res));
-router.get('/delivery',ensureAuthenticated, (req, res, next)=>controller.ShowDelivery(req, res));
+router.get('/delivery', (req, res, next)=>controller.ShowDelivery(req, res));
 router.get('/productspurchased', (req, res, next)=>controller.ShowProductPurchased(req, res));
 router.get('/info-user',ensureAuthenticated, (req, res, next)=>controller.ShowInfoUser(req, res));
 router.get('/change-info-user', (req, res) => controller.ShowChangeInfoUser(req, res));
