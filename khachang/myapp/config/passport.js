@@ -22,7 +22,7 @@ module.exports =function (passport) {
                 return done(null, false,{message:'Vui lòng điền đầy đủ thông tin'});
             User.findOne({
                 username:username
-            }).then(async function (user) {    
+            }).then(function (user) {    
                 if(!user)
                     return done(null,false,{message:'Tài khoản chưa được đăng ký'});
                 bcrypt.compare(password,user.password,(err,isMatch)=>{
