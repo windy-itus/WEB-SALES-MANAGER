@@ -64,10 +64,10 @@ class Product {
     // Check if sort is at sortOpts
     if (sortId < 0 || sortId > 4) sortId = 0;
     // Get session info
-    var session = req.session;
+    var user;
     // Set user name in session
     if (req.user != undefined && req.user != null) {
-      session.username = req.user._doc.name;
+      user = req.user;
     }
     // Check if previous or next page was click, then change page number
     if (!isEmpty(req.query.PageNext)) {
@@ -112,7 +112,7 @@ class Product {
     // Render the page
     res.render('viewlistproducts', {
       data: data,
-      user: session.username,
+      user,
       priceRange: priceRange,
       sortOpts: sortOpts,
       selPriceRange: price,
@@ -125,14 +125,12 @@ class Product {
   }
 
   async ShowList(req, res, logout) {
-    var login = req.session;
     if (logout) {
-      login.username = null;
-      if (req.user != null) req.user = null;
+      req.logout();
+      req.session.destroy();
     }
-    if (req.user != undefined && req.user != null) {
-      login.username = req.user._doc.name;
-    }
+    var user;
+    if (req.user != undefined && req.user != null) user = req.user;
     // Get all product
     const fullproduct = await product.find({}).limit(prodPerPage);
     // Count how many products were found
@@ -140,7 +138,7 @@ class Product {
     // Render the page
     res.render('viewlistproducts', {
       data: fullproduct,
-      user: login.username,
+      user,
       priceRange: priceRange,
       sortOpts: sortOpts,
       selPriceRange: 0,
@@ -154,7 +152,7 @@ class Product {
   async ShowDetail(req, res) {
     var user;
     if (req.user != undefined && req.user != null) {
-      user = req.user.name;
+      user = req.user;
     }
     var dbdetail = [];
     var dbrecommand = [];
