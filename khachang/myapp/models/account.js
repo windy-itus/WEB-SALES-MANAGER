@@ -60,10 +60,3 @@ module.exports.hashPassword = async (password) => {
         throw new Error('Hashing failed', error)
     }
 }
-
-module.exports.checkToken=function(token){
-  User.findOne({token:token}).then(function(doc){
-    return true;
-  });
-  return false;
-}

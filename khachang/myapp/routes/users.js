@@ -23,7 +23,7 @@ router.post('/register-form',(req, res) => controller.Register(req, res));
 
 // Handler get info user
 router.get('/forgetpassword', (req, res, next)=>controller.ForGetPassWord(req, res));
-router.post('/confirm-account-to-reset-password', (req, res, next)=>controller.ConfirmPassWord(req, res));
+router.post('/forgetpassword', (req, res, next)=>controller.SubmitForgetPassword(req, res));
 router.get('/delivery', (req, res, next)=>controller.ShowDelivery(req, res));
 router.get('/productspurchased', (req, res, next)=>controller.ShowProductPurchased(req, res));
 router.get('/info-user',ensureAuthenticated, (req, res, next)=>controller.ShowInfoUser(req, res));
@@ -31,7 +31,8 @@ router.get('/change-info-user', (req, res) => controller.ShowChangeInfoUser(req,
 router.post('/change-info-user', (req, res) => controller.ChangeInfo(req, res));
 router.get('/changepassword',ensureAuthenticated,(req, res, next)=>controller.ShowChangePassword(req, res));
 router.post('/changepassword', (req, res) => controller.ChangePassword(req, res));
-router.get('/resetpassword/d3qpkso0fl000000', (req,res) => controller.ResetPassword(req,res));
+router.get('/resetpassword/:token', (req,res) => controller.ShowResetPassword(req,res));
+router.post('/resetpassword/:token', (req,res) => controller.ResetPassword(req,res));
 
 
 

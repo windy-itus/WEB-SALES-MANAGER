@@ -3,6 +3,7 @@ var account = User.getAccount;
 //test gui mail
 var nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
+var iduser_reset;
 
 class Account {
   async Register(req, res) {
@@ -73,24 +74,29 @@ class Account {
     }
     res.render('forgetpassword', { title: 'Quên mật khẩu' });
   }
-  ConfirmPassWord(req, res) {
+  SubmitForgetPassword(req, res) {
     const email = req.body.email;
-    var code=Array(16+1).join((Math.random().toString(36)+'00000000000000000').slice(2, 18)).slice(0, 16);
-    account.findOne({email:email}).then(function(userdb){
-      User.UpdateInfoAccount({token:code},userdb._id);
-    });
+    var code = Array(16 + 1).join((Math.random().toString(36) + '00000000000000000').slice(2, 18)).slice(0, 16);
     var msg = "";
-    var errorr = "";
     var user = "";
+    var iduser;
     if (req.user != undefined && req.user != null) {
       user = req.user;
     }
+    account.findOne({ email: email }).then(function (userdb) {
+      iduser = userdb._id;
+      User.UpdateInfoAccount({ token: code }, userdb._id);
+    })
+      .catch((err) => {
+        msg = "Email không được dùng để đăng kí tài khoản ứng dụng";
+        res.render('forgetpassword', { title: 'Xác thực tài khoản', user, msg });
+      });
     if (email.search("@gmail.com") == -1) {
-      errorr = "Email bạn nhập vào không tồn, vui lòng kiếm tra lại. Email có dạng: Example@gmail.com";
-      res.render('forgetpassword', { title: 'Xác thực tài khoản', user, errorr });
+      msg = "Email bạn nhập vào không tồn, vui lòng kiếm tra lại. Email có dạng: Example@gmail.com";
+      res.render('forgetpassword', { title: 'Xác thực tài khoản', user, msg });
     }
     else {
-      
+
       var transporter = nodemailer.createTransport({ // config mail server
         service: 'Gmail',
         auth: {
@@ -103,41 +109,92 @@ class Account {
         to: email,
         subject: '[XÁC MINH TÀI KHOẢN VÀ LẤY LẠI MẬT KHẨU]',
         text: '<a href="http://localhost:3000/users/resetpassword/"><b>Click here to reset password</b></a>',
-        html: '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/resetpassword/'+ code+'"><b>Click here to reset password</b></a></li>'
+        html: '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/users/resetpassword/' + code + '"><b>Click here to reset password</b></a></li>'
       }
       transporter.sendMail(mainOptions, function (err, info) {
         if (err) {
           console.log(err);
           errorr = "Hiện tại hệ thống không thể hỗ trợ bạn khôi phục mật khẩu. Bạn có thể thử lại lần sau!";
-          res.render('confirmcode', { title: 'Xác thực tài khoản', user, msg, errorr });
+          res.render('forgetpassword', { title: 'Xác thực tài khoản', user, msg });
         } else {
           console.log('Message sent: ' + info.response);
-          msg = "Hệ thống đã gửi mã xác minh đến tài khoản của bạn, vui lòng check mail để xác minh và lấy lại lại khoản";
-          res.render('confirmcode', { title: 'Xác thực tài khoản', user, msg, errorr });
+          msg = "Hệ thống đã gửi mã xác minh đến tài khoản của bạn, vui lòng check mail để thực hiện resetpassword";
+          res.render('forgetpassword', { title: 'Xác thực tài khoản', user, msg });
         }
       });
+      var timeout;
+      timeout = setTimeout(function () {
+        User.UpdateInfoAccount({ token:null }, iduser);
+      }, 10000);
     }
   }
 
-  ResetPassword(req,res){
-    const checktoken= User.checkToken(req.params.token);
-    console.log(checktoken);
+  async ShowResetPassword(req, res) {
+    const token = req.params.token;
+    var isexist;
+
+    await account.findOne({ token: token }).then(function (doc) {
+      isexist = true;
+      iduser_reset = doc._id;
+    })
+      .catch((err) => {
+        isexist = false;
+      });
+    if (isexist == false) res.send("Not found");
+    if (isexist == true) {
+      var user = "";
+      if (req.user != undefined && req.user != null) {
+        user = req.user._doc.name;
+      }
+      res.render('resetpassword', { title: 'Reset Password', user, token });
+    }
+  }
+
+  async ResetPassword(req, res) {
+    const newpw = req.body.newpw;
+    const renewpw = req.body.renewpw;
+    var errors = [];
+    if (!newpw || !renewpw) {
+      errors.push({ msg: 'Vui lòng điền đầy đủ thông tin' });
+    }
+    if (newpw.length < 7) {
+      errors.push({ msg: 'Mật khẩu phải có độ dài lớn hơn 6 ký tự' });
+    }
+    if (newpw != renewpw) {
+      errors.push({ msg: 'Mật khẩu nhập lại không đúng' });
+    }
     var user = "";
     if (req.user != undefined && req.user != null) {
       user = req.user._doc.name;
     }
-    res.render('resetpassword', { title: 'Reset Password', user });
+    if (errors.length > 0) {
+      res.render('resetpassword', { title: 'Reset Password', user, data: errors, newpw, renewpw });
+    }
+    else {
+
+      await User.hashPassword(newpw).then(function (doc) {
+        User.UpdateInfoAccount({ password: doc }, iduser_reset);
+        var success = "Mật khẩu đã được đặt lại thành công";
+        res.render('resetpassword', { title: 'Reset Password', user, success });
+      })
+        .catch((err) => {
+          errors.push({ msg: 'Xảy ra lỗi, vui lòng thử lại' });
+          res.render('resetpassword', { title: 'Reset Password', user, data: errors, newpw, renewpw });
+        });
+
+
+    }
   }
 
 
   ShowDelivery(req, res) {
-     var user = "";
-     if (req.user != undefined && req.user != null) {
-       user = req.user._doc.name;
-       res.render('delivery', { title: 'Thông tin giao hàng', User:req.user });
-     }
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+      res.render('delivery', { title: 'Thông tin giao hàng', User: req.user });
+    }
     //res.render('delivery', { title: 'Thông tin giao hàng' });
-    
+
   }
 
   ShowProductPurchased(req, res) {
@@ -211,20 +268,20 @@ class Account {
       errors.push({ msg: 'Vui lòng điền đầy đủ thông tin' });
     }
     if (newpassword != renewpassword) errors.push({ msg: 'Nhập lại mật khẩu mới không đúng' });
-    if(newpassword.length<7) errors.push({ msg: 'Mật khẩu phải có độ dài lớn hơn 6' });
+    if (newpassword.length < 7) errors.push({ msg: 'Mật khẩu phải có độ dài lớn hơn 6' });
     bcrypt.compare(oldpassword, req.user.password, async (err, isMatch) => {
       if (err) throw err;
       if (!isMatch) {
         errors.push({ msg: 'Mật khẩu sai, vui lòng kiểm tra lại' });
       }
       if (errors.length > 0) {
-        res.render('changepassword', { title: 'Thay đổi mật khẩu', user:req.user, info,data:errors });
+        res.render('changepassword', { title: 'Thay đổi mật khẩu', user: req.user, info, data: errors });
       }
       else {
         await User.hashPassword(newpassword).then(function (doc) {
-          User.UpdateInfoAccount({ password: doc },iduser);
+          User.UpdateInfoAccount({ password: doc }, iduser);
           var success = "Thay đổi thành công";
-          res.render('changepassword', { title: 'Thông tin tài khoản', user:req.user, success });
+          res.render('changepassword', { title: 'Thông tin tài khoản', user: req.user, success });
         });
       }
     });
