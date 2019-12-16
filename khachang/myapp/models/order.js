@@ -7,7 +7,7 @@ mongoose.connect(uri, {
     useNewUrlParser: true,
   });
 
-  module.exports.addOrder=function(order){
+  module.exports.addOrder=function(order,productsIncart){
     MongoClient.connect(uri, function (err, db) {
       if (err) throw err;
       var dbo = db.db("ManagerStore");
@@ -16,4 +16,13 @@ mongoose.connect(uri, {
           db.close();
       });
   });
-  } 
+
+  MongoClient.connect(uri, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("ManagerStore");
+    dbo.collection("ProductInOrder").insertMany(productsIncart, function (err, res) {
+        if (err) throw err;
+        db.close();
+    });
+});
+} 

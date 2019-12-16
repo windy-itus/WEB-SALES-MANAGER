@@ -1,6 +1,7 @@
 // class Home (commom)
 const db = require('../models/product').getProduct;
 var Order = require('../models/order');
+const ID=require('uuid/v1');
 
 class Home {
     ShowAbout(req, res) {
@@ -81,13 +82,19 @@ class Home {
         const dc=req.body.address;
         const user=req.user;
         const id=user._id;
+        const id_order= ID();
         const stt=0;
         const amou=req.body.sum;
         const Day=new Date();
          const success="Đặt hàng thành công";
          const fail="Vui lòng nhập đủ thông tin";
          let mess;
+
+        let products=[];
+        products= req.session.cart;
+
          const order = {
+             _id:id_order,
              ID_Usser:id,
              recipient:name,
              phone_number:sdt,
@@ -96,6 +103,17 @@ class Home {
              amount:amou,
              date:Day
          };
+
+         let productsIncart=[];
+         products.forEach(function(doc){
+            const product={
+                _idOrder:id_order,
+                _idProduct:doc
+            }
+
+            productsIncart.push(product);
+         });
+
         //console.log(name);
         if(!name||!sdt||!dc)
         {
@@ -104,7 +122,7 @@ class Home {
         else
         {
             mess=success;
-            Order.addOrder(order);
+            Order.addOrder(order,productsIncart);
         }
         res.render('delivery', {status:mess,name:name,sdt:sdt,address:dc,User:req.user, sum:amou});
     }
