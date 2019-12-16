@@ -1,5 +1,7 @@
 // class Home (commom)
 const db = require('../models/product').getProduct;
+var Order = require('../models/order');
+
 class Home {
     ShowAbout(req, res) {
         var user;
@@ -70,6 +72,48 @@ class Home {
         }
 
         res.render('cart', { title: 'Quản lý giỏ hàng', user: req.session.username, data: data, sum: sum });
+    }
+
+    async Order(req,res)
+    {
+        const name=req.body.name;
+        const sdt=req.body.sdt;
+        const dc=req.body.address;
+        const user=req.user;
+        const id=user._id;
+        const stt=0;
+        const amou=req.body.sum;
+        const Day=new Date();
+         const success="Đặt hàng thành công";
+         const fail="Vui lòng nhập đủ thông tin";
+         let mess;
+         const order = {
+             ID_Usser:id,
+             recipient:name,
+             phone_number:sdt,
+             address:dc,
+             status:stt,
+             amount:amou,
+             date:Day
+         };
+        //console.log(name);
+        if(!name||!sdt||!dc)
+        {
+            mess=fail;
+        }
+        else
+        {
+            mess=success;
+            Order.addOrder(order);
+        }
+        res.render('delivery', {status:mess,name:name,sdt:sdt,address:dc,User:req.user, sum:amou});
+    }
+
+    ThanhToan(req,res)
+    {
+        const user=req.user;
+        const data=req.params.sum;
+        res.render('delivery', { title: 'thanh toán', sum: data, User:user});
     }
 }
 

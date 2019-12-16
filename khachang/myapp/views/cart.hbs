@@ -1,6 +1,7 @@
 <h2 class="text-center">Giỏ hàng</h2>
 <div class="container" style="background-color: white;">
-    <table id="cart" class="table table-hover table-condensed">
+ 
+        <table id="cart" class="table table-hover table-condensed">
         {{#if data}}
         {{#each data}}
         <thead>
@@ -32,7 +33,7 @@
                 <td data-th="Subtotal" class="text-center">{{this.price}}</td>
                 <td class="actions" data-th="">
                     
-                    <button class="btn btn-danger btn-sm">Xóa<i class="fa fa-trash-o"></i>
+                    <button class="btn btn-danger btn-sm">Xóa<i class="fa fa-trash-o" type="submit"></i>
                     </button>
                 </td>
             </tr>
@@ -40,14 +41,16 @@
             {{/each}}
             {{else}} <div class="text-center">Không có gì trong giỏ hàng</div>
             {{/if}}
-            <tr>
-                <td><a href="/home" class="btn btn-warning"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
+            <tr>                
+               <form action="/thanhtoan/{{sum}}" method="GET">
+                    <td><a href="/home" class="btn btn-warning"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
                 </td>
                 <td colspan="2" class="hidden-xs"> </td>
-                <td class="hidden-xs text-center"><strong>Tổng tiền : {{sum}} đ</strong>
+                <td class="hidden-xs text-center"><label id="sum" value="sum" name="sum">Tổng tiền : {{sum}} đ</label>
                 </td>
-                <td><a href="#" class="btn btn-success btn-block">Thanh toán <i class="fa fa-angle-right"></i></a>
+                <td><button type="submit" class="btn btn-success btn-block">Thanh toán <i class="fa fa-angle-right"></i></button>
                 </td>
+               </form>
             </tr>
             </tfoot>
     </table>

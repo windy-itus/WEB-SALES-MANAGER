@@ -23,6 +23,8 @@ router.get('/faq', (req, res) => controllerHome.ShowFaq(req, res));
 router.get('/cart', async (req, res)=>controllerHome.ShowCart(req, res));
 router.get('/search',(req,res)=>controllerProduct.Search(req, res));
 router.post('/add-in-cart/:id', async (req, res) => controllerHome.AddProductInCart(req, res));
-router.post('/delete/:id', async (req, res) => controllerHome.DeleteProductInCart(req, res))
+router.post('/delete/:id', async (req, res) => controllerHome.DeleteProductInCart(req, res));
+router.post('/order',async (req, res)=>controllerHome.Order(req,res));
+router.get('/thanhtoan/:sum',(req,res)=>controllerHome.ThanhToan(req,res));
 
 module.exports = router;

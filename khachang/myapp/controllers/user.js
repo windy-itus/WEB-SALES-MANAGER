@@ -46,7 +46,7 @@ class Account {
         const user = {
           name: name,
           username: username,
-          password: password,
+          password: doc,
           phone: phone,
           email: email,
           address: address,
@@ -129,13 +129,17 @@ class Account {
     res.render('resetpassword', { title: 'Reset Password', user });
   }
 
+
   ShowDelivery(req, res) {
-    var user = "";
-    if (req.user != undefined && req.user != null) {
-      user = req.user._doc.name;
-    }
-    res.render('delivery', { title: 'Thông tin giao hàng', user });
+     var user = "";
+     if (req.user != undefined && req.user != null) {
+       user = req.user._doc.name;
+       res.render('delivery', { title: 'Thông tin giao hàng', User:req.user });
+     }
+    //res.render('delivery', { title: 'Thông tin giao hàng' });
+    
   }
+
   ShowProductPurchased(req, res) {
     var user = "";
     if (req.user != undefined && req.user != null) {
