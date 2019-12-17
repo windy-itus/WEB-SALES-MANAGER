@@ -281,7 +281,7 @@ class Account {
         await User.hashPassword(newpassword).then(function (doc) {
           User.UpdateInfoAccount({ password: doc }, iduser);
           var success = "Thay đổi thành công";
-          res.render('changepassword', { title: 'Thông tin tài khoản', user: req.user, success });
+          res.render('changepassword', { title: 'Thay đổi mật khẩu', user: req.user, success });
         });
       }
     });
