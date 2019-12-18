@@ -21,6 +21,17 @@ var prodSchema = new mongoose.Schema({
 }, {
   collection: 'Order'
 });
-
 const Order = db.useDb("ManagerStore").model("Order", prodSchema);
 module.exports.getOrder = Order;
+
+
+
+var productInOrder=new mongoose.Schema({
+  _id: String,
+  _idOrder:String,
+  _idProduct: String
+}, {
+  collection: 'ProductInOrder'
+});
+const ProductInOrder = db.useDb("ManagerStore").model("ProductInOrder", productInOrder);
+module.exports.getProductInOrder = ProductInOrder;

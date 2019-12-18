@@ -2,6 +2,7 @@
 const product = require('../models/product').getProduct;
 const products = require('../models/product').getDBProduct();
 const newProduct = require('../models/product');
+const Order = require('../models/order').getOrder;
 
 var categories = [
   { id: 0, name: "Tất cả" },
@@ -222,6 +223,13 @@ class Product {
       }
     })
     res.render('viewlistproducts', { data: data });
+  }
+
+  async QLDongHang(req, res)
+  {
+    let Data;
+    Data= await Order.find({});
+    res.render('QLdonhang', {Data:Data});
   }
 
 }
