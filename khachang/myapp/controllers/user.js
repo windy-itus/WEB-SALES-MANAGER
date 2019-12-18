@@ -70,11 +70,7 @@ class Account {
     res.render('login', { title: 'Đăng nhập/Đăng ký', notice: msg, user });
   }
   ForGetPassWord(req, res) {
-    var user = "";
-    if (req.user != undefined && req.user != null) {
-      user = req.user._doc.name;
-    }
-    res.render('forgetpassword', { title: 'Quên mật khẩu' });
+    res.render('forgetpassword', { title: 'Quên mật khẩu',user:req.user });
   }
   async SubmitForgetPassword(req, res) {
     const email = req.body.email;
@@ -158,10 +154,10 @@ class Account {
         }
       }
     });
-    
   }
 
   async ResetPassword(req, res) {
+    const token = req.params.token;
     const newpw = req.body.newpw;
     const renewpw = req.body.renewpw;
     var errors = [];
@@ -179,21 +175,19 @@ class Account {
       user = req.user._doc.name;
     }
     if (errors.length > 0) {
-      res.render('resetpassword', { title: 'Reset Password', user, data: errors, newpw, renewpw });
+      res.render('resetpassword', { title: 'Reset Password', user, data: errors, newpw, renewpw,token });
     }
     else {
 
       await User.hashPassword(newpw).then(function (doc) {
         User.UpdateInfoAccount({ password: doc }, iduser_reset);
         var success = "Mật khẩu đã được đặt lại thành công";
-        res.render('resetpassword', { title: 'Reset Password', user, success });
+        res.render('resetpassword', { title: 'Reset Password', user, success,token });
       })
         .catch((err) => {
           errors.push({ msg: 'Xảy ra lỗi, vui lòng thử lại' });
-          res.render('resetpassword', { title: 'Reset Password', user, data: errors, newpw, renewpw });
+          res.render('resetpassword', { title: 'Reset Password', user, data: errors, newpw, renewpw,token });
         });
-
-
     }
   }
   
