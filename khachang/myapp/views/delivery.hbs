@@ -4,6 +4,7 @@
         <div class="heading">
     		<h3>Thông tin khách hàng</h3>
     	</div>
+       {{#if sum}}
        <form action="/order" method="POST">
             
                 <div class="content_top col-md-12">
@@ -27,9 +28,10 @@
                 <br>
                 <button class="btn btn-primary btn-sm" type="submit">Xác nhận</button>
             </div>
-            </div>
-        
+            </div>     
        </form>
+       {{else}}<div>Không có gì trong giỏ hàng</div>
+       {{/if}}
        {{#if status}}
             <div>{{status}}</div>
        {{/if}}

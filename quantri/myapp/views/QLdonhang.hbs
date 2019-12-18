@@ -1,0 +1,26 @@
+
+    {{#if Data}}
+    {{#each Data}}
+    <form>
+        <div style="margin-right:30px ; width: 30%;border: 10px ;height: auto; align-items: center; line-height: 25px; float: inline;">
+       <div align="center" >Đơn Hàng</div>
+       <hr>
+       <div style="float: left; width: 50%;">
+          <b>Ngày</b><div id="date" name="date">{{this.date}}</div>
+          <b>Người đặt: </b><div name="ID_Usser">{{this.ID_Usser}}</div>
+          <b>Người nhận</b>
+          <div name="recipient">{{this.recipient}}</div>
+       </div>
+       <div>          
+            <b>Tổng tiền</b> <div name="amount">{{this.amount}}</div>
+            <button class="Button"> Chi tiết </button><br>
+            <button> Giao hàng </button>
+            <div></div>
+       </div>
+    </div>   
+    <br>
+    <br>
+    <hr>
+    </form>
+    {{/each}}
+    {{/if}}

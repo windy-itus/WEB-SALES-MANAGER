@@ -130,7 +130,11 @@ class Home {
     ThanhToan(req,res)
     {
         const user=req.user;
-        const data=req.params.sum;
+        let data=req.params.sum;
+        if(data<=0)
+        {
+            data=null;
+        }
         res.render('delivery', { title: 'thanh toán', sum: data, User:user});
     }
 }
