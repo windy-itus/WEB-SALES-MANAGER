@@ -1,7 +1,8 @@
-
+<div align="center">
+   
     {{#if Data}}
     {{#each Data}}
-    <form>
+    <form method="GET" action="/order/o={{this._id}}" style="width: 100%; heigh=100% background-color: bisque;">
         <div style="margin-right:30px ; width: 30%;border: 10px ;height: auto; align-items: center; line-height: 25px; float: inline;">
        <div align="center" >Đơn Hàng</div>
        <hr>
@@ -12,15 +13,19 @@
           <div name="recipient">{{this.recipient}}</div>
        </div>
        <div>          
-            <b>Tổng tiền</b> <div name="amount">{{this.amount}}</div>
-            <button class="Button"> Chi tiết </button><br>
-            <button> Giao hàng </button>
+            <b>Tổng tiền</b> <div name="amount">{{this.amount}}</div>           
+            {{!-- <button> Giao hàng </button><br> --}}
+            <b>Trạng thái:</b><span name="status">{{this.status}}</span>
+            <button class="Button" type="submit"> Chi tiết </button><br>
             <div></div>
        </div>
     </div>   
     <br>
     <br>
-    <hr>
     </form>
+    <hr>
+    <hr>
     {{/each}}
     {{/if}}
+    
+</div>

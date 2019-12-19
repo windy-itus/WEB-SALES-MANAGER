@@ -9,6 +9,7 @@ router.get('/up', (req, res)=>controllerProduct.Show(req,res));
 router.get('/home', (req, res) => controllerProduct.ShowList(req, res));
 router.get('/search',(req,res)=>controllerProduct.Search(req, res));
 router.get('/qldonhang',async (req,res)=>controllerProduct.QLDongHang(req, res));
+router.get('/order/o=:_id',async(req,res)=>controllerProduct.ChiTietDonHang(req, res));
 router.get('/', (req, res) => controllerProduct.ShowList(req, res));
 
 
