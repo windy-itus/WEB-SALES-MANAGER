@@ -12,6 +12,7 @@ router.get('/qldonhang',async (req,res)=>controllerProduct.QLDongHang(req, res))
 router.get('/', (req, res) => controllerProduct.ShowList(req, res));
 
 
+
 /* GET users listing. */
 router.get('/logout', (req, res) => controllerProduct.ShowList(req, res, true));
 // chưa xử lí

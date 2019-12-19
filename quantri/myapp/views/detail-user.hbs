@@ -1,0 +1,77 @@
+<div class="main">
+    <div class="content container-fluid">
+        <div class="heading">
+            <h3>Thông tin tài khoản</h3>
+        </div>
+        {{#if info}}
+        <div class="content_top col-md-12">
+            <form>
+                <div class="form-group">
+                    <label for="username">Tên tài khoản</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" name="username" type="text" id="username"
+                                value="{{info.username}}" readonly></div>
+                    </div>
+
+                    <label for="name">Họ và tên</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" name="name" type="text" id="name"
+                                value="{{info.name}}" readonly></div>
+                    </div>
+
+                    <label for="birthday">Email</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" name="email" type="email" id="email"
+                                value="{{info.email}}" readonly></div>
+                    </div>
+
+                    <label for="phone">Số điện thoại</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" name="phone" type="text" id="phone"
+                                value="{{info.phone}}" readonly></div>
+                    </div>
+                    <label for="address">Địa chỉ</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" name="address" type="text" id="address"
+                                value="{{info.address}}" readonly></div>
+                    </div>
+                    <label for="lock">Trạng thái</label>
+                    {{#if info.lock}}
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" name="lock" type="text" id="lock"
+                                value="Đang khóa" readonly></div>
+                    </div>
+                    {{else}}
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" name="lock" type="text" id="lock"
+                                value="Kích hoạt" readonly></div>
+                    </div>
+                    {{/if}}
+                    <label for="admin">Loại tài khoản</label>
+                    {{#if info.admin}}
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" name="admin" type="text" id="admin"
+                                value="Admin" readonly></div>
+                    </div>
+                    {{else}}
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" name="admin" type="text" id="admin"
+                                value="Người dùng" readonly></div>
+                    </div>
+                    {{/if}}
+                    <br>
+                    <div class="row">
+                        {{#if info.lock}}
+                        <div class="col-md-2"><a href="/users/lock-{{info.username}}"><button
+                                    class="btn btn-primary btn-sm" type="button">Mở khóa tài khoản</button></a></div>
+                        {{else}}
+                        <div class="col-md-2"><a href="/users/lock-{{info.username}}"><button
+                                    class="btn btn-primary btn-sm" type="button">Khóa tài khoản</button></a></div>
+                        {{/if}}
+                    </div>
+                </div>
+            </form>
+        </div>
+        {{/if}}
+    </div>
+</div>

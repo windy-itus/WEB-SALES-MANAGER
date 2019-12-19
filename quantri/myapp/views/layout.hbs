@@ -51,34 +51,6 @@
 						</li>					
 				   </ul>
 		     </div>
-		     <script>
-			function DropDown(el) {
-				this.dd = el;
-				this.initEvents();
-			}
-			DropDown.prototype = {
-				initEvents : function() {
-					var obj = this;
-
-					obj.dd.on('click', function(event){
-						$(this).toggleClass('active');
-						event.stopPropagation();
-					});	
-				}
-			}
-
-			$(function() {
-
-				var dd = new DropDown( $('#language') );
-
-				$(document).click(function() {
-					// all dropdowns
-					$('.wrapper-dropdown').removeClass('active');
-				});
-
-			});
-
-		</script>
 		 </div>
 				<div class="login">
 					{{#if user}}
@@ -100,10 +72,10 @@
 		<ul class="menu list-unstyled">
 			<li><a href="/home">TRANG CHỦ</a></li>
 			<li><a href="/qldonhang">ĐƠN ĐẶT HÀNG</a></li>
-			<li><a href="#">HỆ THỐNG GIAN HÀNG</a></li>
-			<li><a href="#">TÀI KHOẢN NGƯỜI DÙNG</a></li>
-			<li><a href="#">THỐNG KÊ</a></li>
-			<li><a href="#">TÀI KHOẢN</a></li>
+			<li><a href="/admin/system-stall">HỆ THỐNG GIAN HÀNG</a></li>
+			<li><a href="/admin/user-account">TÀI KHOẢN NGƯỜI DÙNG</a></li>
+			<li><a href="/#">THỐNG KÊ</a></li>
+			<li><a href="users/info">TÀI KHOẢN</a></li>
 			
 			<li><a href="https://app-banhangdk.herokuapp.com/">VÀO TRANG BÁN HÀNG</a></li>VÀO TRANG BÁN HÀNG
 			

@@ -3,39 +3,41 @@
         <div class="heading">
     		<h3>Thông tin tài khoản</h3>
     	</div>
+        {{#if user}}
         <div class="content_top col-md-12">
+            <form>
             <div class="form-group">
                 <label for="username">Tên tài khoản</label>
                 <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="username" value="windy"></div>  
-                </div>
-
-                <label for="username">Password</label>
-                <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="password" id="username" value="123456"></div>  
+                    <div class="col-md-6"><input class="form-control" name="username" type="text" id="username" value="{{user.username}}" readonly></div>  
                 </div>
 
                 <label for="name">Họ và tên</label>
                 <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="name" value="Phạm Đặng Đăng Khoa"></div>  
+                    <div class="col-md-6"><input class="form-control" name="name" type="text" id="name" value="{{user.name}}" readonly></div>  
                 </div>
 
-                <label for="birthday">Ngày tháng năm sinh</label>
+                <label for="birthday">Email</label>
                 <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="date" id="birthday" value="28/02/1999"></div>  
+                    <div class="col-md-6"><input class="form-control" name="email" type="email" id="email" value="{{user.email}}" readonly></div>  
                 </div>
                 
-                <label for="sdt">Số điện thoại</label>
+                <label for="phone">Số điện thoại</label>
                 <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="sdt" value="0354629479"></div>  
+                    <div class="col-md-6"><input class="form-control" name="phone" type="text" id="phone" value="{{user.phone}}" readonly></div>  
                 </div>
-                <label for="adress">Địa chỉ</label>
+                <label for="address">Địa chỉ</label>
                 <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="adress" value="227 Nguyễn Văn Cừ Quận 5"></div>  
+                    <div class="col-md-6"><input class="form-control" name="address" type="text" id="address" value="{{user.address}}" readonly></div>  
                 </div>
                 <br>
-                <a href="#"><button class="btn btn-primary btn-sm" type="button">Thay đổi</button></a>
+                <div class="row">
+                    <div class="col-md-2"><a href="/users/change-info-user"><button class="btn btn-primary btn-sm" type="button">Thay đổi thông tin</button></a></div>
+                    <div class="col-md-2"><a href="/users/changepassword"><button class="btn btn-primary btn-sm" type="button">Đổi mật khẩu</button></a></div>
+                </div>
             </div>
+            </form>
         </div>
+        {{/if}}
     </div>
 </div>

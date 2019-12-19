@@ -18,7 +18,7 @@ var prodSchema = new mongoose.Schema({
   id_category: Number,
   image_link: String,
   name: String,
-  price: String
+  price: Number
 }, {
   collection: 'Product'
 });

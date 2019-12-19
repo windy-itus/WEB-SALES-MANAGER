@@ -1,0 +1,76 @@
+<div class="main">
+  <div class="content container-fluid">
+    <div class="heading">
+      <h3>Quản lý Gian Hàng</h3>
+      <br>
+    </div>
+    <div class="sort">
+      <p>Sắp xếp theo:
+        <select>
+          <option>A-Z</option>
+          <option>Z-A</option>
+        </select>
+      </p>
+    </div>
+    <div class="show">
+      <p>Số lượng hiển thị:
+        <select>
+          <option>5</option>
+          <option>10</option>
+          <option>15</option>
+          <option>20</option>
+          <option>25</option>
+          <option>Tất cả</option>
+        </select>
+      </p>
+    </div>
+    <div class="page-no">
+      <p>Trang:<ul>
+          <li><a href="#">1</a></li>
+          <li class="active"><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li>[<a href="#"> Tiếp theo>>></a>]</li>
+        </ul>
+      </p>
+    </div>
+    <div class="clear"></div>
+    <div class=" content_top table-responsive col-md-12">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Tên</th>
+            <th>Giá</th>
+            <th>Số lượng</th>
+            <th>Số lượng bán</th>
+            <th>Mô tả</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#if listproduct}}
+          {{#each listproduct}}
+          <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.count}}</td>
+            <td>{{this.count_sell}}</td>
+            <td>{{this.description}}</td>
+            <td><a href="">
+                <button type="button">Xem</button>
+              </a></td>
+            <td><a href="">
+                <button type="button">Xóa</button>
+              </a></td>
+            <td><a href="">
+                <button type="button">Sửa</button>
+              </a></td>
+          </tr>
+          {{/each}}
+          {{/if}}
+        </tbody>
+      </table>
+      <div class="buttons">
+        <div><button class="grey">Thêm sản phẩm</button></div>
+      </div>
+    </div>
+  </div>
+</div>
