@@ -3,6 +3,7 @@ const product = require('../models/product').getProduct;
 const products = require('../models/product').getDBProduct();
 const newProduct = require('../models/product');
 const Order = require('../models/order').getOrder;
+const ProductInOrder=require('../models/order').getProductInOrder;
 
 var categories = [
   { id: 0, name: "Tất cả" },
@@ -227,9 +228,40 @@ class Product {
 
   async QLDongHang(req, res)
   {
-    let Data;
-    Data= await Order.find({});
+    let data=[];
+    data= await Order.find({});
+    let Data=[];
+    data.forEach(function(doc){
+      if(doc.status==0)
+      {
+        doc.status="Chưa giao hàng";
+      }
+      else
+      {
+        doc.status="Đã giao hàng";
+      }
+      Data.push(doc);
+    })
     res.render('QLdonhang', {Data:Data});
+  }
+
+  async ChiTietDonHang(req,res)
+  {
+      let id_order=req.params._id;
+      let data =[];
+      let Data=[];
+      let idproduct=[];
+      data = await ProductInOrder.find({_idOrder: id_order});
+      data.forEach(function(doc){
+        idproduct.push(doc._idProduct);
+      });
+
+      let sum=0;
+      Data= await product.find({_id:{$in:idproduct}});
+      Data.forEach(function(doc){
+        sum=sum+Number(doc.price);
+      });
+      res.render('CTdonhang',{Data:Data,sum:sum});
   }
 
 }

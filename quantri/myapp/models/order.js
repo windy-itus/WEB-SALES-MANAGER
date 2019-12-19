@@ -15,7 +15,7 @@ var prodSchema = new mongoose.Schema({
   recipient: String,
   phone_number: String,
   address: String,
-  status: Number,
+  status: String,
   amount: Number,
   date: Date,
 }, {
