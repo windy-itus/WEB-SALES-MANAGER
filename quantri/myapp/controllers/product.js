@@ -260,8 +260,21 @@ class Product {
         idproduct.push(doc._idProduct);
       });
 
+      console.log(data);
+
       let sum=0;
-      Data= await product.find({_id:{$in:idproduct}});
+      await product.find({}).then((docs)=>{
+        docs.forEach((doc)=>{
+            data.forEach((d)=>{
+              if(d._idProduct==doc._id)
+              {
+                  Data.push(doc);
+              }
+            })
+        })
+      });
+       
+      console.log(Data);
       Data.forEach(function(doc){
         sum=sum+Number(doc.price);
       });

@@ -29,14 +29,26 @@ class Home {
     async ShowCart(req, res) {
         var data = [];
         var sum = 0;
+        let dtinCart=[]
+        dtinCart = req.session.cart;
+        console.log(dtinCart);
+        //_id: { $in: req.session.cart }
         if (req.session.cart) {
-            await db.find({ _id: { $in: req.session.cart } }).then(function (_data) {
-                data = _data;
-                _data.forEach(function (doc) {
-                    sum = sum + doc.price;
-                });
+            await db.find({}).then(function (Data) {               
+               Data.forEach((_data)=>{
+                    dtinCart.forEach((doc)=>{
+                        if(doc==_data._id)
+                        {
+                            data.push(_data);
+                            sum=sum+_data.price;
+                        }
+                    });
+               })
             });
         }
+
+        console.log(data);
+        
         res.render('cart', { title: 'Quản lý giỏ hàng', user: req.session.username, data: data, sum: sum });
     }
 
@@ -49,7 +61,15 @@ class Home {
         }
         req.session.cart.push(idproduct);
 
-        pro = await db.find({ _id: idproduct });
+        //pro = await db.find({ _id: idproduct });
+        await db.find({}).then((docs)=>{
+            docs.forEach(doc=>{
+                if(doc._id==idproduct)
+                {
+                    pro.push(doc);
+                }
+            })
+        })
 
         recom = await db.find({ _id: pro.id_category });
 

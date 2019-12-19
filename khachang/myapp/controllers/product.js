@@ -150,22 +150,23 @@ class Product {
   }
 
   async ShowDetail(req, res) {
-    var user;
-    if (req.user != undefined && req.user != null) {
-      user = req.user;
-    }
     var dbdetail = [];
     var dbrecommand = [];
-    var idproduct = Number(req.params.id);
+    var idproduct = req.params.id;
+    var dbsession = req.session;
     // Get product detail
-    dbdetail = await product.find({ _id: idproduct });
+    await product.find({}).then((docs)=>{
+      docs.forEach((doc)=>{
+        if(doc._id==idproduct) dbdetail.push(doc);
+      })
+    });
     // Get recommended products
     dbrecommand = await product.find({
       id_category: dbdetail.id_category,
       _id: { $not: { $eq: idproduct } }
     });
     // Render page
-    res.render('product', { data: dbdetail, recommand: dbrecommand, user });
+    res.render('product', { data: dbdetail, recommand: dbrecommand, user: dbsession.username });
   }
 
   async Search(req, res) {
