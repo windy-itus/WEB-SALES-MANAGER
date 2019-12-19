@@ -38,16 +38,15 @@
 
     	<div class="section group">
 				{{#if data}}
-			{{#each data}}
 				<div class="cont-desc span_1_of_2">				
 					<div class="grid images_3_of_2">
-						<img src="{{this.image_link}}" alt="Hình ảnh đang load" />
+						<img src="{{data.image_link}}" alt="Hình ảnh đang load" />
 					</div>
 				<div class="desc span_3_of_2">
-					<h2>{{this.name}}</h2>
-					<p>{{this.description}}</p>					
+					<h2>{{data.name}}</h2>
+					<p>{{data.description}}</p>					
 					<div class="price">
-						<p>Giá: <span>{{this.price}}</span></p>
+						<p>Giá: <span>{{data.price}}</span></p>
 					</div>
 					<div class="available">
 						<p>Tùy chọn có sẵn :</p>
@@ -92,8 +91,8 @@
 			</div>
 			<div class="product-desc">
 			<h2>Chi tiết sản phẩm</h2>
-			<p>{{this.description}}</p>
-	        <p> {{this.description}}</p>
+			<p>{{data.description}}</p>
+	        <p> {{data.description}}</p>
 	    </div>
 	    <div class="product-tags">
 			<h2>Thẻ sản phẩm</h2>
@@ -104,7 +103,6 @@
 			<div class="button"><span><a href="#">Thêm thẻ</a></span></div>
 	    </div>				
 	</div>
-		 	{{/each}}
 			{{/if}}
 
 				<div class="rightsidebar span_3_of_1">

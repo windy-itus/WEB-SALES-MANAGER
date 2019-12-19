@@ -145,10 +145,14 @@ class Product {
   async ShowDetail(req, res) {
     var dbdetail = [];
     var dbrecommand = [];
-    var idproduct = Number(req.params.id);
+    var idproduct = req.params.id;
     var dbsession = req.session;
     // Get product detail
-    dbdetail = await product.find({ _id: idproduct });
+    await product.find({}).then((docs)=>{
+      docs.forEach((doc)=>{
+        if(doc._id==idproduct) dbdetail=doc;
+      })
+    });
     // Get recommended products
     dbrecommand = await product.find({
       id_category: dbdetail.id_category,

@@ -10,7 +10,7 @@ mongoose.connect(uri, {
 
 var db = mongoose.connection;
 var prodSchema = new mongoose.Schema({
-  _id: Number,
+  _id: String,
   count: Number,
   count_sell: Number,
   description: String,
