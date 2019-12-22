@@ -190,8 +190,30 @@ class Account {
         });
     }
   }
+  
+  ShowDelivery(req, res) {
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+      res.render('delivery', { title: 'Thông tin giao hàng', User: req.user });
+    }
+    //res.render('delivery', { title: 'Thông tin giao hàng' });
+
+  }
+
+  ShowProductPurchased(req, res) {
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user._doc.name;
+    }
+    res.render('productspurchased', { title: 'Lịch sử giao hàng', user });
+  }
   ShowInfoUser(req, res) {
-    res.render('informationaccount', { title: 'Thông tin tài khoản', user:req.user });
+    var user = "";
+    if (req.user != undefined && req.user != null) {
+      user = req.user;
+    }
+    res.render('informationaccount', { title: 'Thông tin tài khoản', user });
   }
 
   ShowChangeInfoUser(req, res) {

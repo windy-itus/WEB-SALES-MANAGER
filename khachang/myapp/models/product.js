@@ -24,21 +24,41 @@ var prodSchema = new mongoose.Schema({
 });
 
 const Product = db.useDb("ManagerStore").model("Product", prodSchema);
-module.exports.getProduct = Product;
+module.exports.getProduct=Product;
 
-module.exports.getDBProduct = function () {
-  var db = [];
-  MongoClient.connect(uri, function (err, client) {
-    if (err) throw err;// throw if error
-    // Connect to DB 'ManagerStore'
-    var dbo = client.db("ManagerStore");
-    // Get data from document 'Product'
-
-    var cursor = dbo.collection("Product").find({});
-    cursor.forEach(function (doc) {
-      db.push(doc);
+module.exports.getListProductByQuery = function (query) {
+  return new Promise(function(resolve, reject){
+    Product.find(query).then((docs)=>{
+      resolve(docs);
     });
-    client.close();// close connection     
   });
-  return db;
 }
+module.exports.getListProductByCount=function (query,count) {
+  return new Promise(function(resolve, reject){
+    Product.find(query).limit(count).then((docs)=>{
+      resolve(docs);
+    });
+  });
+}
+module.exports.getListProductByIf=function (query,sort,prodPerPage,pageNo) {
+  return new Promise(function(resolve, reject){
+    Product.find(query).sort(sort)
+    .limit(prodPerPage)
+    .skip(prodPerPage * (pageNo - 1)).then((docs)=>{
+      resolve(docs);
+    });
+  });
+}
+
+module.exports.getListProductByIDString=function (id) {
+  return new Promise(function(resolve, reject){
+    Product.find({}).then((docs)=>{
+      docs.forEach((doc)=>{
+        if(doc._id==id)  resolve(doc);
+      });
+    });
+  });
+}
+
+
+module.exports.count=Product.count({});

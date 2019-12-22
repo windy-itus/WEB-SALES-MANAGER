@@ -31,8 +31,8 @@ router.get('/change-info-user', (req, res) => controller.ShowChangeInfoUser(req,
 router.post('/change-info-user', (req, res) => controller.ChangeInfo(req, res));
 router.get('/changepassword',ensureAuthenticated,(req, res, next)=>controller.ShowChangePassword(req, res));
 router.post('/changepassword', (req, res) => controller.ChangePassword(req, res));
-router.get('/resetpassword/:token', (req,res) => controller.ShowResetPassword(req,res));
-router.post('/resetpassword/:token', (req,res) => controller.ResetPassword(req,res));
+router.get('/resetpassword-:token', (req,res) => controller.ShowResetPassword(req,res));
+router.post('/resetpassword-:token', (req,res) => controller.ResetPassword(req,res));
 
 router.get('/info', (req,res) => controller.ShowInfoUser(req,res));
 

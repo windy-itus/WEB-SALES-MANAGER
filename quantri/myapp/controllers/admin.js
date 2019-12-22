@@ -20,10 +20,17 @@ class Admin {
     }
     LockOrUnlock(req, res){
         const username=req.params.username;
-        var lock=false;
          accounts.findOne({username:username}).then((doc)=>{
             modelUser.UpdateInfoAccount({lock:!doc.lock},doc._id).then((result)=>{
                 res.redirect("/admin/user-account");
+            });   
+        });
+    }
+    LockOrUnlockDetail(req,res){
+        const username=req.params.username;
+         accounts.findOne({username:username}).then((doc)=>{
+            modelUser.UpdateInfoAccount({lock:!doc.lock},doc._id).then((result)=>{
+                res.redirect("/admin/detail-info-"+username);
             });   
         });
     }
@@ -45,6 +52,25 @@ class Admin {
             res.render('listproduct',{title:'Sản phẩm gian hàng',listproduct :docs});
         });
     }
+    async AddStall(req,res){
+        const name=req.body.namestall;
+        var id;
+        await modelStall.ListStall({}).then((docs)=>{
+            id=docs.length+1;
+        });
+        
+        modelStall.AddStall(name,id).then((doc)=>{
+            if(doc) console.log("Thêm thành công");
+            res.redirect('/admin/system-stall');
+        });
+    }
+    DeleteStall(req,res){
+        const id=Number(req.params.id);
+        console.log(id);
+        modelStall.DeleteStall({id:id}).then((doc)=>{
+            if(doc) console.log("Xóa thành công");
+            res.redirect('/admin/system-stall');
+        });
+    }
 }
-
 module.exports=Admin;

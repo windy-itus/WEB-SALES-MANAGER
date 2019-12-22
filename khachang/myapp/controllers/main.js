@@ -1,5 +1,6 @@
 // class Home (commom)
-const db = require('../models/product').getProduct;
+const modelProduct = require('../models/product');
+const db=modelProduct.getProduct
 var Order = require('../models/order');
 const ID=require('uuid/v1');
 
@@ -62,14 +63,7 @@ class Home {
         req.session.cart.push(idproduct);
 
         //pro = await db.find({ _id: idproduct });
-        await db.find({}).then((docs)=>{
-            docs.forEach(doc=>{
-                if(doc._id==idproduct)
-                {
-                    pro.push(doc);
-                }
-            })
-        })
+        pro= await modelProduct.getListProductByIDString(idproduct);
 
         recom = await db.find({ _id: pro.id_category });
 
@@ -84,7 +78,7 @@ class Home {
         let sum = 0;
 
         if (req.session.cart) {
-            await db.find({ _id: { $in: req.session.cart } }).then(function (_data) {
+            await  db.find({ _id: { $in: req.session.cart } }).then(function (_data) {
                 data = _data;
                 _data.forEach(function (doc) {
                     sum = sum + doc.price;

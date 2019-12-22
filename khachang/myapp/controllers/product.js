@@ -1,5 +1,5 @@
 
-const product = require('../models/product').getProduct;
+const modelProduct = require('../models/product');
 //const products=require('../models/product').getDBProduct();
 
 var priceRange = [
@@ -57,8 +57,8 @@ class Product {
     var sort = {};
     var pageNo = 1; // always start at page 1
     var pageDirect = "";
-    var price = parseToInt(req.query.Price);
-    var sortId = parseToInt(req.query.SortBy);
+    var price = Number(req.query.Price);
+    var sortId = Number(req.query.SortBy);
     // Check if price is at priceRange
     if (price < 0 || price > 3) price = 0;
     // Check if sort is at sortOpts
@@ -71,10 +71,10 @@ class Product {
     }
     // Check if previous or next page was click, then change page number
     if (!isEmpty(req.query.PageNext)) {
-      pageNo = parseToInt(req.query.PageNext);
+      pageNo = Number(req.query.PageNext);
       pageDirect = NEXT;
     } else if (!isEmpty(req.query.PagePrev)) {
-      pageNo = parseToInt(req.query.PagePrev);
+      pageNo = Number(req.query.PagePrev);
       pageDirect = PREV;
     }
     // Set query
@@ -94,8 +94,8 @@ class Product {
     else if (sortId === 3) sort = { price: 1 }; // price ascending
     else if (sortId === 4) sort = { price: -1 }; // price descending
     // Count how many products were found
-    var data = await product.find(query);
-    const numOfProducts = await product.count(query);
+    var data = await modelProduct.getListProductByQuery(query);
+    const numOfProducts = await modelProduct.count;
     // Total page numbers
     const totalPageNum = Math.ceil(numOfProducts / prodPerPage);
     // Page number management
@@ -105,10 +105,7 @@ class Product {
       if (pageNo !== 1) pageNo = pageNo - 1;
     }
     // Find filtered product
-    data = await product.find(query)
-      .sort(sort)
-      .limit(prodPerPage)
-      .skip(prodPerPage * (pageNo - 1));
+    data = await modelProduct.getListProductByIf(query,sort,prodPerPage,pageNo);
     // Render the page
     res.render('viewlistproducts', {
       data: data,
@@ -129,16 +126,15 @@ class Product {
       req.logout();
       req.session.destroy();
     }
-    var user;
-    if (req.user != undefined && req.user != null) user = req.user;
+
     // Get all product
-    const fullproduct = await product.find({}).limit(prodPerPage);
+    const fullproduct = await modelProduct.getListProductByCount({},prodPerPage);
     // Count how many products were found
-    const numOfProducts = await product.count({});
+    const numOfProducts = await modelProduct.count;
     // Render the page
     res.render('viewlistproducts', {
       data: fullproduct,
-      user,
+      user:req.user,
       priceRange: priceRange,
       sortOpts: sortOpts,
       selPriceRange: 0,
@@ -150,18 +146,14 @@ class Product {
   }
 
   async ShowDetail(req, res) {
-    var dbdetail = [];
     var dbrecommand = [];
     var idproduct = req.params.id;
     var dbsession = req.session;
     // Get product detail
-    await product.find({}).then((docs)=>{
-      docs.forEach((doc)=>{
-        if(doc._id==idproduct) dbdetail.push(doc);
-      })
-    });
+    var dbdetail= await modelProduct.getListProductByIDString(idproduct);
+    console.log(dbdetail.name);
     // Get recommended products
-    dbrecommand = await product.find({
+    var dbrecommand = await modelProduct.getListProductByQuery({
       id_category: dbdetail.id_category,
       _id: { $not: { $eq: idproduct } }
     });
@@ -171,7 +163,7 @@ class Product {
 
   async Search(req, res) {
     var regex = new RegExp(escapeRegex(req.query.key), 'gi');
-    const data = await product.find({ name: regex });
+    const data = await modelProduct.getListProductByQuery({ name: regex });
     res.render('viewlistproducts', {
       data: data,
       user: req.session.username,
@@ -186,10 +178,6 @@ class Product {
   }
 }
 
-function parseToInt(x) {
-  const parsed = parseInt(x, 32);
-  return isNaN(parsed) ? 0 : parsed;
-}
 
 function isEmpty(val) {
   return (val === undefined || val == null || val.length <= 0) ? true : false;

@@ -1,30 +1,30 @@
 const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.DATA;
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
-mongoose.connect(uri, {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  autoReconnect: true
-});
+// mongoose.connect(uri, {
+//   useUnifiedTopology: true,
+//   useNewUrlParser: true,
+//   autoReconnect: true
+// });
 
-var db = mongoose.connection;
-var prodSchema = new mongoose.Schema({
-  _id: String,
-  count: Number,
-  count_sell: Number,
-  description: String,
-  discount: String,
-  id_category: Number,
-  image_link: String,
-  name: String,
-  price: Number
-}, {
-  collection: 'Product'
-});
+// var db = mongoose.connection;
+// var prodSchema = new mongoose.Schema({
+//   _id: String,
+//   count: Number,
+//   count_sell: Number,
+//   description: String,
+//   discount: String,
+//   id_category: Number,
+//   image_link: String,
+//   name: String,
+//   price: Number
+// }, {
+//   collection: 'Product'
+// });
 
-const Product = db.useDb("ManagerStore").model("Product", prodSchema);
-module.exports.getProduct = Product;
+// const Product = db.useDb("ManagerStore").model("Product", prodSchema);
+// module.exports.getProduct = Product;
 
 module.exports.getDBProduct = function () {
   var db = [];

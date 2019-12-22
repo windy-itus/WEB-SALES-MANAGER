@@ -52,7 +52,7 @@
             <td><a href="/admin/products-{{this.id}}">
                 <button type="button">Xem</button>
               </a></td>
-            <td><a href="">
+            <td><a href="/admin/delete-stall-{{this.id}}">
                 <button type="button">Xóa</button>
               </a></td>
             <td><a href="">
@@ -63,9 +63,18 @@
           {{/if}}
         </tbody>
       </table>
-      <div class="buttons">
-        <div><button class="grey">Thêm gian hàng</button></div>
-      </div>
+    </div>
+    <div class="col-md-4 content_top ">
+      <form method="POST" action="/admin/add-stall">
+        <div style="color: blueviolet;">
+          <h3>Thêm gian hàng</h3>
+        </div>
+        <div class="row">
+          <div class="col-md-4"><label for="namestall">Tên gian hàng</label></div>
+          <div class="col-md-4"><input class="form-control" name="namestall" type="text" id="namestall" required></div>
+          <div class="col-md-4"><button class="btn btn-primary btn-sm">Thêm gian hàng</button></div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
