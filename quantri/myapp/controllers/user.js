@@ -83,7 +83,7 @@ class Account {
     }
     await account.findOne({ email: email }).then(function (userdb) {
       var claims={
-        sub:userdb,
+        sub:userdb.username,
         iss:'localhost:3000',
       }
         token = jwt.sign(claims,"khoa-itus",{

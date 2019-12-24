@@ -27,13 +27,16 @@ const User = db.useDb("ManagerStore").model("User", inforSchema);
 module.exports.getAccount=User;
 
 module.exports.addAccount=function(user){
+  return new Promise((resolve,reject)=>{
   MongoClient.connect(uri, function (err, db) {
     if (err) throw err;
     var dbo = db.db("ManagerStore");
     dbo.collection("Account").insertOne(user, function (err, res) {
         if (err) throw err;
+        resolve(true);
         db.close();
     });
+  });
 });
 } 
 
