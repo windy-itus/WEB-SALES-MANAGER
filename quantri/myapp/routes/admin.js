@@ -14,6 +14,11 @@ router.get('/system-stall',(req, res) => controller.ShowStalls(req, res));
 router.get('/products-:id',(req, res) => controller.ShowListProduct(req, res));
 router.post('/add-stall',(req, res) => controller.AddStall(req, res));
 router.get('/delete-stall-:id',(req, res) => controller.DeleteStall(req, res));
-
+router.get('/detail-:id',(req, res) => controller.DetailProduct(req, res));
+router.post('/deleteproduct',(req,res)=>controller.DeleteProduct(req,res));
+router.post('/addproduct',(req,res)=>controller.AddProduct(req,res));
+router.get('/addproduct-:idcategory',(req,res)=>controller.ShowAddProduct(req,res));
+router.post('/editproduct',(req,res)=>controller.EditProduct(req,res));
+router.get('/delete-:id',(req, res) => controller.DeleteProduct(req, res));
 
 module.exports = router;

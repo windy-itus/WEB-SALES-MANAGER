@@ -1,0 +1,173 @@
+<div class="main">
+    <div class="content">
+        <div class="content_top">
+            <div class="container-fluid">
+                <form method="POST">
+                    {{#if data}}
+                    <div>
+                        <h3>Thông tin chi tiết sản phẩm</h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="{{data.image_link}}" id="image" alt="Hình ảnh đang load" width="80%"
+                                height="80%" />
+                            <br>
+                            <div id="upload-img" hidden>
+                            <progress class="col-sm-10" value="0" id="process" max="100">0%</progress>
+                            <input id="photo" class="file" type="file" name="mainimage" value="" onchange="getfile()">
+                            <input id="url" name="url" value="{{data.image_link}}" hidden></input>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            {{#if notice}}
+                                <div style="color: red;">{{notice}}</div>
+                            {{/if}}
+                            <input id="id" name="id" type="text" value="{{data._id}}" hidden>
+                            <div class="row">
+                                <div class="col-md-3"><label for="name">Tên sản phẩm</label></div>
+                                <div class="col-md-9"><input id="name" name="name" type="text" value="{{data.name}}"
+                                        readonly required></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3"><label for="description">Mô tả sản phẩm</label></div>
+                                <div class="col-md-9"><input id="description" name="description" type="text"
+                                        value="{{data.description}}" readonly required></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3"><label for="price">Giá sản phẩm</label></div>
+                                <div class="col-md-9"><input name="price" id="price" type="text" value="{{data.price}}"
+                                        readonly required></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3"><label for="count">Số lượng</label></div>
+                                <div class="col-md-9"><input type="text" name="count" id="count" value="{{data.count}}"
+                                        readonly required></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-3"><label for="discount">Giảm giá</label></div>
+                                <div class="col-md-9"><input type="text" name="discount" id="discount" value="{{data.count}}"
+                                        readonly required></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                            <div id="edit" class="col-md-2 btn btn-primary btn-sm"><span>Chỉnh sửa</span></div>
+                            <div class="col-md-3"></div>
+                            <div id="delete"><input class="btn btn-primary btn-sm" id="delete" type="submit" value="Xóa"
+                                formaction="/admin/deleteproduct"></div>
+                            <div class="col-md-4" id="btnsubmit" hidden> <input class="btn btn-primary btn-sm" type="submit" value="Xác nhận chỉnh sửa"
+                                formaction="/admin/editproduct"></div>
+                                </div>
+                        </div>
+                    </div>
+                    {{/if}}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{{!-- <script src="/javascripts/import-new-products.js"></script> --}}
+<script>
+    var name = document.getElementById("name");
+    var description = document.getElementById("description");
+    var price = document.getElementById("price");
+    var count = document.getElementById("count");
+    $("#edit").click(() => {
+        $("#edit").hide();
+        $("#delete").hide();
+        $("#btnsubmit").show();
+        $("#name").prop("readonly", false);
+        $("#description").prop("readonly", false);
+        $("#price").prop("readonly", false);
+        $("#count").prop("readonly", false);
+        $("#discount").prop("readonly", false);
+        $("#upload-img").show();
+    })
+</script>
+
+{{!-- <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script> --}}
+
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyB3C7OOUgjjxf7yvV9P6VbmtHmDGKVBCeA",
+        authDomain: "stotepicture.firebaseapp.com",
+        databaseURL: "https://stotepicture.firebaseio.com",
+        projectId: "stotepicture",
+        storageBucket: "stotepicture.appspot.com",
+        messagingSenderId: "160343356649",
+        appId: "1:160343356649:web:b433527c5cf3c68d46ac78",
+        measurementId: "G-228F3ECR6Q"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    //firebase.analytics();
+
+    var selectedFile;
+    function getfile() {
+        var pic = document.getElementById("photo");
+
+        // selected file is that file which user chosen by html form 
+        selectedFile = pic.files[0];
+
+        myfunction(); // call below written function 
+    }
+
+    function myfunction() {
+        // select unique name for everytime when image uploaded 
+        // Date.now() is function that give current timestamp 
+        var name = "dangkhoa" + Date.now();
+
+        // make ref to your firebase storage and select images folder 
+        var storageRef = firebase.storage().ref('/images/' + name);
+
+        // put file to firebase  
+        var uploadTask = storageRef.put(selectedFile);
+
+        // all working for progress bar that in html 
+        // to indicate image uploading... report 
+        uploadTask.on('state_changed', function (snapshot) {
+            var progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            var uploader = document.getElementById('process');
+            uploader.value = progress;
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED:
+                    console.log('Upload is paused');
+                    break;
+                case firebase.storage.TaskState.RUNNING:
+                    console.log('Upload is running');
+                    break;
+            }
+        }, function (error) {
+            console.log(error);
+        }, function () {
+
+            // get the uploaded image url back 
+            uploadTask.snapshot.ref.getDownloadURL().then(
+                function (downloadURL) {
+                    console.log(downloadURL);
+
+                    // You get your url from here 
+                    //console.log('File available at', downloadURL);
+                    document.getElementById('url').value = downloadURL;
+                    $('#image').attr("src", downloadURL);
+
+                    // alert(document.getElementById('url').value);
+                    // print the image url  
+                    console.log(downloadURL);
+                });
+        });
+    };
+</script>

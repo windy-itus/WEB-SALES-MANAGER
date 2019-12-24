@@ -1,70 +1,148 @@
 <div class="container-fluid" id="content">
-	<div class="row">
-		<!-- List of products -->
-		<div class="col-12 col-md-8 col-xl-9">
-			<form id="uploadProductForm" method="POST">
-				<div>
-					<h3>Nhập sản phẩm mới</h3>
-				</div>
+    <div class="row">
+        <!-- List of products -->
+        <div class="col-12 col-md-8 col-xl-9">
+            <form id="uploadProductForm" method="POST" action="/admin/addproduct">
+                <div>
+                    <h3>Nhập sản phẩm mới</h3>
+                </div>
+                {{#if notice}}
+                <div style="color: red;">{{notice}}</div>
+                {{/if}}
+                <div class="form-group row">
+                    <label for="masp" class="col-sm-2 col-form-label">ID loại sản phẩm</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="category" name="category" class="form-control form-control-sm"
+                            value="{{idcategory}}" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="masp" class="col-sm-2 col-form-label">Tên Sản Phẩm</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="name" name="name" class="form-control form-control-sm" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="price" class="col-sm-2 col-form-label" required>Giá</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="price" name="price" class="form-control form-control-sm" required>
+                    </div>
+                </div>
 
-				<div class="form-group row">
-					<label for="masp" class="col-sm-2 col-form-label">Tên Sản Phẩm</label>
-					<div class="col-sm-7">
-						<input type="text" id="name" name="name" class="form-control form-control-sm">
-					</div>
-				</div>
+                <div class="form-group row">
+                    <label for="discount" class="col-sm-2 col-form-label">Giảm giá</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="discount" name="discount" class="form-control form-control-sm" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="count" class="col-sm-2 col-form-label">Số lượng</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="count" name="count" class="form-control form-control-sm" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="description" class="col-sm-2 col-form-label">Mô tả</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="description" name="description" class="form-control form-control-sm"
+                            required>
+                    </div>
+                </div>
 
-				<div class="form-group row">
-					<label for="tensp" class="col-sm-2 col-form-label">Loại Sản Phẩm</label>
-					<div class="col-sm-7">
-						<input type="text" id="tensp" name="tensp" class="form-control form-control-sm">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="soluong" class="col-sm-2 col-form-label">Giá</label>
-					<div class="col-sm-7">
-						<input type="number" id="soluong" name="soluong" class="form-control form-control-sm">
-					</div>
-				</div>
+                <div class="form-group row">
+                    <label for="process" class="col-sm-2 col-form-label">Process</label>
+                    <div class="col-sm-7">
+                        <progress class="col-sm-12" value="0" id="process" max="100">0%</progress>
+                        <input id="photo" class="file" type="file" name="mainimage" value="" onchange="getfile()">
+                        <input id="url" name="url" hidden></input>
 
-				<div class="form-group row">
-					<label for="dongia" class="col-sm-2 col-form-label">Giảm giá</label>
-					<div class="col-sm-7">
-						<input type="text" id="dongia" name="dongia" class="form-control form-control-sm">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="giadaily" class="col-sm-2 col-form-label">Số lượng</label>
-					<div class="col-sm-7">
-						<input type="text" id="count" name="count" class="form-control form-control-sm">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="giadaily" class="col-sm-2 col-form-label">Mô tả</label>
-					<div class="col-sm-7">
-						<input type="text" id="description" name="description" class="form-control form-control-sm">
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<label for="process" class="col-sm-2 col-form-label">Process</label>
-					<div class="col-sm-7">
-						<progress class="col-sm-12" value="0" id="process" max="100">0%</progress>
-						<input id="photo" class="file" type="file" name="mainimage" value="" onchange="getfile()">
-						<input id="url" name="url" hidden></input>
-
-						<img src="https://www.onlygfx.com/wp-content/uploads/2016/04/old-photo-camera.png" alt=""
-							id="image" width="150px" height="auto">
-					</div>
-				</div>
-				<div class="search" style="margin-bottom: 5%;">
-					<div><button id="submit_link" type="submit" class="grey" disabled>Tạo sản phẩm</button></div>
-				</div>
-				<br>
-				<br>
-			</form>
-		</div>
-	</div>
+                        <img src="https://www.onlygfx.com/wp-content/uploads/2016/04/old-photo-camera.png" alt=""
+                            id="image" width="150px" height="auto">
+                    </div>
+                </div>
+                <div class="search" style="margin-bottom: 5%;">
+                    <div><button id="submit_link" type="submit" class="grey" disabled>Thêm sản phẩm</button></div>
+                </div>
+                <br>
+                <br>
+            </form>
+        </div>
+    </div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
-<script src="/public/javascripts/import-new-products.js"></script>
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyB3C7OOUgjjxf7yvV9P6VbmtHmDGKVBCeA",
+        authDomain: "stotepicture.firebaseapp.com",
+        databaseURL: "https://stotepicture.firebaseio.com",
+        projectId: "stotepicture",
+        storageBucket: "stotepicture.appspot.com",
+        messagingSenderId: "160343356649",
+        appId: "1:160343356649:web:b433527c5cf3c68d46ac78",
+        measurementId: "G-228F3ECR6Q"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    //firebase.analytics();
+
+    var selectedFile;
+    function getfile() {
+        var pic = document.getElementById("photo");
+
+        // selected file is that file which user chosen by html form 
+        selectedFile = pic.files[0];
+
+        // make save button disabled for few seconds that has id='submit_link' 
+        document.getElementById('submit_link').setAttribute('disabled', 'true');
+        myfunction(); // call below written function 
+    }
+
+    function myfunction() {
+        // select unique name for everytime when image uploaded 
+        // Date.now() is function that give current timestamp 
+        var name = "123" + Date.now();
+
+        // make ref to your firebase storage and select images folder 
+        var storageRef = firebase.storage().ref('/images/' + name);
+
+        // put file to firebase  
+        var uploadTask = storageRef.put(selectedFile);
+
+        // all working for progress bar that in html 
+        // to indicate image uploading... report 
+        uploadTask.on('state_changed', function (snapshot) {
+            var progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            var uploader = document.getElementById('process');
+            uploader.value = progress;
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED:
+                    console.log('Upload is paused');
+                    break;
+                case firebase.storage.TaskState.RUNNING:
+                    console.log('Upload is running');
+                    break;
+            }
+        }, function (error) {
+            console.log(error);
+        }, function () {
+
+            // get the uploaded image url back 
+            uploadTask.snapshot.ref.getDownloadURL().then(
+                function (downloadURL) {
+                    console.log(downloadURL);
+
+                    // You get your url from here 
+                    //console.log('File available at', downloadURL);
+                    document.getElementById('url').value = downloadURL;
+                    $('#image').attr("src", downloadURL);
+
+                    // alert(document.getElementById('url').value);
+                    // print the image url  
+                    console.log(downloadURL);
+                    document.getElementById('submit_link').removeAttribute('disabled');
+                });
+        });
+    };
+</script>

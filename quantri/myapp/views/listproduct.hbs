@@ -54,14 +54,11 @@
             <td>{{this.count}}</td>
             <td>{{this.count_sell}}</td>
             <td>{{this.description}}</td>
-            <td><a href="">
+            <td><a href="/admin/detail-{{this._id}}">
                 <button type="button">Xem</button>
               </a></td>
-            <td><a href="">
+            <td><a href="/admin/delete-{{this._id}}">
                 <button type="button">Xóa</button>
-              </a></td>
-            <td><a href="">
-                <button type="button">Sửa</button>
               </a></td>
           </tr>
           {{/each}}
@@ -69,7 +66,7 @@
         </tbody>
       </table>
       <div class="buttons">
-        <div><button class="grey">Thêm sản phẩm</button></div>
+        <div><a href="/admin/addproduct-{{idcategory}}"> <button class="grey">Thêm sản phẩm</button></a></div>
       </div>
     </div>
   </div>

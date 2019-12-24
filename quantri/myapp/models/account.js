@@ -34,7 +34,7 @@
           if (err) throw err;
           db.close();
       });
-  });
+    });
   } 
 
   module.exports.UpdateInfoAccount=function(user,query){

@@ -1,65 +1,108 @@
 const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.DATA;
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-// mongoose.connect(uri, {
-//   useUnifiedTopology: true,
-//   useNewUrlParser: true,
-//   autoReconnect: true
-// });
+mongoose.connect(uri, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  autoReconnect: true
+});
 
-// var db = mongoose.connection;
-// var prodSchema = new mongoose.Schema({
-//   _id: String,
-//   count: Number,
-//   count_sell: Number,
-//   description: String,
-//   discount: String,
-//   id_category: Number,
-//   image_link: String,
-//   name: String,
-//   price: Number
-// }, {
-//   collection: 'Product'
-// });
+var db = mongoose.connection;
+var prodSchema = new mongoose.Schema({
+  _id: Object,
+  count: Number,
+  count_sell: Number,
+  description: String,
+  discount: String,
+  id_category: Number,
+  image_link: String,
+  name: String,
+  price: Number
+}, {
+  collection: 'Product'
+});
 
-// const Product = db.useDb("ManagerStore").model("Product", prodSchema);
-// module.exports.getProduct = Product;
+const Product = db.useDb("ManagerStore").model("Product", prodSchema);
+module.exports.getProduct=Product;
 
-module.exports.getDBProduct = function () {
-  var db = [];
-  MongoClient.connect(uri, function (err, client) {
-    if (err) throw err;// throw if error
-    // Connect to DB 'ManagerStore'
-    var dbo = client.db("ManagerStore");
-    // Get data from document 'Product'
-
-    var cursor = dbo.collection("Product").find({});
-    cursor.forEach(function (doc) {
-      db.push(doc);
-    });
-    client.close();// close connection     
-  });
-  return db;
-}
-
-module.exports.Addproduct=function(nameproduct,category,price,count,countsell,decription,discount,image)
-{
-  MongoClient.connect(uri,function(error,db){
-    var dbo = db.db("ManagerStore");
-    var myobj = {
-        name: nameproduct,
-        id_category:category,
-        price:price,
-        count:count,
-        count_sell:countsell,
-        image_link:image,
-        description:decription,
-        discount:discount
-    };
-    dbo.collection("Product").insertOne(myobj, function (err, res) {
-        if (err) throw err;
-        db.close();
+module.exports.getListProductByQuery = function (query) {
+  return new Promise(function(resolve, reject){
+     Product.find(query).then((docs)=>{
+      resolve(docs);
     });
   });
 }
+module.exports.getListProductByCount=function (query,count) {
+  return new Promise(function(resolve, reject){
+    Product.find(query).limit(count).then((docs)=>{
+      resolve(docs);
+    });
+  });
+}
+module.exports.getListProductByIf=function (query,sort,prodPerPage,pageNo) {
+  return new Promise(function(resolve, reject){
+    Product.find(query).sort(sort)
+    .limit(prodPerPage)
+    .skip(prodPerPage * (pageNo - 1)).then((docs)=>{
+      resolve(docs);
+    });
+  });
+}
+
+module.exports.getProductByIDString=function (id) {
+  return new Promise(function(resolve, reject){
+    Product.find({}).then((docs)=>{
+      docs.forEach((doc)=>{
+        if(doc._id==id)  resolve(doc);
+      });
+    });
+  });
+}
+module.exports.DeleteOneProduct=function (query) {
+  return new Promise(function(resolve, reject){
+    MongoClient.connect(uri, function (err, db) {
+      if (err) throw err;
+      var dbo = db.db("ManagerStore");
+      dbo.collection("Product").deleteOne(query, function (err, res) {
+          if (err) throw err;
+          resolve(true);
+          db.close();
+      });
+    });
+  });
+}
+module.exports.InsertOneProduct=function (product) {
+  return new Promise(function(resolve, reject){
+    MongoClient.connect(uri, function (err, db) {
+      if (err) throw err;
+      var dbo = db.db("ManagerStore");
+      dbo.collection("Product").insertOne(product, function (err, res) {
+          if (err) throw err;
+          resolve(true);
+          db.close();
+      });
+    });
+  });
+}
+module.exports.UpdateOneProduct=function (product,condition) {
+  return new Promise(function(resolve, reject){
+    MongoClient.connect(uri,async function (err, db) {
+      if (err) throw err;
+      var dbo = db.db("ManagerStore");
+      var dbt=dbo.collection("Product");
+      await dbt.updateOne(
+        condition,
+        {
+          $set: product
+        }
+    )
+    db.close();
+    resolve(true);
+  });
+  });
+}
+
+
+
+module.exports.count=Product.count({});

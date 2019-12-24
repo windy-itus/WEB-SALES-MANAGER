@@ -1,7 +1,6 @@
 const modelUser = require('../models/account');
 var accounts = modelUser.getAccount;
 const modelStall= require('../models/stall');
-var stalls= modelStall.getCategory;
 const modelProduct= require('../models/product');
 var product= modelProduct.getProduct;
 
@@ -42,14 +41,14 @@ class Admin {
     }
 
     ShowStalls(req, res){
-        stalls.find({}).then((docs)=>{
-            res.render('systemstall',{title:'Hệ thống gian hàng',liststall :docs});
+        modelStall.ListStall({}).then((docs)=>{  
+            res.render('systemstall',{title:'Hệ thống gian hàng',liststall:docs});
         }); 
     }
     ShowListProduct(req, res){
         const id=req.params.id;
         product.find({id_category:id}).then((docs)=>{
-            res.render('listproduct',{title:'Sản phẩm gian hàng',listproduct :docs});
+            res.render('listproduct',{title:'Sản phẩm gian hàng',listproduct :docs,idcategory:docs[0].id_category});
         });
     }
     async AddStall(req,res){
@@ -66,11 +65,96 @@ class Admin {
     }
     DeleteStall(req,res){
         const id=Number(req.params.id);
-        console.log(id);
         modelStall.DeleteStall({id:id}).then((doc)=>{
             if(doc) console.log("Xóa thành công");
             res.redirect('/admin/system-stall');
         });
+    }
+    DetailProduct(req, res){
+        const id=req.params.id;
+        modelProduct.getProductByIDString(id).then((result)=>{
+            res.render('detail-product',{title:'Chi tiết sản phẩm',data :result});
+        });
+    }
+    DeleteProduct(req,res){
+        var id=req.body.id;
+        if(id==undefined|| id==null) id=req.params.id;
+        modelProduct.getProductByIDString(id).then((result)=>{
+            modelProduct.DeleteOneProduct({_id:result._id}).then((doc)=>{
+                if(doc) console.log("xóa thành công");
+                res.redirect('/admin/products-'+result.id_category);
+            });
+        });
+    }
+
+    ShowAddProduct(req,res){
+        res.render('addproduct',{title:'Thêm sản phẩm',idcategory:req.params.idcategory});
+    }
+
+    async AddProduct(req,res){
+        var notice;
+        const name=req.body.name;
+        const description=req.body.description;
+        const image=req.body.url;
+        const count=Number(req.body.count);
+        const discount=req.body.discount;
+        const price=Number(req.body.price);
+        const id_category=Number(req.body.category);
+        await modelProduct.getListProductByQuery({}).then((docs)=>{
+            docs.forEach((doc)=>{
+                if(doc.name==name) notice="sản phẩm tồn tại";
+            });
+        });
+        if(notice!=undefined) {
+            res.render('addproduct',{title:'Thêm sản phẩm',idcategory:req.params.idcategory,notice});
+        }
+        else{
+        modelProduct.InsertOneProduct({name:name,
+             description:description,
+             image_link:image,
+             count:count,
+             discount:discount,
+             price:price,
+             id_category:id_category
+            }).then((doc)=>{
+                if(doc) console.log("Thêm thành công");
+                res.redirect('/admin/addproduct-'+id_category);
+            });
+        }
+    }
+    async EditProduct(req,res){
+        var notice;
+        const name=req.body.name;
+        const image=req.body.url;
+        const description=req.body.description;
+        const count=Number(req.body.count);
+        const discount=req.body.discount;
+        const price=Number(req.body.price);
+        const id=req.body.id;
+        await modelProduct.getListProductByQuery({}).then((docs)=>{
+            docs.forEach((doc)=>{
+                if(name==doc.name) notice='Sản phẩm đã tồn tại';
+            });
+        });
+        if(notice!=undefined) {
+            modelProduct.getProductByIDString(id).then((result)=>{
+                res.render('detail-product',{title:'Chi tiết sản phẩm',data :result, notice});
+            });
+        }
+        else{
+        modelProduct.getProductByIDString(id).then((result)=>{
+            modelProduct.UpdateOneProduct({name:name,
+                description:description,
+                image_link:image,
+                count:count,
+                discount:discount,
+                price:price
+               },{_id:result._id}).then((doc)=>{
+                   if(doc) console.log("Sửa thành công");
+                    res.redirect('/admin/detail-'+id);
+               });
+        });
+        }   
     }
 }
 module.exports=Admin;

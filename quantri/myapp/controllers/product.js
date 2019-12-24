@@ -1,18 +1,12 @@
 
-const product = require('../models/product').getProduct;
-const products = require('../models/product').getDBProduct();
-const newProduct = require('../models/product');
-const Order = require('../models/order').getOrder;
-const ProductInOrder=require('../models/order').getProductInOrder;
+const modelProduct = require('../models/product');
+//const products=require('../models/product').getDBProduct();
 
-var categories = [
+var priceRange = [
   { id: 0, name: "Tất cả" },
-  { id: 1, name: "Điện thoại" },
-  { id: 2, name: "Laptop" },
-  { id: 3, name: "Loa" },
-  { id: 4, name: "Tủ lạnh" },
-  { id: 5, name: "Đồng hồ" },
-  { id: 6, name: "Máy ảnh" }
+  { id: 1, name: "Dưới 10 triệu" },
+  { id: 2, name: "Từ 10 - 30 triệu" },
+  { id: 3, name: "Trên 30 triệu" }
 ];
 var sortOpts = [
   { id: 0, name: "--" },
@@ -21,65 +15,87 @@ var sortOpts = [
   { id: 3, name: "Giá thấp đến cao" },
   { id: 4, name: "Giá cao đến thấp" }
 ];
-var filter = { selectedCate: 0, selectedSort: 0 }
 const prodPerPage = 8; // product per page
+// Direct page
 const PREV = "page-prev";
 const NEXT = "page-next";
+// Product's Type
+const DIEN_THOAI = "dien-thoai"
+const LAPTOP = "laptop"
+const MAY_ANH = "may-anh"
+const DONG_HO = "dong-ho"
+const TU_LANH = "tu-lanh"
 /**
  * Class Product Controller
  */
 class Product {
-  async ShowList(req, res, logout) {
-    var login = req.session;
-    if (logout) {
-      login.username = null;
-      if (req.user != null) req.user = null;
+  async ShowProducts(req, res) {
+    switch (req.params.type) {
+      case DIEN_THOAI:
+        await this.ShowProductsTemplate(req, res, 1, "Điện thoại", DIEN_THOAI)
+        break;
+      case LAPTOP:
+        await this.ShowProductsTemplate(req, res, 2, "Laptop", LAPTOP)
+        break;
+      case TU_LANH:
+        await this.ShowProductsTemplate(req, res, 4, "Tủ lạnh", TU_LANH)
+        break;
+      case DONG_HO:
+        await this.ShowProductsTemplate(req, res, 5, "Đồng hồ", DONG_HO)
+        break;
+      case MAY_ANH:
+        await this.ShowProductsTemplate(req, res, 6, "Máy lạnh", MAY_ANH)
+        break;
+      default:
+        await this.ShowProductsTemplate(req, res, 0, "Sản phẩm")
+        break;
     }
-    if (req.user != undefined && req.user != null) {
-      login.username = req.user._doc.name;
-    }
-    // Get all product
-    const fullproduct = await product.find({}).limit(prodPerPage);
-    // Count how many products were found
-    const numOfProducts = await product.count({});
-    // Render the page
-    res.render('viewlistproducts', {
-      data: fullproduct,
-      user: login.username,
-      categories: categories,
-      sortOpts: sortOpts,
-      selectedCate: 0,
-      selectedSort: 0,
-      currentPage: 1,
-      pages: Math.ceil(numOfProducts / prodPerPage)
-    });
   }
-  async ShowIf(req, res) {
+
+  async ShowProductsTemplate(req, res, _categoryId, _title, _type) {
     var query = {};
     var sort = {};
-    var pageNo = 1;
+    var pageNo = 1; // always start at page 1
     var pageDirect = "";
-    var cateId = await parseToInt(req.body.Category);
-    var sortId = await parseToInt(req.body.SortBy);
-    var dbsession = req.session;
+    var price = Number(req.query.Price);
+    var sortId = Number(req.query.SortBy);
+    // Check if price is at priceRange
+    if (price < 0 || price > 3) price = 0;
+    // Check if sort is at sortOpts
+    if (sortId < 0 || sortId > 4) sortId = 0;
+    // Get session info
+    var user;
+    // Set user name in session
+    if (req.user != undefined && req.user != null) {
+      user = req.user;
+    }
     // Check if previous or next page was click, then change page number
-    if (req.body.pageNext != undefined && req.body.pageNext != null && req.body.pageNext !== "") {
-      pageNo = await parseToInt(req.body.pageNext);
+    if (!isEmpty(req.query.PageNext)) {
+      pageNo = Number(req.query.PageNext);
       pageDirect = NEXT;
-    } else if (req.body.pagePrev != undefined && req.body.pagePrev != null && req.body.pagePrev !== "") {
-      pageNo = await parseToInt(req.body.pagePrev);
+    } else if (!isEmpty(req.query.PagePrev)) {
+      pageNo = Number(req.query.PagePrev);
       pageDirect = PREV;
     }
     // Set query
-    if (cateId !== 0) query = { id_category: cateId };
+    if (_categoryId !== 0) {
+      if (price === 1) query = { id_category: _categoryId, price: { $lt: 10000000 } };
+      else if (price === 2) query = { id_category: _categoryId, price: { $gte: 10000000, $lte: 30000000 } };
+      else if (price === 3) query = { id_category: _categoryId, price: { $gt: 30000000 } };
+      else query = { id_category: _categoryId };
+    } else {
+      if (price === 1) query = { price: { $lt: 10000000 } };
+      else if (price === 2) query = { price: { $gte: 10000000, $lte: 30000000 } };
+      else if (price === 3) query = { price: { $gt: 30000000 } };
+    }
     // Set sort order
     if (sortId === 1) sort = { name: 1 }; // name ascending
     else if (sortId === 2) sort = { name: -1 }; // name descending
     else if (sortId === 3) sort = { price: 1 }; // price ascending
     else if (sortId === 4) sort = { price: -1 }; // price descending
     // Count how many products were found
-    var dbIf = await product.find(query);
-    const numOfProducts = await product.count(query);
+    var data = await modelProduct.getListProductByQuery(query);
+    const numOfProducts = await modelProduct.count;
     // Total page numbers
     const totalPageNum = Math.ceil(numOfProducts / prodPerPage);
     // Page number management
@@ -89,73 +105,55 @@ class Product {
       if (pageNo !== 1) pageNo = pageNo - 1;
     }
     // Find filtered product
-    dbIf = await product.find(query)
-      .sort(sort)
-      .limit(prodPerPage)
-      .skip(prodPerPage * (pageNo - 1));
-    // Render page
+    data = await modelProduct.getListProductByIf(query,sort,prodPerPage,pageNo);
+    // Render the page
     res.render('viewlistproducts', {
-      data: dbIf,
-      user: dbsession.username,
-      categories: categories,
+      data: data,
+      user,
+      priceRange: priceRange,
       sortOpts: sortOpts,
-      selectedCate: cateId,
+      selPriceRange: price,
       selectedSort: sortId,
-      currentPage: pageNo,
-      pages: totalPageNum
+      currentPage: totalPageNum === 0 ? totalPageNum : pageNo,
+      pages: totalPageNum,
+      type: _type,
+      title: _title
     });
   }
-  // async Paging(req, res) {
-  //   var query = {};
-  //   var sort = {};
-  //   var cateId = await parseToInt(req.body.Category);
-  //   var sortId = await parseToInt(req.body.SortBy);
-  //   var pageNo = await parseToInt(req.params.page);
-  //   var direct = req.params.direct;
-  //   var dbsession = req.session;
-  //   // Set query
-  //   if (cateId !== 0) query = { id_category: cateId };
-  //   // Set sort order
-  //   if (sortId === 1) sort = { name: 1 }; // name ascending
-  //   else if (sortId === 2) sort = { name: -1 }; // name descending
-  //   else if (sortId === 3) sort = { price: 1 }; // price ascending
-  //   else if (sortId === 4) sort = { price: -1 }; // price descending
-  //   // Check if previous or next page was click, then change page number
-  //   if (direct === PREV) {
-  //     if (pageNo > 0) pageNo = pageNo - 1;
-  //   }
-  //   // Find filtered product
-  //   const dbIf = await product.find(query)
-  //     .sort(sort)
-  //     .limit(prodPerPage)
-  //     .skip(prodPerPage * pageNo);
-  //   // Count how many products were found
-  //   const numOfProducts = await product.count(query);
-  //   // Render page
-  //   res.render('viewlistproducts', {
-  //     data: dbIf,
-  //     user: dbsession.username,
-  //     categories: categories,
-  //     sortOpts: sortOpts,
-  //     selectedCate: cateId,
-  //     selectedSort: sortId,
-  //     currentPage: pageNo + 1,
-  //     pages: Math.ceil(numOfProducts / prodPerPage)
-  //   });
-  // }
+
+  async ShowList(req, res, logout) {
+    if (logout) {
+      req.logout();
+      req.session.destroy();
+    }
+
+    // Get all product
+    const fullproduct = await modelProduct.getListProductByCount({},prodPerPage);
+    // Count how many products were found
+    const numOfProducts = await modelProduct.count;
+    // Render the page
+    res.render('viewlistproducts', {
+      data: fullproduct,
+      user:req.user,
+      priceRange: priceRange,
+      sortOpts: sortOpts,
+      selPriceRange: 0,
+      selectedSort: 0,
+      currentPage: 1,
+      pages: Math.ceil(numOfProducts / prodPerPage),
+      title: "Sản phẩm"
+    });
+  }
+
   async ShowDetail(req, res) {
-    var dbdetail = [];
     var dbrecommand = [];
     var idproduct = req.params.id;
     var dbsession = req.session;
     // Get product detail
-    await product.find({}).then((docs)=>{
-      docs.forEach((doc)=>{
-        if(doc._id==idproduct) dbdetail=doc;
-      })
-    });
+    var dbdetail= await modelProduct.getProductByIDString(idproduct);
+    console.log(dbdetail.name);
     // Get recommended products
-    dbrecommand = await product.find({
+    var dbrecommand = await modelProduct.getListProductByQuery({
       id_category: dbdetail.id_category,
       _id: { $not: { $eq: idproduct } }
     });
@@ -163,133 +161,33 @@ class Product {
     res.render('product', { data: dbdetail, recommand: dbrecommand, user: dbsession.username });
   }
 
-  Show(req, res) {
+  async Search(req, res) {
+    var regex = new RegExp(escapeRegex(req.query.key), 'gi');
+    const data = await modelProduct.getListProductByQuery({ name: regex });
+    res.render('viewlistproducts', {
+      data: data,
+      user: req.session.username,
+      priceRange: priceRange,
+      sortOpts: sortOpts,
+      selPriceRange: 0,
+      selectedSort: 0,
+      currentPage: 1,
+      pages: 1,
+      title: "Tìm kiếm"
+    });
+  }
+  Show(req,res){
     res.render('addproduct');
   }
-  async ShowDienthoai(req, res) {
-    var dbif = product.find({ id_category: 1 });
-    res.render('viewtype', { data: dbif });
-  }
-
-  async ShowLaptop(req, res) {
-    var dbif = product.find({ id_category: 2 });
-    res.render('viewtype', { data: dbif });
-  }
-
-  async ShowMayanh(req, res) {
-    var dbif = product.find({ id_category: 6 });
-    res.render('viewtype', { data: dbif });
-  }
-
-  async ShowTulanh(req, res) {
-    var dbif = product.find({ id_category: 4 });
-    res.render('viewtype', { data: dbif });
-  }
-
-  async ShowDongho(req, res) {
-    var dbif = product.find({ id_category: 5 });
-    res.render('viewtype', { data: dbif });
-  }
-
-  Addproduct(req, res) {
-    const nameproduct = req.body.nameproduct;
-    const category = req.body.category;
-    const price = req.body.category;
-    const count = req.body.count;
-    const decription = req.body.decription;
-    const discount = req.body.discount;
-    const image = req.body.image;
-    const countsell = 0;
-    let erorr = [];
-    erorr.push({ msg: "nhập đầy đủ thông tin" });
-    const success = "thêm sản phẩm thành công"
-
-    if (!nameproduct || !category || !price || !count || !decription || !discount || !image) {
-      res.render('addproduct', { data: erorr, nameproduct, category, price, count, decription, discount, image });
-    }
-    else {
-      newProduct.Addproduct(nameproduct, category, price, count, countsell, decription, discount, image);
-      res.render('addproduct', { success, nameproduct, category, price, count, decription, discount, image });
-    }
-  }
-
-  async Search(req, res) {
-    let key = req.query.key.toString();
-    key=key.toLowerCase();
-    console.log(key);
-    let data = [];
-    let name;
-    //let data1=[];
-    //console.log(data1);
-    products.forEach(function (doc) {
-      name=doc.name.toLowerCase();
-      if (name.indexOf(key) >= 0) {
-        data.push(doc);
-      }
-    })
-    res.render('viewlistproducts', { data: data });
-  }
-
-  async QLDongHang(req, res)
-  {
-    let data=[];
-    data= await Order.find({});
-    let Data=[];
-    data.forEach(function(doc){
-      if(doc.status==0)
-      {
-        doc.status="Chưa giao hàng";
-      }
-      else
-      {
-        doc.status="Đã giao hàng";
-      }
-      Data.push(doc);
-    })
-    res.render('QLdonhang', {Data:Data});
-  }
-
-  async ChiTietDonHang(req,res)
-  {
-      let id_order=req.params._id;
-      let data =[];
-      let Data=[];
-      let idproduct=[];
-      data = await ProductInOrder.find({_idOrder: id_order});
-      data.forEach(function(doc){
-        idproduct.push(doc._idProduct);
-      });
-
-      console.log(data);
-
-      let sum=0;
-      await product.find({}).then((docs)=>{
-        docs.forEach((doc)=>{
-            data.forEach((d)=>{
-              if(d._idProduct==doc._id)
-              {
-                  Data.push(doc);
-              }
-            })
-        })
-      });
-       
-      console.log(Data);
-      Data.forEach(function(doc){
-        sum=sum+Number(doc.price);
-      });
-      res.render('CTdonhang',{Data:Data,sum:sum});
-  }
-
 }
 
 
-function parseToInt(x) {
-  const parsed = parseInt(x, 32);
-  if (isNaN(parsed)) {
-    return 0;
-  }
-  return parsed;
+function isEmpty(val) {
+  return (val === undefined || val == null || val.length <= 0) ? true : false;
 }
+
+function escapeRegex(str) {
+  return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = Product;
