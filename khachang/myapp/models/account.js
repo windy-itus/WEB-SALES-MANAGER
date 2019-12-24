@@ -1,30 +1,30 @@
 const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.DATA;
-// var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 const bcrypt=require('bcryptjs');
 
-// mongoose.connect(uri, {
-//   useUnifiedTopology: true,
-//   useNewUrlParser: true,
-// });
+mongoose.connect(uri, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
 
-// var db = mongoose.connection;
-// var inforSchema = new mongoose.Schema({
-//   _id:Object,
-//   name: String,
-//   username: String,
-//   password: String,
-//   address: String,
-//   email: String,
-//   phone: String,
-//   admin: Boolean,
-//   token: String,
-//   lock: Boolean
-// }, {
-//   collection: 'Account'
-// });
-// const User = db.useDb("ManagerStore").model("User", inforSchema);
-// module.exports.getAccount=User;
+var db = mongoose.connection;
+var inforSchema = new mongoose.Schema({
+  _id:Object,
+  name: String,
+  username: String,
+  password: String,
+  address: String,
+  email: String,
+  phone: String,
+  admin: Boolean,
+  token: String,
+  lock: Boolean
+}, {
+  collection: 'Account'
+});
+const User = db.useDb("ManagerStore").model("User", inforSchema);
+module.exports.getAccount=User;
 
 module.exports.addAccount=function(user){
   MongoClient.connect(uri, function (err, db) {

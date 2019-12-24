@@ -1,5 +1,6 @@
 
 const modelProduct = require('../models/product');
+const modelCart=require('../models/cart');
 //const products=require('../models/product').getDBProduct();
 
 var priceRange = [
@@ -126,6 +127,16 @@ class Product {
       req.logout();
       req.session.destroy();
     }
+    if(req.user!=undefined&&req.user!=null){
+      if(req.session.cart!=null&&req.session.cart!=undefined){
+        var db=req.session.cart;
+        db.forEach((doc)=>{
+          modelCart.addCart({id_user:req.user.username,id_product:doc});
+        });
+        req.session.cart=null;
+      }
+    }
+
 
     // Get all product
     const fullproduct = await modelProduct.getListProductByCount({},prodPerPage);
@@ -148,17 +159,16 @@ class Product {
   async ShowDetail(req, res) {
     var dbrecommand = [];
     var idproduct = req.params.id;
-    var dbsession = req.session;
+    
     // Get product detail
     var dbdetail= await modelProduct.getListProductByIDString(idproduct);
-    console.log(dbdetail.name);
     // Get recommended products
     var dbrecommand = await modelProduct.getListProductByQuery({
       id_category: dbdetail.id_category,
       _id: { $not: { $eq: idproduct } }
     });
     // Render page
-    res.render('product', { data: dbdetail, recommand: dbrecommand, user: dbsession.username });
+    res.render('product', { data: dbdetail, recommand: dbrecommand, user: req.user });
   }
 
   async Search(req, res) {

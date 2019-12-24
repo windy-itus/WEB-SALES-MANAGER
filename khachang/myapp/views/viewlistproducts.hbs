@@ -46,13 +46,11 @@
 		</div>
 
 		<div class="section group">
-			<span></span>
 			{{#if data}}
 			{{#each data}}
 			<div class="grid_1_of_4 images_1_of_4">
-
 				<a href="/products/detail/{{this._id}}" id="imageProduct">
-					<img src="{{this.image_link}}" alt="" />
+					<img src="{{this.image_link}}" alt="Đang load" width="200" height="150"/>
 				</a>
 				<div class="discount">
 					<span class="percentage">{{this.discount}}</span>

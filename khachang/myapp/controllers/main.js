@@ -1,5 +1,6 @@
 // class Home (commom)
 const modelProduct = require('../models/product');
+const modelCart=require('../models/cart');
 const db=modelProduct.getProduct
 var Order = require('../models/order');
 const ID=require('uuid/v1');
@@ -30,12 +31,21 @@ class Home {
     async ShowCart(req, res) {
         var data = [];
         var sum = 0;
-        let dtinCart=[]
-        dtinCart = req.session.cart;
-        console.log(dtinCart);
+        var dtinCart=[];
+        if(req.session.cart!= undefined&& req.session.cart !=null){
+            dtinCart = req.session.cart;
+        }
+        
+        if(req.user!= undefined) {
+        await modelCart.getListCart({id_user:req.user.username}).then((docs)=>{
+            docs.forEach((doc)=>{
+                dtinCart.push(doc.id_product);
+            })
+        });
+        }
         //_id: { $in: req.session.cart }
-        if (req.session.cart) {
-            await db.find({}).then(function (Data) {               
+        if (dtinCart.length>0) {
+            await modelProduct.getListProductByQuery({}).then(function (Data) {               
                Data.forEach((_data)=>{
                     dtinCart.forEach((doc)=>{
                         if(doc==_data._id)
@@ -47,20 +57,22 @@ class Home {
                })
             });
         }
-
-        console.log(data);
-        
-        res.render('cart', { title: 'Quản lý giỏ hàng', user: req.session.username, data: data, sum: sum });
+        res.render('cart', { title: 'Quản lý giỏ hàng', user: req.user, data: data, sum: sum });
     }
 
     async AddProductInCart(req, res) {
         let pro = [];
         let recom = [];
         var idproduct = req.params.id;
+        if(req.user!=undefined&& req.user!=null){
+            modelCart.addCart({id_user:req.user.username,id_product:idproduct});
+        }
+        else{
         if (req.session.cart == null) {
             req.session.cart = [];
         }
         req.session.cart.push(idproduct);
+        }
 
         //pro = await db.find({ _id: idproduct });
         pro= await modelProduct.getListProductByIDString(idproduct);
@@ -68,25 +80,24 @@ class Home {
         recom = await db.find({ _id: pro.id_category });
 
         console.log("1 sản phẩm đã được thêm vào giỏ hàng");
-        res.render('product', { title: 'Sản phẩm', data: pro, recommand: recom, user: req.session.username });
+        res.render('product', { title: 'Sản phẩm', data: pro, recommand: recom, user: req.user });
     }
 
     async DeleteProductInCart(req, res) {
         const id = req.params.id;
-        req.session.cart.splice(req.session.cart.indexOf(id), 1);
-        let data = [];
-        let sum = 0;
-
-        if (req.session.cart) {
-            await  db.find({ _id: { $in: req.session.cart } }).then(function (_data) {
-                data = _data;
-                _data.forEach(function (doc) {
-                    sum = sum + doc.price;
-                });
+        var data=[];
+        var listcart=[];
+        var sum = 0;
+        if(req.user!=undefined&&req.user!=null){
+            await modelCart.deleteCart({id_product:id}).then(async()=>{
+                res.redirect("/cart");
             });
         }
+        else{
+        await req.session.cart.splice(req.session.cart.indexOf(id), 1);
+        res.redirect("/cart");
+        }
 
-        res.render('cart', { title: 'Quản lý giỏ hàng', user: req.session.username, data: data, sum: sum });
     }
 
     async Order(req,res)
