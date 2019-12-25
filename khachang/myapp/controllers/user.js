@@ -3,21 +3,21 @@ var account = User.getAccount;
 //test gui mail
 var nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
-const jwt=require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const MailConfig = require('../config/mail');
 
 
 class Account {
   async Register(req, res) {
-    const username = req.body.username;
+    const username = req.body.usernamedk;
     const name = req.body.name;
-    const password = req.body.password;
+    const password = req.body.passworddk;
     const repassword = req.body.repassword;
     const email = req.body.email;
     const address = req.body.address;
     const phone = req.body.phone;
     let errors = [];
     var token;
-    const success = "Đăng kí thành công";
     //check exist field
     if (!name || !username || !password || !repassword || !email || !address || !phone) {
       errors.push({ msg: 'Vui lòng điền đầy đủ thông tin' });
@@ -34,15 +34,10 @@ class Account {
       })
     });
     if (errors.length > 0) {
+      const info={name:name,username:username,password:password,repassword:repassword,email:email,address:address,phone:phone};
       res.render('login', {
-        data: errors
-        , name
-        , username
-        , password
-        , repassword
-        , email
-        , address
-        , phone
+        data: errors,
+        info
       });
     } else {
       await User.hashPassword(password).then(async function (doc) {
@@ -55,122 +50,90 @@ class Account {
           address: address,
           admin: false,
           lock: false,
-          activate:false
+          activate: false
         }
-        await User.addAccount(user).then((doc)=>{
-          var claims={
-            sub:username,
-            iss:'localhost:3000',
+        await User.addAccount(user).then((doc) => {
+          var claims = {
+            sub: username,
+            iss: 'localhost:3000',
           }
-            token = jwt.sign(claims,"khoa-itus",{
+          token = jwt.sign(claims, "khoa-itus", {
             expiresIn: '10m'
           });
-          User.UpdateInfoAccount({ token: token }, {username:username});
+          User.UpdateInfoAccount({ token: token }, { username: username });
         });
-
-      var transporter = nodemailer.createTransport({ // config mail server
-        service: 'Gmail',
-        auth: {
-          user: 'ad.appcreater@gmail.com',
-          pass: 'qwertyuiop@123456789'
-        }
-      });
-      var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
-        from: 'Đăng Khoa Store',
-        to: email,
-        subject: '[XÁC MINH TÀI KHOẢN VÀ LẤY LẠI MẬT KHẨU]',
-        text: '<a href="http://localhost:3000/users/activate-account-'+token+'"><b>Click here to reset password</b></a>',
-        html: '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/users/activate-account-' + token + '"><b>Click here to reset password</b></a></li>'
-      }
-      transporter.sendMail(mainOptions, function (err, info) {
-        if (err) {
-          console.log(err);
-          errorr = "Hiện tại hệ thống không thể hỗ trợ bạn khôi phục mật khẩu. Bạn có thể thử lại lần sau!";
-          res.render('forgetpassword', { title: 'Xác thực tài khoản', user, msg });
-        } else {
-          console.log('Message sent: ' + info.response);
-          msg = "Hệ thống đã gửi mã xác minh đến "+ email+", vui lòng check mail để thực hiện resetpassword. Nếu không nhận được mail vui lòng kiểm tra email và thử lại";
-          res.render('forgetpassword', { title: 'Xác thực tài khoản', user, msg });
-        }
-      });
-      res.render('login', { success });
+        const html = '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/users/activate-account-' + token + '"><b>Click here to reset password</b></a></li>'
+        const object = '[Đăng Khoa Store]-[KÍCH HOẠT TÀI KHOẢN]';
+        MailConfig.SendMail(email, object, html).then((doc) => {
+          if (doc) {
+            const success = "Đăng kí thành công. Vui lòng kiểm tra email đã đăng kí để tiến hành kích hoạt tài khoản";
+            res.render('login', { success });
+          }
+          else {
+            const success = "Xảy ra lỗi";
+            res.render('login', { success });
+          }
+        });
       });
       errors.push({ msg: 'Đăng kí thất bại' });
     }
   }
-  ActivateAccount(req,res){
+  ActivateAccount(req, res) {
     const token = req.params.token;
     jwt.verify(token, "khoa-itus", async (err, decoded) => {
       if (err) {
         console.log("hết hạn");
         res.send("Not found");
       }
-      else{
-        User.UpdateInfoAccount({activate:true},{token:token}).then(()=>{
+      else {
+        User.UpdateInfoAccount({ activate: true }, { token: token }).then(() => {
           res.send("Tài khoản của bạn đã được kích hoạt");
         })
-        .catch((err)=>{
-          res.send(err);
-        });
+          .catch((err) => {
+            res.send(err);
+          });
       }
     });
   }
   ShowLogin(req, res, msg) {
-    var user = "";
-    if (req.user != undefined && req.user != null) {
-      user = req.user._doc.name;
-    }
-    res.render('login', { title: 'Đăng nhập/Đăng ký', notice: msg, user });
+    res.render('login', { title: 'Đăng nhập/Đăng ký', notice: msg, user:req.user,username:req.params.username});
   }
   ForGetPassWord(req, res) {
-    res.render('forgetpassword', { title: 'Quên mật khẩu',user:req.user });
+    res.render('forgetpassword', { title: 'Quên mật khẩu', user: req.user });
   }
   async SubmitForgetPassword(req, res) {
     const email = req.body.email;
     var token;
     var msg = "";
     await account.findOne({ email: email }).then(function (userdb) {
-      var claims={
-        sub:userdb.username,
-        iss:'localhost:3000',
+      var claims = {
+        sub: userdb.username,
+        iss: 'localhost:3000',
       }
-        token = jwt.sign(claims,"khoa-itus",{
+      token = jwt.sign(claims, "khoa-itus", {
         expiresIn: '10m'
       });
-      User.UpdateInfoAccount({ token: token }, {username:userdb.username});
+      User.UpdateInfoAccount({ token: token }, { username: userdb.username });
     })
       .catch((err) => {
         msg = "Email không được dùng để đăng kí tài khoản ứng dụng";
-        res.render('forgetpassword', { title: 'Xác thực tài khoản',  user:req.user, msg });
+        res.render('forgetpassword', { title: 'Xác thực tài khoản', user: req.user, msg });
       });
     if (email.search("@gmail.com") == -1) {
       msg = "Email bạn nhập vào không tồn, vui lòng kiếm tra lại. Email có dạng: Example@gmail.com";
-      res.render('forgetpassword', { title: 'Xác thực tài khoản', user:req.user, msg });
+      res.render('forgetpassword', { title: 'Xác thực tài khoản', user: req.user, msg });
     }
     else {
-      var transporter = nodemailer.createTransport({ // config mail server
-        service: 'Gmail',
-        auth: {
-          user: 'ad.appcreater@gmail.com',
-          pass: 'qwertyuiop@123456789'
+      const html = '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/users/resetpassword-' + token + '"><b>Click here to reset password</b></a></li>';
+      const object = '[Đăng Khoa Store]-[XÁC THỰC TÀI KHOẢN VÀ LẤY LẠI MẬT KHẨU]';
+      MailConfig.SendMail(email, object, html).then((doc) => {
+        if (doc) {
+          msg = "Hệ thống đã gửi mã xác minh đến " + email + ", vui lòng check mail để thực hiện resetpassword. Nếu không nhận được mail vui lòng kiểm tra email và thử lại";
+          res.render('forgetpassword', { title: 'Xác thực tài khoản', user: req.user, msg });
         }
-      });
-      var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
-        from: 'Đăng Khoa Store',
-        to: email,
-        subject: '[XÁC MINH TÀI KHOẢN VÀ LẤY LẠI MẬT KHẨU]',
-        text: '<a href="http://localhost:3000/users/resetpassword-"><b>Click here to reset password</b></a>',
-        html: '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/users/resetpassword-' + token + '"><b>Click here to reset password</b></a></li>'
-      }
-      transporter.sendMail(mainOptions, function (err, info) {
-        if (err) {
-          console.log(err);
+        else {
           errorr = "Hiện tại hệ thống không thể hỗ trợ bạn khôi phục mật khẩu. Bạn có thể thử lại lần sau!";
-          res.render('forgetpassword', { title: 'Xác thực tài khoản',  user:req.user, msg });
-        } else {
-          console.log('Message sent: ' + info.response);
-          msg = "Hệ thống đã gửi mã xác minh đến "+ email+", vui lòng check mail để thực hiện resetpassword. Nếu không nhận được mail vui lòng kiểm tra email và thử lại";
-          res.render('forgetpassword', { title: 'Xác thực tài khoản',  user:req.user, msg });
+          res.render('forgetpassword', { title: 'Xác thực tài khoản', user: req.user, msg });
         }
       });
     }
@@ -178,22 +141,21 @@ class Account {
 
   async ShowResetPassword(req, res) {
     const token = req.params.token;
-    console.log(token);
-    var isexist=false;
+    var isexist = false;
     jwt.verify(token, "khoa-itus", async (err, decoded) => {
       if (err) {
         console.log("hết hạn");
         res.send("Not found");
       }
-      else{
-      await account.findOne({ token: token }).then(function (doc) {
-        isexist = true;
-      })
-        .catch((err) => {
-          isexist = false;
-        });
+      else {
+        await account.findOne({ token: token }).then(function (doc) {
+          isexist = true;
+        })
+          .catch((err) => {
+            isexist = false;
+          });
         if (isexist == true) {
-          res.render('resetpassword', { title: 'Reset Password', user:req.user, token });
+          res.render('resetpassword', { title: 'Reset Password', user: req.user, token });
         }
       }
     });
@@ -214,32 +176,32 @@ class Account {
       errors.push({ msg: 'Mật khẩu nhập lại không đúng' });
     }
     if (errors.length > 0) {
-      res.render('resetpassword', { title: 'Reset Password', user:req.user, data: errors, newpw, renewpw,token });
+      res.render('resetpassword', { title: 'Reset Password', user: req.user, data: errors, newpw, renewpw, token });
     }
     else {
-      User.getOneAccount({token:token}).then((result)=>{
+      User.getOneAccount({ token: token }).then((result) => {
         User.hashPassword(newpw).then(function (doc) {
-          User.UpdateInfoAccount({ password: doc }, {username:result.username});
+          User.UpdateInfoAccount({ password: doc }, { username: result.username });
           var success = "Mật khẩu đã được đặt lại thành công";
-          res.render('resetpassword', { title: 'Reset Password', user:req.user, success,token });
+          res.render('resetpassword', { title: 'Reset Password', user: req.user, success, token });
         })
           .catch((err) => {
             errors.push({ msg: 'Xảy ra lỗi, vui lòng thử lại' });
-            res.render('resetpassword', { title: 'Reset Password', user:req.user, data: errors, newpw, renewpw,token });
+            res.render('resetpassword', { title: 'Reset Password', user: req.user, data: errors, newpw, renewpw, token });
           });
       });
     }
   }
-  
+
   ShowDelivery(req, res) {
-      res.render('delivery', { title: 'Thông tin giao hàng', user: req.user });
+    res.render('delivery', { title: 'Thông tin giao hàng', user: req.user });
   }
 
   ShowProductPurchased(req, res) {
-    res.render('productspurchased', { title: 'Lịch sử giao hàng', user:req.user });
+    res.render('productspurchased', { title: 'Lịch sử giao hàng', user: req.user });
   }
   ShowInfoUser(req, res) {
-    res.render('informationaccount', { title: 'Thông tin tài khoản', user:req.user });
+    res.render('informationaccount', { title: 'Thông tin tài khoản', user: req.user });
   }
 
   ShowChangeInfoUser(req, res) {
@@ -276,7 +238,7 @@ class Account {
   }
 
   ShowChangePassword(req, res) {
-    res.render('changepassword', { title: 'Thông tin tài khoản', user:req.user });
+    res.render('changepassword', { title: 'Thông tin tài khoản', user: req.user });
   }
 
   ChangePassword(req, res) {

@@ -25,6 +25,8 @@ module.exports =function (passport) {
             }).then(function (user) {    
                 if(!user)
                     return done(null,false,{message:'Tài khoản chưa được đăng ký'});
+                if(!user.activate)
+                    return done(null,false,{message:'Tài khoản chưa được kích hoạt'});
                 bcrypt.compare(password,user.password,(err,isMatch)=>{
                     if(err) throw err;
                     if(isMatch) return done(null,user);

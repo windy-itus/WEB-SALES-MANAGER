@@ -19,7 +19,8 @@ var inforSchema = new mongoose.Schema({
   phone: String,
   admin: Boolean,
   token: String,
-  lock: Boolean
+  lock: Boolean,
+  activate:Boolean
 }, {
   collection: 'Account'
 });

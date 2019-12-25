@@ -10,7 +10,7 @@ mongoose.connect(uri, {
 
 var db = mongoose.connection;
 var prodSchema = new mongoose.Schema({
-  _id: Object,
+  _id: String,
   count: Number,
   count_sell: Number,
   description: String,
@@ -56,6 +56,17 @@ module.exports.getProductByIDString=function (id) {
       docs.forEach((doc)=>{
         if(doc._id==id)  resolve(doc);
       });
+    });
+  });
+}
+module.exports.getListProductByIDString=function (arrid) {
+  return new Promise(function(resolve, reject){
+    Product.find({}).then((docs)=>{
+      var arr=[];
+      docs.forEach((doc)=>{
+        if(arrid.indexOf(doc._id)>=0) arr.push(doc);
+      });
+      resolve(arr);
     });
   });
 }

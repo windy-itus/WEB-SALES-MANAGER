@@ -23,15 +23,33 @@ var prodSchema = new mongoose.Schema({
 });
 const Order = db.useDb("ManagerStore").model("Order", prodSchema);
 module.exports.getOrder = Order;
+module.exports.getOrderByQuery = function (query) {
+  return new Promise(function (resolve, reject) {
+    Order.find(query).then((docs) => {
+      resolve(docs);
+    });
+  });
+}
+module.exports.getOneOrderByQuery = function (query) {
+  return new Promise(function (resolve, reject) {
+    Order.findOne(query).then((docs) => {
+      resolve(docs);
+    });
+  });
+}
+module.exports.deleteOrder = function (query) {
+  return new Promise(function (resolve, reject) {
+    MongoClient.connect(uri, function (err, db) {
+      if (err) throw err;
+      var dbo = db.db("ManagerStore");
+      dbo.collection("Order").deleteOne(query, function (err, res) {
+          if (err) throw err;
+          resolve(true);
+          db.close();
+      });
+    });
+  });
+}
 
 
 
-var productInOrder=new mongoose.Schema({
-  _id: String,
-  _idOrder:String,
-  _idProduct: String
-}, {
-  collection: 'ProductInOrder'
-});
-const ProductInOrder = db.useDb("ManagerStore").model("ProductInOrder", productInOrder);
-module.exports.getProductInOrder = ProductInOrder;

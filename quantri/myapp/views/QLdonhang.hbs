@@ -1,31 +1,37 @@
-<div align="center">
-   
-    {{#if Data}}
-    {{#each Data}}
-    <form method="GET" action="/order/o={{this._id}}" style="width: 100%; heigh=100% background-color: bisque;">
-        <div style="margin-right:30px ; width: 30%;border: 10px ;height: auto; align-items: center; line-height: 25px; float: inline;">
-       <div align="center" >Đơn Hàng</div>
-       <hr>
-       <div style="float: left; width: 50%;">
-          <b>Ngày</b><div id="date" name="date">{{this.date}}</div>
-          <b>Người đặt: </b><div name="ID_Usser">{{this.ID_Usser}}</div>
-          <b>Người nhận</b>
-          <div name="recipient">{{this.recipient}}</div>
-       </div>
-       <div>          
-            <b>Tổng tiền</b> <div name="amount">{{this.amount}}</div>           
-            {{!-- <button> Giao hàng </button><br> --}}
-            <b>Trạng thái:</b><span name="status">{{this.status}}</span>
-            <button class="Button" type="submit"> Chi tiết </button><br>
-            <div></div>
-       </div>
-    </div>   
-    <br>
-    <br>
-    </form>
-    <hr>
-    <hr>
-    {{/each}}
-    {{/if}}
-    
+<div class="main">
+    <div class="content container-fluid">
+        <div class="heading">
+            <h3>Quản lý đơn đặt hàng</h3>
+            <br>
+        </div>
+        <div class="clear"></div>
+        <div class=" content_top table-responsive col-md-12">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>ID đơn hàng</th>
+                        <th>Ngày đặt</th>
+                        <th>ID Người đặt</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#if Data}}
+                    {{#each Data}}
+                    <tr>
+                        <td>{{this.id}}</td>
+                        <td>{{this.date}}</td>
+                        <td>{{this.ID_Usser}}</td>
+                        <td>{{this.status}}</td>
+                        <td><a href="/admin/detail-order-{{this.id}}"> <button class="Button" type="submit"> Chi tiết
+                                </button></a></td>
+                        <td><a href="/admin/delete-order-{{this.id}}"> <button class="Button" type="submit"> Xóa
+                                </button></a></td>
+                    </tr>
+                    {{/each}}
+                    {{/if}}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

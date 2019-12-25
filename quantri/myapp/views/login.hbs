@@ -5,10 +5,10 @@
 			<p>Đăng nhập bên dưới.</p>
 			<div style="color: red;">{{notice}}</div>
 			<form action="/users/login" method="POST" id="member">
-				<div><label class="control-label" for="user">Tài khoản</label></div>
-				<input id="user" name="username" type="text">
-				<div><label class="control-label" for="pw">Mật khẩu</label></div>
-				<input id="pw" name="password" type="password">
+				<div><label class="control-label" for="password">Tài khoản</label></div>
+				<input id="password" name="username" type="text" value="{{username}}">
+				<div><label class="control-label" for="password">Mật khẩu</label></div>
+				<input id="password" name="password" type="password">
 				<div class="buttons">
 					<div><button type="submit" class="grey">Đăng Nhập</button></div>
 				</div>
@@ -28,21 +28,21 @@
 				<div class="row">
 					<div class="form-group col-md-6">
 						<div><label class="control-label" for="name">Họ và tên</label></div>
-						<div><input id="name" name="name" type="text" value="{{name}}"></div>
-						<div><label class="control-label" for="username">Tài khoản</label></div>
-						<div><input id="username" name="username" type="text" value="{{username}}"></div>
-						<div><label class="control-label" for="password">Mật khẩu</label></div>
-						<div><input id="password" name="password" type="password" value="{{password}}"></div>
+						<div><input id="name" name="name" type="text" value="{{info.name}}"></div>
+						<div><label class="control-label" for="usernamedk">Tài khoản</label></div>
+						<div><input id="usernamedk" name="usernamedk" type="text" value="{{info.username}}"></div>
+						<div><label class="control-label" for="passworddk">Mật khẩu</label></div>
+						<div><input id="passworddk" name="passworddk" type="password" value="{{info.password}}"></div>
 						<div><label class="control-label" for="repassword">Nhập lại Mật khẩu</label></div>
-						<div><input id="repassword" name="repassword" type="password" value="{{repassword}}"></div>
+						<div><input id="repassword" name="repassword" type="password" value="{{info.repassword}}"></div>
 					</div>
 					<div class="form-group col-md-6">
 						<div><label class="control-label" for="address">Địa chỉ</label></div>
-						<div><input id="address" name="address" type="text" value="{{address}}"></div>
+						<div><input id="address" name="address" type="text" value="{{info.address}}"></div>
 						<div><label class="control-label " for="email">Email</label></div>
-						<div><input id="email" name="email" type="email" value="{{email}}"></div>
+						<div><input id="email" name="email" type="email" value="{{info.email}}"></div>
 						<div><label class="control-label " for="phone">Số điện thoại</label></div>
-						<div><input id="phone" name="phone" type="number" value="{{phone}}"></div>
+						<div><input id="phone" name="phone" type="number" value="{{info.phone}}"></div>
 					</div>
 				</div>
 				<div class="search">
@@ -57,3 +57,8 @@
 	</div>
 </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+	var username="{{username}}";
+	if(username) $('#password').focus();
+</script>

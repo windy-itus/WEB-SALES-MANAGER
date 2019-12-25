@@ -1,31 +1,18 @@
 // class Home (commom)
 const modelProduct = require('../models/product');
 const modelCart=require('../models/cart');
-const db=modelProduct.getProduct
 var Order = require('../models/order');
 const ID=require('uuid/v1');
 
 class Home {
     ShowAbout(req, res) {
-        var user;
-        if (req.user != undefined && req.user != null) {
-            user = req.user.name;
-        }
-        res.render('about', { title: 'Về Chúng Tôi', user });
+        res.render('about', { title: 'Về Chúng Tôi', user:req.user });
     }
     ShowContact(req, res) {
-        var user;
-        if (req.user != undefined && req.user != null) {
-            user = req.user.name;
-        }
-        res.render('contact', { title: 'Liên hệ', user});
+        res.render('contact', { title: 'Liên hệ', user:req.user});
     }
     ShowFaq(req, res) {
-        var user;
-        if (req.user != undefined && req.user != null) {
-            user = req.user.name;
-        }
-        res.render('faq', { title: 'Hỗ trợ', user});
+        res.render('faq', { title: 'Hỗ trợ', user:req.user});
     }
 
     async ShowCart(req, res) {
@@ -76,8 +63,8 @@ class Home {
 
         //pro = await db.find({ _id: idproduct });
         pro= await modelProduct.getListProductByIDString(idproduct);
-
-        recom = await db.find({ _id: pro.id_category });
+        recom= await modelProduct.getListProductByQuery({_id: pro.id_category})
+        // recom = await db.find({ _id: pro.id_category });
 
         console.log("1 sản phẩm đã được thêm vào giỏ hàng");
         res.render('product', { title: 'Sản phẩm', data: pro, recommand: recom, user: req.user });
@@ -111,12 +98,19 @@ class Home {
         const stt=0;
         const amou=req.body.sum;
         const Day=new Date();
-         const success="Đặt hàng thành công";
-         const fail="Vui lòng nhập đủ thông tin";
-         let mess;
+        const success="Đặt hàng thành công";
+        const fail="Vui lòng nhập đủ thông tin";
+        let mess;
 
-        let products=[];
-        products= req.session.cart;
+        var products=[];
+        if(req.session.cart!= undefined&& req.session.cart !=null){
+            products = req.session.cart;
+        }
+        await modelCart.getListCart({id_user:req.user.username}).then((docs)=>{
+            docs.forEach((doc)=>{
+                products.push(doc.id_product);
+            })
+        });
 
          const order = {
              _id:id_order,
@@ -149,18 +143,20 @@ class Home {
             mess=success;
             Order.addOrder(order,productsIncart);
         }
-        res.render('delivery', {status:mess,name:name,sdt:sdt,address:dc,User:req.user, sum:amou});
+        await modelCart.deleteManyCart({id_user:req.user.username}).then(async()=>{
+            res.render('delivery', {status:mess,name:name,sdt:sdt,address:dc,user:req.user, sum:amou});
+        });
+        
     }
 
     ThanhToan(req,res)
     {
-        const user=req.user;
         let data=req.params.sum;
         if(data<=0)
         {
             data=null;
         }
-        res.render('delivery', { title: 'thanh toán', sum: data, User:user});
+        res.render('delivery', { title: 'thanh toán', sum: data, user:req.user});
     }
 }
 
