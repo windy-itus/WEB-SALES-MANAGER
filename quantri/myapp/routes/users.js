@@ -24,14 +24,13 @@ router.post('/register-form',(req, res) => controller.Register(req, res));
 // Handler get info user
 router.get('/forgetpassword', (req, res, next)=>controller.ForGetPassWord(req, res));
 //method get
-router.get('/delivery',ensureAuthenticated, (req, res, next)=>controller.ShowDelivery(req, res));
-router.get('/productspurchased',ensureAuthenticated, (req, res, next)=>controller.ShowProductPurchased(req, res));
 router.get('/info-user',ensureAuthenticated, (req, res, next)=>controller.ShowInfoUser(req, res));
 router.get('/change-info-user',ensureAuthenticated, (req, res) => controller.ShowChangeInfoUser(req, res));
 router.get('/changepassword',ensureAuthenticated,(req, res, next)=>controller.ShowChangePassword(req, res));
 router.get('/resetpassword-:token', (req,res) => controller.ShowResetPassword(req,res));
-//method post
 router.get('/activate-account-:token', (req,res) => controller.ActivateAccount(req,res));
+//method post
+
 router.post('/forgetpassword', (req, res, next)=>controller.SubmitForgetPassword(req, res));
 router.post('/change-info-user',ensureAuthenticated, (req, res) => controller.ChangeInfo(req, res));
 router.post('/changepassword',ensureAuthenticated, (req, res) => controller.ChangePassword(req, res));

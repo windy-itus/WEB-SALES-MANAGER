@@ -95,7 +95,10 @@ class Admin {
     }
 
     ShowAddProduct(req, res) {
-        res.render('addproduct', { title: 'Thêm sản phẩm', idcategory: req.params.idcategory,user:req.user });
+        const idcategory=Number(req.params.idcategory);
+        modelStall.ListStall({}).then((docs)=>{
+            res.render('addproduct', { title: 'Thêm sản phẩm', idcategorychoose: idcategory,user:req.user,Categories:docs });
+        });
     }
 
     async AddProduct(req, res) {
@@ -106,14 +109,14 @@ class Admin {
         const count = Number(req.body.count);
         const discount = req.body.discount;
         const price = Number(req.body.price);
-        const id_category = Number(req.body.category);
+        const id_category = Number(req.body.Category);
         await modelProduct.getListProductByQuery({}).then((docs) => {
             docs.forEach((doc) => {
                 if (doc.name == name) notice = "sản phẩm tồn tại";
             });
         });
         if (notice != undefined) {
-            res.render('addproduct', { title: 'Thêm sản phẩm', idcategory: req.params.idcategory, notice ,user:req.user});
+            res.render('addproduct', { title: 'Thêm sản phẩm', idcategory: id_category, notice ,user:req.user});
         }
         else {
             modelProduct.InsertOneProduct({
@@ -123,6 +126,7 @@ class Admin {
                 count: count,
                 discount: discount,
                 price: price,
+                count_sell:0,
                 id_category: id_category
             }).then((doc) => {
                 if (doc) console.log("Thêm thành công");
@@ -141,7 +145,7 @@ class Admin {
         const id = req.body.id;
         await modelProduct.getListProductByQuery({}).then((docs) => {
             docs.forEach((doc) => {
-                if (name == doc.name) notice = 'Sản phẩm đã tồn tại';
+                if (name == doc.name&&id!=doc.id) notice = 'Sản phẩm đã tồn tại';
             });
         });
         if (notice != undefined) {
@@ -160,7 +164,7 @@ class Admin {
                     price: price
                 }, { _id: result._id }).then((doc) => {
                     if (doc) console.log("Sửa thành công");
-                    res.redirect('/admin/detail-' + id);
+                    res.redirect('/admin/detail-product-' + id);
                 });
             });
         }

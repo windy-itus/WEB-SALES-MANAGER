@@ -1,19 +1,18 @@
 var firebaseConfig = {
-    apiKey: "AIzaSyDarZhXQnvoV-7CM8jdKh6V0DHJuDu9ZWo",
-    authDomain: "mydata-f82f3.firebaseapp.com",
-    databaseURL: "https://mydata-f82f3.firebaseio.com",
-    projectId: "mydata-f82f3",
-    storageBucket: "mydata-f82f3.appspot.com",
-    messagingSenderId: "139587318494",
-    appId: "1:139587318494:web:7873921a44ff0ce0c5484f",
-    measurementId: "G-Y4E09R18C4"
+    apiKey: "AIzaSyB3C7OOUgjjxf7yvV9P6VbmtHmDGKVBCeA",
+    authDomain: "stotepicture.firebaseapp.com",
+    databaseURL: "https://stotepicture.firebaseio.com",
+    projectId: "stotepicture",
+    storageBucket: "stotepicture.appspot.com",
+    messagingSenderId: "160343356649",
+    appId: "1:160343356649:web:b433527c5cf3c68d46ac78",
+    measurementId: "G-228F3ECR6Q"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
+//firebase.analytics();
 
 var selectedFile;
-
 function getfile() {
     var pic = document.getElementById("photo");
 
@@ -21,7 +20,6 @@ function getfile() {
     selectedFile = pic.files[0];
 
     // make save button disabled for few seconds that has id='submit_link' 
-    document.getElementById('submit_link').setAttribute('disabled', 'true');
     myfunction(); // call below written function 
 }
 
@@ -58,6 +56,7 @@ function myfunction() {
         // get the uploaded image url back 
         uploadTask.snapshot.ref.getDownloadURL().then(
             function (downloadURL) {
+                console.log(downloadURL);
 
                 // You get your url from here 
                 //console.log('File available at', downloadURL);
