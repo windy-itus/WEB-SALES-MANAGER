@@ -62,7 +62,7 @@ class Account {
           });
           User.UpdateInfoAccount({ token: token }, { username: username });
         });
-        const html = '<p>Bạn vừa thực hiện yêu cầu reset password tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/users/activate-account-' + token + '"><b>Click here to reset password</b></a></li>'
+        const html = '<p>Bạn vừa thực hiện đăng kí tài khoản tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/users/activate-account-' + token + '"><b>Nhấn vào đây để kích hoạt tài khoản</b></a></li>'
         const object = '[Đăng Khoa Store]-[KÍCH HOẠT TÀI KHOẢN]';
         MailConfig.SendMail(email, object, html).then((doc) => {
           if (doc) {

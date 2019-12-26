@@ -61,10 +61,14 @@ module.exports.getProductByIDString=function (id) {
 }
 module.exports.getListProductByIDString=function (arrid) {
   return new Promise(function(resolve, reject){
-    Product.find({}).then((docs)=>{
+    Product.find({}).then(async(docs)=>{
       var arr=[];
-      docs.forEach((doc)=>{
-        if(arrid.indexOf(doc._id)>=0) arr.push(doc);
+
+      docs.forEach(async(doc)=>{
+        await arrid.forEach((idproduct)=>{
+          if(doc._id==idproduct)
+          arr.push(doc);
+          });
       });
       resolve(arr);
     });
