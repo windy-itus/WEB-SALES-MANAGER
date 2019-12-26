@@ -2,7 +2,10 @@
 const modelProduct = require('../models/product');
 const modelCart=require('../models/cart');
 var Order = require('../models/order');
+const order=require('../models/order').getOrder;
 const ID=require('uuid/v1');
+const Product=require('../models/product').getProduct;
+const productInOrder = require('../models/product_in_order').getProductInOrder;
 
 class Home {
     ShowAbout(req, res) {
@@ -157,6 +160,46 @@ class Home {
             data=null;
         }
         res.render('delivery', { title: 'thanh toán', sum: data, user:req.user});
+    }
+
+    async showHistory(req,res)
+    {
+        const iduser=req.user._id;
+        let idorder=[];
+        let idproducts=[];
+        let data=[];
+        //console.log(iduser);
+        const orders= await order.find({ID_Usser:iduser});
+        //console.log(order);
+        orders.forEach(function(doc){
+            idorder.push(doc._id);
+        });
+        
+        const products=await productInOrder.find({_idOrder: {$in: idorder}});
+      
+        products.forEach(function(doc){
+    
+            idproducts.push(doc._idProduct);
+        });
+        
+        console.log(idproducts);
+  
+        await Product.find({}).then((docs)=>{
+             docs.forEach((doc)=>{
+              
+                idproducts.forEach(function(id){
+
+                    if(id==doc._id)
+                    {
+                        data.push(doc);
+                        
+                    }
+                });
+             });
+        });
+   
+        res.render('viewlistproducts',{data:data});
+        
     }
 }
 

@@ -1,0 +1,60 @@
+<h2 class="text-center">CHI TIẾT ĐƠN HÀNG</h2>
+ <div class="container"> 
+ <table id="cart" class="table table-hover table-condensed"> 
+  <thead> 
+   <tr> 
+    <th style="width:50%">Tên sản phẩm</th> 
+    <th style="width:10%">Giá</th> 
+    <th style="width:8%"> </th> 
+    <th style="width:22%" class="text-center">Thành tiền</th> 
+    <th style="width:10%"> </th> 
+   </tr> 
+  </thead> 
+  
+  <tbody><tr> 
+    {{#if Data}}
+    {{#each Data}}
+   <td data-th="Product"> 
+    <div class="row"> 
+    
+     <div class="col-sm-2 hidden-xs"><img src={{this.image_link}} alt="Sản phẩm 1" class="img-responsive" width="100">
+     </div> 
+     <div class="col-sm-10"> 
+      <h4 class="nomargin">{{this.name}}</h4> 
+      <p name="description">{{this.description}}</p> 
+     </div> 
+    </div> 
+   </td> 
+   <td data-th="Price" name="price">{{this.price}}đ</td> 
+   <td data-th="Quantity">
+   </td> 
+   <td data-th="Subtotal" class="text-center" name="price">{{this.price}}đ</td> 
+   <td class="actions" data-th="">
+    <button class="btn btn-info btn-sm"><i class="fa fa-edit"></i>
+    </button> 
+    <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i>
+    </button>
+   </td> 
+  </tr> 
+  {{/each}}
+  {{/if}}
+    <td>
+    </td> 
+    <td colspan="2" class="hidden-xs"> </td> 
+    <td class="hidden-xs text-center"><strong>Tổng tiền {{sum}}</strong>
+    </td> 
+    <td>
+    </td> 
+   </tr> 
+  </tfoot> 
+ </table>
+
+<div>
+    <b> ID Người đặt hàng:{{order.ID_Usser}}</b><br>
+    <b> Người nhận:{{order.recipient}}</b> <br>
+    <b> Địa chỉ:{{order.address}}</b><br>
+    <b> Số đt:{{order.phone_number}}</b><br>
+</div>
+</div>
+</div>
+

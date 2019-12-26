@@ -7,6 +7,29 @@ mongoose.connect(uri, {
     useNewUrlParser: true,
   });
 
+var db = mongoose.connection;
+var prodSchema = new mongoose.Schema({
+  _id: String,
+  ID_Usser: Object,
+  recipient: String,
+  phone_number: String,
+  address: String,
+  status: String,
+  amount: Number,
+  date: Date,
+}, {
+  collection: 'Order'
+});
+const Order = db.useDb("ManagerStore").model("Order", prodSchema);
+module.exports.getOrder = Order;
+module.exports.getOrderByQuery = function (query) {
+  return new Promise(function (resolve, reject) {
+    Order.find(query).then((docs) => {
+      resolve(docs);
+    });
+  });
+}
+
   module.exports.addOrder=function(order,productsIncart){
     MongoClient.connect(uri, function (err, db) {
       if (err) throw err;
@@ -26,3 +49,13 @@ mongoose.connect(uri, {
     });
 });
 } 
+module.exports.getOderByIDUserString=function (id) {
+   return new Promise(function(resolve, reject){
+      Order.find({}).then((docs)=>{
+      docs.forEach((doc)=>{
+         if(doc.ID_Usser==id)  resolve(doc);
+       });
+     });
+   });
+  //return Order.find({ID_Usser:id});
+}

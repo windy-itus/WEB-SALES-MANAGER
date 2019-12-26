@@ -27,5 +27,6 @@ router.post('/add-in-cart/:id', async (req, res) => controllerHome.AddProductInC
 router.post('/delete/:id', async (req, res) => controllerHome.DeleteProductInCart(req, res));
 router.post('/order',ensureAuthenticated,async (req, res)=>controllerHome.Order(req,res));
 router.get('/thanhtoan/:sum',ensureAuthenticated,(req,res)=>controllerHome.ThanhToan(req,res));
+router.get('/history', async (req,res)=>controllerHome.showHistory(req,res));
 
 module.exports = router;
