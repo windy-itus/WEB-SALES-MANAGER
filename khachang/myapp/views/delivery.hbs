@@ -1,41 +1,44 @@
 <div class="main">
-    {{#if user}}
     <div class="content container-fluid">
         <div class="heading">
-    		<h3>Thông tin khách hàng</h3>
-    	</div>
-       {{#if sum}}
-       <form action="/order" method="POST">
-            
-                <div class="content_top col-md-12">
+            <h3>Thông tin khách hàng</h3>
+        </div>
+        {{#if status}}
+        <div style="color: red;">{{status}}</div>
+        {{/if}}
+        {{#if sum}}
+        <form action="/order" method="POST">
+            <div class="content_top col-md-12">
                 <div class="form-group">
-                <label class="control-label" for="name">Họ và tên</label>
-                <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="name" name="name" value="{{name}}"></div>  
+                    <label class="control-label" for="name">Họ và tên</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" type="text" id="name" name="name"
+                                value="{{name}}" required></div>
+                    </div>
+                    <label class="control-label" for="sdt">Số điện thoại</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" type="text" id="sdt" name="sdt"
+                                value="{{sdt}}" required></div>
+                    </div>
+                    <label class="control-label" for="adress">Địa chỉ nhận</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" type="text" id="address" name="address"
+                                value="{{address}}" required></div>
+                    </div>
+                    <label class="control-label" for="adress">Tổng tiền</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" type="input" id="sum" name="sum"
+                                value="{{sum}}" readonly /></div>
+                    </div>
+                    <label class="control-label" for="note">Ghi chú</label>
+                    <div class="row">
+                        <div class="col-md-6"><input class="form-control" type="text" id="note" name="note"
+                                placeholder="Điền thông tin giao hàng mà bạn muốn cửa hàng lưu ý"></div>
+                    </div>
+                    <br>
+                    <button class="btn btn-primary btn-sm" type="submit">Xác nhận</button>
                 </div>
-                <label class="control-label" for="sdt">Số điện thoại</label>
-                <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="sdt" name="sdt" value="{{sdt}}"></div>  
-                </div>
-                <label class="control-label" for="adress">Địa chỉ nhận</label>
-                <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="text" id="address" name="address" value="{{address}}"></div>  
-                </div>
-                <label class="control-label" for="adress">Tổng tiền</label>
-                <div class="row">
-                    <div class="col-md-6"><input class="form-control" type="input" id="sum" name="sum" value="{{sum}}"/></div>  
-                <br>
-                <br>
-                <button class="btn btn-primary btn-sm" type="submit">Xác nhận</button>
-            </div>
-            </div>     
-       </form>
-       {{else}}<div>Không có gì trong giỏ hàng</div>
-       {{/if}}
-       {{#if status}}
-            <div>{{status}}</div>
-       {{/if}}
+        </form>
+        {{/if}}
     </div>
-    {{else}} <br><br><br><div align="center" style="color:red; font-size: 30px;">Vui lòng đăng nhập trước khi thanh toán</div><br><br><br>
-    {{/if}}
 </div>

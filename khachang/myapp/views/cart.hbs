@@ -42,12 +42,13 @@
             {{else}} <div class="text-center">Không có gì trong giỏ hàng</div>
             {{/if}}
             <tr>                
-               <form action="/thanhtoan/{{sum}}" method="GET">
+               <form action="/thanhtoan" method="POST">
                     <td><a href="/home" class="btn btn-warning"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
                 </td>
                 <td colspan="2" class="hidden-xs"> </td>
-                <td class="hidden-xs text-center"><label id="sum" value="sum" name="sum">Tổng tiền : {{sum}} đ</label>
+                <td class="hidden-xs text-center"><label id="tvsum" value="sum" name="tvsum">Tổng tiền : {{sum}} đ</label>
                 </td>
+                <input type="text" value="{{sum}}" name="sum" id="sum" readonly hidden>
                 <td><button type="submit" class="btn btn-success btn-block">Thanh toán <i class="fa fa-angle-right"></i></button>
                 </td>
                </form>
