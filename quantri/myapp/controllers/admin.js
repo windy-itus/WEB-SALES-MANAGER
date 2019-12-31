@@ -7,11 +7,14 @@ const modelProduct = require('../models/product');
 
 const modelOrder = require('../models/order');
 const modelProductInOrder = require('../models/product_in_order');
+// truy xuất database statistic
+const modelStatistic = require('../models/statistic');
 
+const prodPerPage = 6; // product per page
 
 class Admin {
-    ShowHome(req,res){
-        res.render('statistical',{title:'Trang chủ',user:req.user})
+    ShowHome(req, res) {
+        res.render('statistical', { title: 'Trang chủ', user: req.user })
     }
     async ShowListUser(req, res) {
         var listuser = [];
@@ -21,7 +24,7 @@ class Admin {
                     listuser.push(doc);
                 }
             });
-            res.render('useraccounts', { title: 'Danh sách tài khoản người dùng', listacc: listuser,user:req.user });
+            res.render('useraccounts', { title: 'Danh sách tài khoản người dùng', listacc: listuser, user: req.user });
         });
     }
     LockOrUnlock(req, res) {
@@ -43,19 +46,65 @@ class Admin {
     ViewDetailUser(req, res) {
         const username = req.params.username;
         modelUser.getOneAccount({ username: username }).then((doc) => {
-            res.render('detail-user', { title: 'Thông tin chi tiết', info: doc ,user:req.user});
+            res.render('detail-user', { title: 'Thông tin chi tiết', info: doc, user: req.user });
         });
     }
 
     ShowStalls(req, res) {
         modelStall.ListStall({}).then((docs) => {
-            res.render('systemstall', { title: 'Hệ thống gian hàng', liststall: docs,user:req.user });
+            res.render('systemstall', { title: 'Hệ thống gian hàng', liststall: docs, user: req.user });
         });
     }
-    ShowListProduct(req, res) {
+    async ShowListProduct(req, res) {
         const id = req.params.id;
-        modelProduct.getListProductByQuery({ id_category: id }).then((docs) => {
-            res.render('listproduct', { title: 'Sản phẩm gian hàng', listproduct: docs, idcategory: docs[0].id_category ,user:req.user});
+        var query = {};
+        var sort = {};
+        var pageNo = 1; // always start at page 1
+        var pageDirect = "";
+        var cateName = "";
+        var price = Number(req.query.Price);
+        var sortId = Number(req.query.SortBy);
+        // Check if price is at priceRange
+        if (price < 0 || price > 3) price = 0;
+        // Check if sort is at sortOpts
+        if (sortId < 0 || sortId > 4) sortId = 0;
+        // Check if previous or next page was click, then change page number
+        if (!isEmpty(req.query.PageNext)) {
+            pageNo = Number(req.query.PageNext);
+            pageDirect = "page-next";
+        } else if (!isEmpty(req.query.PagePrev)) {
+            pageNo = Number(req.query.PagePrev);
+            pageDirect = "page-prev";
+        }
+        // Get query
+        query = makeQuery(id, price);
+        // Get sort order
+        sort = makeSort(sortId);
+        // Count how many products were found
+        const numOfProducts = await modelProduct.count(query);
+        // Total page numbers
+        const totalPageNum = Math.ceil(numOfProducts / prodPerPage);
+        // Page number management
+        if (pageDirect === "page-next") {
+            if (pageNo !== totalPageNum) pageNo = pageNo + 1;
+        } else if (pageDirect === "page-prev") {
+            if (pageNo !== 1) pageNo = pageNo - 1;
+        }
+        // Find filtered product
+        const data = await modelProduct.getListProductByIf(query, sort, prodPerPage, pageNo);
+        // Get category name
+        cateName = await modelProduct.getCategoryName(id);
+
+        res.render('listproduct', {
+            title: 'Sản phẩm gian hàng',
+            listproduct: data,
+            idcategory: data[0].id_category,
+            user: req.user,
+            selPriceRange: price,
+            selectedSort: sortId,
+            currentPage: totalPageNum === 0 ? totalPageNum : pageNo,
+            pages: totalPageNum,
+            type: cateName
         });
     }
     async AddStall(req, res) {
@@ -80,7 +129,7 @@ class Admin {
     DetailProduct(req, res) {
         const id = req.params.id;
         modelProduct.getProductByIDString(id).then((result) => {
-            res.render('detail-product', { title: 'Chi tiết sản phẩm', data: result ,user:req.user});
+            res.render('detail-product', { title: 'Chi tiết sản phẩm', data: result, user: req.user });
         });
     }
     DeleteProduct(req, res) {
@@ -150,7 +199,7 @@ class Admin {
         });
         if (notice != undefined) {
             modelProduct.getProductByIDString(id).then((result) => {
-                res.render('detail-product', { title: 'Chi tiết sản phẩm', data: result, notice,user:req.user });
+                res.render('detail-product', { title: 'Chi tiết sản phẩm', data: result, notice, user: req.user });
             });
         }
         else {
@@ -182,15 +231,15 @@ class Admin {
             }
             Data.push(doc);
         })
-        res.render('QLdonhang', { Data: Data ,user:req.user});
+        res.render('QLdonhang', { Data: Data, user: req.user });
     }
     async ChiTietDonHang(req, res) {
         let id_order = req.params.id;
         let data = [];
         let Data = [];
         let idproduct = [];
-        data = await modelProductInOrder.getProductInOrderByQuery({_idOrder:id_order});
-        
+        data = await modelProductInOrder.getProductInOrderByQuery({ _idOrder: id_order });
+
         await data.forEach(function (doc) {
             idproduct.push(doc._idProduct);
         });
@@ -201,16 +250,47 @@ class Admin {
             sum = sum + Number(doc.price);
         });
         console.log(Data);
-        const order=await modelOrder.getOneOrderByQuery({_id:id_order});
-        res.render('CTdonhang', { Data: Data, sum: sum,order:order,user:req.user });
+        const order = await modelOrder.getOneOrderByQuery({ _id: id_order });
+        res.render('CTdonhang', { Data: Data, sum: sum, order: order, user: req.user });
     }
-    DeleteOrder(req,res){
+    DeleteOrder(req, res) {
         let id_order = req.params.id;
-            modelOrder.deleteOrder({_id:id_order}).then((doc)=>{
-            if(doc) modelProductInOrder.deleteProductInOrder({_idOrder:id_order}).then((doc)=>{
-                if(doc) res.redirect('/admin/qldonhang');
+        modelOrder.deleteOrder({ _id: id_order }).then((doc) => {
+            if (doc) modelProductInOrder.deleteProductInOrder({ _idOrder: id_order }).then((doc) => {
+                if (doc) res.redirect('/admin/qldonhang');
             });
         });
     }
+
+    async ShowTop10(req, res) {
+        const data = await modelStatistic.GetTop10Product();
+        res.render('top10', { title: 'Top 10', user: req.user, data: data });
+    }
+
+    async ShowDoanhSo(req, res) {
+        // var statistic = 
+        res.render('doanhso', { title: 'Doanh So', user: req.user });
+    }
 }
+
+function makeQuery(_cateId, _price) {
+    var query = {};
+    if (_price === 1) query = { id_category: _cateId, price: { $lt: 10000000 } };
+    else if (_price === 2) query = { id_category: _cateId, price: { $gte: 10000000, $lte: 30000000 } };
+    else if (_price === 3) query = { id_category: _cateId, price: { $gt: 30000000 } };
+    else query = { id_category: _cateId };
+    return query;
+}
+function makeSort(_sortId) {
+    var sort = {};
+    if (_sortId === 1) sort = { name: 1 }; // name ascending
+    else if (_sortId === 2) sort = { name: -1 }; // name descending
+    else if (_sortId === 3) sort = { price: 1 }; // price ascending
+    else if (_sortId === 4) sort = { price: -1 }; // price descending
+    return sort;
+}
+function isEmpty(val) {
+    return (val === undefined || val == null || val.length <= 0) ? true : false;
+}
+
 module.exports = Admin;

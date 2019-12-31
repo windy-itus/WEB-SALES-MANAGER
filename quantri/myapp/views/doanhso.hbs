@@ -1,19 +1,26 @@
 <div class="main">
-    <div class="content container-fluid">
-        <div class="heading">
-    		<h3>Thống kê doanh số</h3>
-    	</div>
-        <div class="sort">
-    		<p>Thống kê theo:
-    			<select>
-    				<option>Ngày</option>
-    				<option>Tuần</option>
-                    <option>Tháng</option>
-                    <option>Quý</option>
-                    <option>Năm</option>			   				
-    			</select>
-    		</p>
-    	</div>
-        <img src="images/diagram.png" alt="" />
-    </div>
+	<div class="content container-fluid">
+		<div class="heading">
+			<h3>Thống kê doanh số</h3>
+		</div>
+		<form action="/admin/doanhso" method="GET">
+			<div class="sort">
+				<p>Thống kê theo:
+					<select id="statistic" onchange="this.form.submit();">
+						<option value="0">Ngày</option>
+						<option value="1">Tuần</option>
+						<option value="2">Tháng</option>
+						<option value="3">Năm</option>
+						<option value="4">Quý</option>
+					</select>
+				</p>
+			</div>
+		</form>
+
+		<img src="/images/diagram.png" alt="" />
+	</div>
+	<script>
+		var selStatistic = "{{selStatistic}}";
+		document.getElementById("statistic").selectedIndex = selStatistic;
+	</script>
 </div>
