@@ -24,37 +24,47 @@ var prodSchema = new mongoose.Schema({
 });
 
 const Product = db.useDb("ManagerStore").model("Product", prodSchema);
-module.exports.getProduct=Product;
+
+var cateSchema = new mongoose.Schema({
+  _id: Object,
+  id: Number,
+  name: String
+}, {
+  collection: 'Category'
+});
+const Category = db.useDb("ManagerStore").model("Category", cateSchema);
+
+module.exports.getProduct = Product;
 
 module.exports.getListProductByQuery = function (query) {
-  return new Promise(function(resolve, reject){
-     Product.find(query).then((docs)=>{
+  return new Promise(function (resolve, reject) {
+    Product.find(query).then((docs) => {
       resolve(docs);
     });
   });
 }
-module.exports.getListProductByCount=function (query,count) {
-  return new Promise(function(resolve, reject){
-    Product.find(query).limit(count).then((docs)=>{
+module.exports.getListProductByCount = function (query, count) {
+  return new Promise(function (resolve, reject) {
+    Product.find(query).limit(count).then((docs) => {
       resolve(docs);
     });
   });
 }
-module.exports.getListProductByIf=function (query,sort,prodPerPage,pageNo) {
-  return new Promise(function(resolve, reject){
+module.exports.getListProductByIf = function (query, sort, prodPerPage, pageNo) {
+  return new Promise(function (resolve, reject) {
     Product.find(query).sort(sort)
-    .limit(prodPerPage)
-    .skip(prodPerPage * (pageNo - 1)).then((docs)=>{
-      resolve(docs);
-    });
+      .limit(prodPerPage)
+      .skip(prodPerPage * (pageNo - 1)).then((docs) => {
+        resolve(docs);
+      });
   });
 }
 
-module.exports.getProductByIDString=function (id) {
-  return new Promise(function(resolve, reject){
-    Product.find({}).then((docs)=>{
-      docs.forEach((doc)=>{
-        if(doc._id==id)  resolve(doc);
+module.exports.getProductByIDString = function (id) {
+  return new Promise(function (resolve, reject) {
+    Product.find({}).then((docs) => {
+      docs.forEach((doc) => {
+        if (doc._id == id) resolve(doc);
       });
     });
   });
@@ -74,50 +84,62 @@ module.exports.getListProductByIDString=function (arrid) {
     });
   });
 }
-module.exports.DeleteOneProduct=function (query) {
-  return new Promise(function(resolve, reject){
+module.exports.DeleteOneProduct = function (query) {
+  return new Promise(function (resolve, reject) {
     MongoClient.connect(uri, function (err, db) {
       if (err) throw err;
       var dbo = db.db("ManagerStore");
       dbo.collection("Product").deleteOne(query, function (err, res) {
-          if (err) throw err;
-          resolve(true);
-          db.close();
+        if (err) throw err;
+        resolve(true);
+        db.close();
       });
     });
   });
 }
-module.exports.InsertOneProduct=function (product) {
-  return new Promise(function(resolve, reject){
+module.exports.InsertOneProduct = function (product) {
+  return new Promise(function (resolve, reject) {
     MongoClient.connect(uri, function (err, db) {
       if (err) throw err;
       var dbo = db.db("ManagerStore");
       dbo.collection("Product").insertOne(product, function (err, res) {
-          if (err) throw err;
-          resolve(true);
-          db.close();
+        if (err) throw err;
+        resolve(true);
+        db.close();
       });
     });
   });
 }
-module.exports.UpdateOneProduct=function (product,condition) {
-  return new Promise(function(resolve, reject){
-    MongoClient.connect(uri,async function (err, db) {
+module.exports.UpdateOneProduct = function (product, condition) {
+  return new Promise(function (resolve, reject) {
+    MongoClient.connect(uri, async function (err, db) {
       if (err) throw err;
       var dbo = db.db("ManagerStore");
-      var dbt=dbo.collection("Product");
+      var dbt = dbo.collection("Product");
       await dbt.updateOne(
         condition,
         {
           $set: product
         }
-    )
-    db.close();
-    resolve(true);
-  });
+      )
+      db.close();
+      resolve(true);
+    });
   });
 }
+module.exports.count=function(query){
+  return new Promise(function(resolve, reject){
+    Product.count(query).then((docs)=>{
+      resolve(docs);
+    });
+  });
+};
 
-
-
-module.exports.count=Product.count({});
+module.exports.getCategoryName = function (_cateId) {
+  return new Promise(function (resolve, reject) {
+    Category.find({ id_category: _cateId })
+      .then((docs) => {
+        resolve(docs.name);
+      });
+  });
+};
