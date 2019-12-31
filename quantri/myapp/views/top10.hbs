@@ -1,72 +1,32 @@
 <div class="main">
-    <div class="content container-fluid">
-        <div class="heading">
-    		<h3>Top 10 Sản Phẩm Bán Chạy</h3>
-            <br>
-    	</div>
-      <div class=" content_top table-responsive col-md-12">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th>Top</th>
-              <th>Tên Sản Phẩm</th>
-              <th>Số Lượng Bán Ra</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Iphone 10</td>
-              <td>3000</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>SamSung Note 9</td>
-              <td>2999</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Máy lạnh ABC</td>
-              <td>2000</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Tivi LCD</td>
-              <td>1412</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Máy giặt Aba</td>
-              <td>1002</td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td>Đồng hồ Thông Minh M3</td>
-              <td>756</td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td>Iphone 8</td>
-              <td>700</td>
-            </tr>
-            <tr>
-              <td>8</td>
-              <td>Xiami Note 8</td>
-              <td>685</td>
-            </tr>
-            <tr>
-              <td>9</td>
-              <td>DELL</td>
-              <td>305</td>
-            </tr>
-            <tr>
-              <td>10</td>
-              <td>HP</td>
-              <td>235</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
+  <div class="content container-fluid">
+    <div class="heading">
+      <h3>Top 10 Sản Phẩm Bán Chạy</h3>
+      <br>
     </div>
+    <div class=" content_top table-responsive col-md-12">
+      <table class="table table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Top</th>
+            <th>Tên Sản Phẩm</th>
+            <th>Số Lượng Bán Ra</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#if data}}
+          {{#each data}}
+          <tr>
+            <td>{{this.top}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.count_sell}}</td>
+          </tr>
+          {{/each}}
+          {{/if}}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
 </div>
+<script>var index = 1;</script>

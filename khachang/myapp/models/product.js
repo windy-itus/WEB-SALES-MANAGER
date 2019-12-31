@@ -59,4 +59,10 @@ module.exports.getProductByIDString=function (id) {
 }
 
 
-module.exports.count=Product.count({});
+module.exports.count=function(query){
+  return new Promise(function(resolve, reject){
+    Product.count(query).then((docs)=>{
+      resolve(docs);
+    });
+  });
+};

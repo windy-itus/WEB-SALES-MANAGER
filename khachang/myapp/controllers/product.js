@@ -95,8 +95,7 @@ class Product {
     else if (sortId === 3) sort = { price: 1 }; // price ascending
     else if (sortId === 4) sort = { price: -1 }; // price descending
     // Count how many products were found
-    var data = await modelProduct.getListProductByQuery(query);
-    const numOfProducts = await modelProduct.count;
+    const numOfProducts = await modelProduct.count(query);
     // Total page numbers
     const totalPageNum = Math.ceil(numOfProducts / prodPerPage);
     // Page number management
@@ -106,7 +105,7 @@ class Product {
       if (pageNo !== 1) pageNo = pageNo - 1;
     }
     // Find filtered product
-    data = await modelProduct.getListProductByIf(query, sort, prodPerPage, pageNo);
+    const data = await modelProduct.getListProductByIf(query, sort, prodPerPage, pageNo);
     // Render the page
     res.render('viewlistproducts', {
       data: data,
@@ -141,7 +140,7 @@ class Product {
     // Get all product
     const fullproduct = await modelProduct.getListProductByCount({}, prodPerPage);
     // Count how many products were found
-    const numOfProducts = await modelProduct.count;
+    const numOfProducts = await modelProduct.count({});
     // Render the page
     res.render('viewlistproducts', {
       data: fullproduct,

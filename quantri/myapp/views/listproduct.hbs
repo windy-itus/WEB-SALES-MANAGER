@@ -1,38 +1,47 @@
 <div class="main">
   <div class="content container-fluid">
     <div class="heading">
-      <h3>Quản lý Gian Hàng</h3>
+      <h3>{{title}}: {{type}}</h3>
       <br>
     </div>
-    <div class="sort">
-      <p>Sắp xếp theo:
-        <select>
-          <option>A-Z</option>
-          <option>Z-A</option>
-        </select>
-      </p>
-    </div>
-    <div class="show">
-      <p>Số lượng hiển thị:
-        <select>
-          <option>5</option>
-          <option>10</option>
-          <option>15</option>
-          <option>20</option>
-          <option>25</option>
-          <option>Tất cả</option>
-        </select>
-      </p>
-    </div>
-    <div class="page-no">
-      <p>Trang:<ul>
-          <li><a href="#">1</a></li>
-          <li class="active"><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li>[<a href="#"> Tiếp theo>>></a>]</li>
-        </ul>
-      </p>
-    </div>
+    <form action="/admin/products-{{idcategory}}" method="GET">
+      <div class="sort">
+        <p>Lọc theo:
+          <select id="price" name="Price" onchange="this.form.submit();">
+            <option value="0">Tất cả</option>
+            <option value="1">Dưới 10 triệu</option>
+            <option value="2">Từ 10 - 30 triệu</option>
+            <option value="3">Trên 30 triệu</option>
+          </select>
+        </p>
+      </div>
+      <div class="show">
+        <p>Sắp xếp theo:
+          <select id="sort" name="SortBy" onchange="this.form.submit();">
+            <option value="0">--</option>
+            <option value="1">Tên A-Z</option>
+            <option value="2">Tên Z-A</option>
+            <option value="3">Giá thấp đến cao</option>
+            <option value="4">Giá cao đến thấp</option>
+          </select>
+        </p>
+      </div>
+      <div class="page-no">
+        <p>
+          <ul>
+            <li><button class="btn" type="submit" id="pagePrev" name="PagePrev" value="{{currentPage}}">Trang
+                trước</button></li>
+            Trang:
+            <li>{{currentPage}}</li>
+            /
+            <li>{{pages}}</li>
+            <li><button class="btn" type="submit" id="pageNext" name="PageNext" value="{{currentPage}}">Trang
+                sau</button>
+            </li>
+          </ul>
+        </p>
+      </div>
+    </form>
     <div class="clear"></div>
     <div class=" content_top table-responsive col-md-12">
       <table class="table table-striped table-sm">
@@ -71,3 +80,9 @@
     </div>
   </div>
 </div>
+<script>
+  var selPrice = "{{selPriceRange}}";
+  var selSort = "{{selectedSort}}";
+  document.getElementById("price").selectedIndex = selPrice;
+  document.getElementById("sort").selectedIndex = selSort;
+</script>
