@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-router.use(express.static("public"));
+// router.use(express.static("public"));
 const passport = require('passport');
 const {ensureAuthenticated}=require('../config/auth');
 

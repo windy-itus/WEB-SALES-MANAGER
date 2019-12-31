@@ -64,7 +64,7 @@ class Home {
         }
 
         //pro = await db.find({ _id: idproduct });
-        pro = await modelProduct.getListProductByIDString(idproduct);
+        pro = await modelProduct.getProductByIDString(idproduct);
         recom = await modelProduct.getListProductByQuery({ _id: pro.id_category })
         // recom = await db.find({ _id: pro.id_category });
 

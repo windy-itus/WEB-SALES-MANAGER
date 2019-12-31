@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.DATA;
 const mongoose = require('mongoose');
+const {ObjectId} = require('mongodb');
 
 mongoose.connect(uri, {
   useUnifiedTopology: true,
@@ -10,7 +11,7 @@ mongoose.connect(uri, {
 
 var db = mongoose.connection;
 var prodSchema = new mongoose.Schema({
-  _id: String,
+  _id:  Object,
   count: Number,
   count_sell: Number,
   description: String,
@@ -25,7 +26,6 @@ var prodSchema = new mongoose.Schema({
 
 const Product = db.useDb("ManagerStore").model("Product", prodSchema);
 module.exports.getProduct=Product;
-
 module.exports.getListProductByQuery = function (query) {
   return new Promise(function(resolve, reject){
     Product.find(query).then((docs)=>{
@@ -50,12 +50,10 @@ module.exports.getListProductByIf=function (query,sort,prodPerPage,pageNo) {
   });
 }
 
-module.exports.getListProductByIDString=function (id) {
+module.exports.getProductByIDString=function (id) {
   return new Promise(function(resolve, reject){
-    Product.find({}).then((docs)=>{
-      docs.forEach((doc)=>{
-        if(doc._id==id)  resolve(doc);
-      });
+    Product.findOne({_id:ObjectId(id)},(err,doc)=>{
+      resolve(doc);
     });
   });
 }

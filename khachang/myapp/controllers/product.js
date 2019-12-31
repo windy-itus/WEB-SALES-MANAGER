@@ -1,7 +1,7 @@
 
 const modelProduct = require('../models/product');
-const modelCart=require('../models/cart');
-//const products=require('../models/product').getDBProduct();
+const modelCart = require('../models/cart');
+const modelComment = require('../models/comment');
 
 var priceRange = [
   { id: 0, name: "Tất cả" },
@@ -106,7 +106,7 @@ class Product {
       if (pageNo !== 1) pageNo = pageNo - 1;
     }
     // Find filtered product
-    data = await modelProduct.getListProductByIf(query,sort,prodPerPage,pageNo);
+    data = await modelProduct.getListProductByIf(query, sort, prodPerPage, pageNo);
     // Render the page
     res.render('viewlistproducts', {
       data: data,
@@ -127,25 +127,25 @@ class Product {
       req.logout();
       req.session.destroy();
     }
-    if(req.user!=undefined&&req.user!=null){
-      if(req.session.cart!=null&&req.session.cart!=undefined){
-        var db=req.session.cart;
-        db.forEach((doc)=>{
-          modelCart.addCart({id_user:req.user.username,id_product:doc});
+    if (req.user != undefined && req.user != null) {
+      if (req.session.cart != null && req.session.cart != undefined) {
+        var db = req.session.cart;
+        db.forEach((doc) => {
+          modelCart.addCart({ id_user: req.user.username, id_product: doc });
         });
-        req.session.cart=null;
+        req.session.cart = null;
       }
     }
 
 
     // Get all product
-    const fullproduct = await modelProduct.getListProductByCount({},prodPerPage);
+    const fullproduct = await modelProduct.getListProductByCount({}, prodPerPage);
     // Count how many products were found
     const numOfProducts = await modelProduct.count;
     // Render the page
     res.render('viewlistproducts', {
       data: fullproduct,
-      user:req.user,
+      user: req.user,
       priceRange: priceRange,
       sortOpts: sortOpts,
       selPriceRange: 0,
@@ -157,18 +157,20 @@ class Product {
   }
 
   async ShowDetail(req, res) {
-    var dbrecommand = [];
     var idproduct = req.params.id;
-    
     // Get product detail
-    var dbdetail= await modelProduct.getListProductByIDString(idproduct);
-    // Get recommended products
-    var dbrecommand = await modelProduct.getListProductByQuery({
-      id_category: dbdetail.id_category,
-      _id: { $not: { $eq: idproduct } }
+    modelProduct.getProductByIDString(idproduct).then((doc)=>{
+        //Get list comment
+      modelComment.getListComment({id_product:doc._id}).then(async (docs) => {
+      // Get recommended products
+      var dbrecommand = await modelProduct.getListProductByQuery({
+        id_category: doc.id_category,
+        _id: { $not: { $eq: idproduct } }
+      });
+      // Render page
+      res.render('product', { data: doc, recommand: dbrecommand, user: req.user, listcomment: docs });
     });
-    // Render page
-    res.render('product', { data: dbdetail, recommand: dbrecommand, user: req.user });
+    })
   }
 
   async Search(req, res) {
@@ -185,6 +187,21 @@ class Product {
       pages: 1,
       title: "Tìm kiếm"
     });
+  }
+  AddComment(req, res) {
+    const context = req.body.context;
+    const id_product = req.body.idproduct;
+    const writter = req.user.username;
+    if (context != undefined) {
+      modelProduct.getProductByIDString(id_product).then(async (doc) => {
+        modelComment.addComment({ id_product: doc._id, writter: writter, context: context }).then((doc) => {
+          res.redirect('/products/detail/' + id_product);
+        })
+      })
+        .catch((err) => {
+          console.log("Lỗi lấy product");
+        });
+    }
   }
 }
 
