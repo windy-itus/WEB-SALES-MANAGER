@@ -167,7 +167,7 @@ class Product {
         _id: { $not: { $eq: idproduct } }
       });
       // Render page
-      res.render('product', { data: doc, recommand: dbrecommand, user: req.user, listcomment: docs });
+      res.render('product', { title:'Chi tiết sản phẩm', data: doc, recommand: dbrecommand, user: req.user, listcomment: docs });
     });
     })
   }
@@ -188,13 +188,14 @@ class Product {
     });
   }
   AddComment(req, res) {
+    console.log(req.body);
     const context = req.body.context;
     const id_product = req.body.idproduct;
-    const writter = req.user.username;
+    const writter = req.body.writter;
     if (context != undefined) {
       modelProduct.getProductByIDString(id_product).then(async (doc) => {
         modelComment.addComment({ id_product: doc._id, writter: writter, context: context }).then((doc) => {
-          res.redirect('/products/detail/' + id_product);
+          res.send(context);
         })
       })
         .catch((err) => {

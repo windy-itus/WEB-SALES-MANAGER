@@ -4,36 +4,6 @@
 			<div class="back-links">
 				<p><a href="#">Trang chủ</a> >> <a href="#">Thiết bị điện tử</a></p>
 			</div>
-			<div class="sort">
-				<p>Sắp xếp theo:
-					<select>
-						<option>Giá tăng</option>
-						<option>Giá giảm</option>
-						<option>Trong kho</option>
-					</select>
-				</p>
-			</div>
-			<div class="show">
-				<p>Số lượng hiển thị:
-					<select>
-						<option>4</option>
-						<option>8</option>
-						<option>12</option>
-						<option>16</option>
-						<option>20</option>
-						<option>Tất cả trong kho</option>
-					</select>
-				</p>
-			</div>
-			<div class="page-no">
-				<p>Trang:<ul>
-						<li><a href="#">1</a></li>
-						<li class="active"><a href="#">2</a></li>
-						<li><a href="#">3</a></li>
-						<li>[<a href="#"> Tiếp theo>>></a>]</li>
-					</ul>
-				</p>
-			</div>
 			<div class="clear"></div>
 		</div>
 		<div class="section group">
@@ -97,17 +67,21 @@
 						<p> {{data.description}}</p>
 			</form>
 		</div>
-		<form action="/products/addcomment" method="post">
-			<input value="{{data.id}}" name="idproduct" type="text" hidden>
+		<form id="formcomment">
+			<input value="{{data.id}}" name="idproduct" id="idproduct" type="text" hidden>
 			<div class="product-tags">
 				<h2>Bình luận</h2>
-				{{#if listcomment}}
-				{{#each listcomment}}
-				<label class="control-label">{{this.writter}}</label>
-				<div>{{this.context}}</div>
-				{{/each}}
-				{{/if}}
+				<div id="listcomment">
+					{{#if listcomment}}
+					{{#each listcomment}}
+					<label class="control-label">{{this.writter}}</label>
+					<div>{{this.context}}</div>
+					{{/each}}
+					{{/if}}
+				</div>
 				<h4>Thêm bình luận:</h4>
+				<input type="text" id="namewritter" name="namewritter" value="{{user.name}}"
+					placeholder="Nhập tên của bạn ở đây" required>
 				<div class="input-box">
 					<input type="text" id="context" name="context" placeholder="Nhập nội dung bình luận ở đây..." />
 				</div>
@@ -203,3 +177,44 @@
 	{{/each}}
 	{{/if}}
 </div>
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+<script>
+	if ($('#namewritter').val() === "") $('#comment').prop("disabled", true);
+	$("input").change(function () {
+		if ($('#namewritter').val() === "") $('#comment').prop("disabled", true);
+		if ($('#namewritter').val() != "") $('#comment').prop("disabled", false);
+	});
+	//$("#listcomment").replaceWith('<div id="listcomment"> "{{ #if listcomment }}" "{{ #each listcomment }}" <label class="control-label"> "{{ this.writter }}" </label> <div>"{{ this.context }}"</div> "{{/each}}" "{{/if}}" </div>');
+	$(function () {
+		$('#comment').click(function (e) {
+			e.preventDefault();
+			console.log('clicked');
+			var data = {};
+			data.idproduct = $('#idproduct').val();
+			data.context = $('#context').val();
+			data.writter = $('#namewritter').val();
+
+			$.ajax({
+				type: 'POST',
+				data: JSON.stringify(data),
+				contentType: 'application/json',
+				url: 'http://localhost:3000/products/addcomment',
+				success: function (context) {
+					console.log('Nhận được data');
+					console.log(context);
+					$('#listcomment').append($('<label class="control-label">{{user.name}}' + data.writter + '</label><div>' + context + '</div>'));
+				}
+			});
+			//$.ajax({
+			//type: 'GET',
+			//data: JSON.stringify(data),
+			//contentType: 'application/json',
+			//url: 'http://localhost:3000/endpoint',
+			//success: function (data) {
+			//console.log('success');
+			//console.log(JSON.stringify(data));
+			//}
+			//});
+		});
+	});
+</script>
