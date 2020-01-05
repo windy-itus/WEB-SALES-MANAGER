@@ -96,7 +96,8 @@ class Account {
     });
   }
   ShowLogin(req, res, msg) {
-    res.render('login', { title: 'Đăng nhập/Đăng ký', notice: msg, user:req.user,username:req.params.username});
+    if(req.user!=undefined&&req.user!=null) res.redirect('/admin/home');
+    else res.render('login', { title: 'Đăng nhập/Đăng ký', notice: msg, user:req.user,username:req.params.username});
   }
   ShowLogOut(req, res){
     req.logout();

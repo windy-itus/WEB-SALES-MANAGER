@@ -23,8 +23,10 @@ router.get('/delete-product-:id', (req, res) => controller.DeleteProduct(req, re
 router.get('/qldonhang', async (req, res) => controller.QLDongHang(req, res));
 router.get('/detail-order-:id', (req, res) => controller.ChiTietDonHang(req, res));
 router.get('/delete-order-:id', (req, res) => controller.DeleteOrder(req, res));
-router.get('/home', (req, res) => controller.ShowHome(req, res));
 router.get('/top10', async (req, res) => controller.ShowTop10(req, res));
-router.get('/doanhso', async (req, res) => controller.ShowDoanhSo(req, res));
+router.get('/home', async (req, res) => controller.ShowHome(req, res));
+router.get('/chitietdoanhthu', async (req, res) => controller.ChitietDoanhThu(req, res));
+router.post('/chitietdoanhthu', async (req, res) => controller.ChitietDoanhThuByIf(req, res));
+router.post('/loaddatachart', async (req, res) => controller.LoadChart(req, res));
 
 module.exports = router;

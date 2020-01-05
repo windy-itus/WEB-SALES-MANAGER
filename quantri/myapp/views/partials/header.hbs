@@ -1,0 +1,85 @@
+<div class="header">
+		<div class="header_top">
+			<div class="logo">
+				<a href="/admin/home"><img src="images/logo.png" alt="" /></a>
+			</div>
+			<div class="header_top_right">
+				<div class="search_box">
+					<div>
+                <select class="form-control" name="searchFunct" id="searchFunct"
+                    onchange="location = this.value;">
+                    <option selected disabled>Tìm nhanh chức năng</option>
+                    <option value="/products/sell">Bán hàng</option>
+                    <optgroup label="Quản trị">
+						<option value="/admin/home">Trang chủ</option>
+                        <option value="/admin/user-account">Quản lý tài khoản người dùng</option>
+                        <option value="/admin/system-stall">Quản lý gian hàng</option>
+                        <option value="/admin/system-stall">Thêm gian hàng</option>
+                        <option value="/admin/addproduct-0">Thêm sản phẩm</option>
+                        <option value="/admin/qldonhang">Quản lý đơn hàng</option>
+                    </optgroup>
+                    <optgroup label="Tài khoản">
+                        <option value="/users/login">Đăng nhập</option>
+                        <option value="/users/login">Đăng kí</option>
+                        <option value="/users/forgetpassword">Quên mật khẩu</option>
+						<option value="/users/info-user">Thông tin cá nhân</option>
+						<option value="/users/changepassword">Đổi mật khẩu</option>
+						<option value="/users/change-info-user">Thay đổi thông tin cá nhân</option>
+                    </optgroup>
+                </select>
+                <style>
+                    .select2-selection__rendered {
+                        line-height: 38px !important;
+                        margin-left: 8px;
+                    }
+
+                    .select2-container .select2-selection--single {
+                        height: 39px !important;
+                    }
+
+                    .select2-selection__arrow {
+                        height: 36px !important;
+                    }
+                </style>
+
+                <script>
+                    $(document).ready(function () {
+                        $('#searchFunct').select2();
+                    });
+                </script>
+
+            </div>
+				</div>
+				<div class="login">
+					{{#if user}}
+					<a href="/logout">
+						<button class="btn-btn-primary btn-sm" type="button">Đăng xuất(Xin chào)</button>
+					</a>
+					{{else}}
+					<a href="/users/login"><button class="btn-btn-primary btn-sm" type="button">Đăng nhập</button></a>
+					{{/if}}
+
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="h_menu">
+			<a id="touch-menu" class="mobile-menu" href="#">Menu</a>
+			<nav>
+				<ul class="menu list-unstyled">
+					<li><a href="/admin/home">TRANG CHỦ</a></li>
+					<li><a href="/admin/qldonhang">ĐƠN ĐẶT HÀNG</a></li>
+					<li><a href="/admin/system-stall">HỆ THỐNG GIAN HÀNG</a></li>
+					<li><a href="/admin/user-account">TÀI KHOẢN NGƯỜI DÙNG</a></li>
+					<li><a href="/admin/home">THỐNG KÊ</a></li>
+					<li><a href="users/info-user">TÀI KHOẢN</a></li>
+
+					<li><a href="https://app-banhangdk.herokuapp.com/">VÀO TRANG BÁN HÀNG</a></li>VÀO TRANG BÁN HÀNG
+
+					<div class="clear"> </div>
+				</ul>
+			</nav>
+			<script src="js/menu.js" type="text/javascript"></script>
+		</div>
+	</div>

@@ -9,13 +9,13 @@ const modelOrder = require('../models/order');
 const modelProductInOrder = require('../models/product_in_order');
 // truy xuất database statistic
 const modelStatistic = require('../models/statistic');
+const moment = require('moment');
+var dateFormat = require('dateformat');
+moment.locale('vi');
 
 const prodPerPage = 6; // product per page
 
 class Admin {
-    ShowHome(req, res) {
-        res.render('statistical', { title: 'Trang chủ', user: req.user })
-    }
     async ShowListUser(req, res) {
         var listuser = [];
         modelUser.getListAccountByQuery({}).then((docs) => {
@@ -144,9 +144,9 @@ class Admin {
     }
 
     ShowAddProduct(req, res) {
-        const idcategory=Number(req.params.idcategory);
-        modelStall.ListStall({}).then((docs)=>{
-            res.render('addproduct', { title: 'Thêm sản phẩm', idcategorychoose: idcategory,user:req.user,Categories:docs });
+        const idcategory = Number(req.params.idcategory);
+        modelStall.ListStall({}).then((docs) => {
+            res.render('addproduct', { title: 'Thêm sản phẩm', idcategorychoose: idcategory, user: req.user, Categories: docs });
         });
     }
 
@@ -165,7 +165,7 @@ class Admin {
             });
         });
         if (notice != undefined) {
-            res.render('addproduct', { title: 'Thêm sản phẩm', idcategory: id_category, notice ,user:req.user});
+            res.render('addproduct', { title: 'Thêm sản phẩm', idcategory: id_category, notice, user: req.user });
         }
         else {
             modelProduct.InsertOneProduct({
@@ -175,7 +175,7 @@ class Admin {
                 count: count,
                 discount: discount,
                 price: price,
-                count_sell:0,
+                count_sell: 0,
                 id_category: id_category
             }).then((doc) => {
                 if (doc) console.log("Thêm thành công");
@@ -194,7 +194,7 @@ class Admin {
         const id = req.body.id;
         await modelProduct.getListProductByQuery({}).then((docs) => {
             docs.forEach((doc) => {
-                if (name == doc.name&&id!=doc.id) notice = 'Sản phẩm đã tồn tại';
+                if (name == doc.name && id != doc.id) notice = 'Sản phẩm đã tồn tại';
             });
         });
         if (notice != undefined) {
@@ -267,9 +267,115 @@ class Admin {
         res.render('top10', { title: 'Top 10', user: req.user, data: data });
     }
 
-    async ShowDoanhSo(req, res) {
+    ShowHome(req, res) {
         // var statistic = 
-        res.render('doanhso', { title: 'Doanh So', user: req.user });
+        res.render('bieudo', { title: 'Doanh So', user: req.user });
+    }
+    ChitietDoanhThu(req, res) {
+        var result = [];
+        modelOrder.getOrderByQuery({ status: 1 }).then(async (docs) => {
+            docs.reduce((ans, value) => {
+                if (!ans[moment(value.date).format('LL')]) {
+                    ans[moment(value.date).format('LL')] = { time: moment(value.date).format('LL'), count: 0, doanhthu: 0, month: dateFormat(value.date, "m"), year: dateFormat(value.date, "y") };
+                    result.push(ans[moment(value.date).format('LL')]);
+                }
+                ans[moment(value.date).format('LL')].count++;
+                ans[moment(value.date).format('LL')].doanhthu += value.amount;
+                return ans;
+            }, {});
+            res.render('statistical', { title: 'Chi tiết doanh thu', user: req.user, data: result });
+        });
+    }
+
+    ChitietDoanhThuByIf(req, res) {
+        const condition = req.body.condition;
+        var resultbyDate = [];
+        var resultbyMonth = [];
+        var resultbyYear = [];
+        modelOrder.getOrderByQuery({ status: 1 }).then(async (docs) => {
+            docs.reduce((ans, value) => {
+                if (!ans[moment(value.date).format('LL')]) {
+                    ans[moment(value.date).format('LL')] = { time: moment(value.date).format('LL'), count: 0, doanhthu: 0, month: dateFormat(value.date, "m"), year: dateFormat(value.date, "yyyy") };
+                    resultbyDate.push(ans[moment(value.date).format('LL')]);
+                }
+                ans[moment(value.date).format('LL')].count++;
+                ans[moment(value.date).format('LL')].doanhthu += value.amount;
+                return ans;
+            }, {});
+            if (condition === "0") res.render('statistical', { title: 'Chi tiết doanh thu', user: req.user, data: resultbyDate,user:req.user,sel:condition});
+            //Nếu thống kê theo tháng
+            else {
+                resultbyDate.reduce((ans, value) => {
+                    if (!ans[value.month]) {
+                        ans[value.month] = { time: 'Tháng ' + value.month + ' Năm ' + value.year, count: 0, doanhthu: 0, year: value.year };
+                        resultbyMonth.push(ans[value.month]);
+                    }
+                    ans[value.month].count++;
+                    ans[value.month].doanhthu += value.doanhthu;
+                    return ans;
+                }, {});
+                if (condition === "1")
+                    res.render('statistical', { title: 'Chi tiết doanh thu', user: req.user, data: resultbyMonth,user:req.user,sel:condition });
+                //Nếu thống kê theo năm
+                else {
+                    resultbyMonth.reduce((ans, value) => {
+                        if (!ans[value.year]) {
+                            ans[value.year] = { time: 'Năm ' + value.year, count: 0, doanhthu: 0 };
+                            resultbyYear.push(ans[value.year]);
+                        }
+                        ans[value.year].count++;
+                        ans[value.year].doanhthu += value.doanhthu;
+                        return ans;
+                    }, {});
+                    res.render('statistical', { title: 'Chi tiết doanh thu', user: req.user, data: resultbyYear,user:req.user,sel:condition});
+                }
+            }
+        });
+    }
+    LoadChart(req,res){
+        const condition=req.body.sel;
+        var resultbyDate = [];
+        var resultbyMonth = [];
+        var resultbyYear = [];
+        modelOrder.getOrderByQuery({ status: 1 }).then(async (docs) => {
+            docs.reduce((ans, value) => {
+                if (!ans[moment(value.date).format('LL')]) {
+                    ans[moment(value.date).format('LL')] = { time: moment(value.date).format('LL'), count: 0, doanhthu: 0, month: dateFormat(value.date, "m"), year: dateFormat(value.date, "yyyy") };
+                    resultbyDate.push(ans[moment(value.date).format('LL')]);
+                }
+                ans[moment(value.date).format('LL')].count++;
+                ans[moment(value.date).format('LL')].doanhthu += value.amount;
+                return ans;
+            }, {});
+            if (condition === "0") res.send(resultbyDate);
+            //Nếu thống kê theo tháng
+            else {
+                resultbyDate.reduce((ans, value) => {
+                    if (!ans[value.month]) {
+                        ans[value.month] = { time: 'Tháng ' + value.month + ' Năm ' + value.year, count: 0, doanhthu: 0, year: value.year };
+                        resultbyMonth.push(ans[value.month]);
+                    }
+                    ans[value.month].count++;
+                    ans[value.month].doanhthu += value.doanhthu;
+                    return ans;
+                }, {});
+                if (condition === "1") res.send(resultbyMonth);
+                 //Nếu thống kê theo năm
+                else {
+                    resultbyMonth.reduce((ans, value) => {
+                        if (!ans[value.year]) {
+                            ans[value.year] = { time: 'Năm ' + value.year, count: 0, doanhthu: 0 };
+                            resultbyYear.push(ans[value.year]);
+                        }
+                        ans[value.year].count++;
+                        ans[value.year].doanhthu += value.doanhthu;
+                        return ans;
+                    }, {});
+                    res.send(resultbyYear);
+                }
+            }
+        });
+        
     }
 }
 

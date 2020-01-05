@@ -1,0 +1,99 @@
+<div class="container-fluid" id="content" style="margin: 20px;">
+    <div class="row mx-auto w-90 mt-5 pt-5 pl-5">
+        <!-- List of products -->
+        <div class="col-12 col-md-8 col-xl-9 py-md-3 pl-md-5 bd-content">
+            <div id="titleProfileInfo" class="row">
+                <h4 class="col mb-5">THỐNG KÊ</h4>
+            </div>
+            <div class="sort">
+                <p>Thống kê theo:
+                    <select id="condition" name="condition" onchange="getData()">
+                        <option value="0">Ngày</option>
+                        <option value="1">Tháng</option>
+                        <option value="2">Năm</option>
+                    </select>
+                </p>
+            </div>
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="content_top col-md-12">
+            <div class="row ">
+                <div class="col-md-6">
+                    <a href="/admin/top10"><button class="btn btn-info" type="button" style="font-size: 50px;">TOP
+                            10</button></a>
+                </div>
+                <div class="col-md-6">
+                    <a href="/admin/chitietdoanhthu"><button class="btn btn-primary" type="button"
+                            style="font-size: 50px;">Doanh số</button></a>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+<script>
+    function getData(){
+    var input = {};
+    input.sel = $('#condition').val();
+    $.ajax({
+        type: 'POST',
+        data: JSON.stringify(input),
+        contentType: 'application/json',
+        url: 'http://localhost:3000/admin/loaddatachart',
+        success: function (context) {
+            Load(context);
+            console.log('Nhận được data');
+        }
+    });
+    }
+    function Load(data) {
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var label = [];
+        var doanhthu = [];
+        for (var doc of data) {
+            label.push(doc.time);
+            doanhthu.push(doc.doanhthu);
+        }
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: doanhthu,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    window.onload = function (){
+        getData();
+    }
+</script>
