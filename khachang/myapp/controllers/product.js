@@ -166,6 +166,7 @@ class Product {
         id_category: doc.id_category,
         _id: { $not: { $eq: idproduct } }
       });
+      
       // Render page
       res.render('product', { title:'Chi tiết sản phẩm', data: doc, recommand: dbrecommand, user: req.user, listcomment: docs });
     });
@@ -202,6 +203,17 @@ class Product {
           console.log("Lỗi lấy product");
         });
     }
+  }
+  LoadComment(req,res){
+    var idproduct = req.body.idproduct;
+    // Get product detail
+    modelProduct.getProductByIDString(idproduct).then((doc)=>{
+        //Get list comment
+      modelComment.getListComment({id_product:doc._id}).then(async (docs) => {
+      // Send data
+      res.send(docs);
+    });
+    })
   }
 }
 

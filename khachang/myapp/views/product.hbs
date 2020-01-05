@@ -72,18 +72,32 @@
 			<div class="product-tags">
 				<h2>Bình luận</h2>
 				<div id="listcomment">
-					{{#if listcomment}}
+					{{!-- {{#if listcomment}}
 					{{#each listcomment}}
 					<label class="control-label">{{this.writter}}</label>
 					<div>{{this.context}}</div>
 					{{/each}}
-					{{/if}}
+					{{/if}} --}}
 				</div>
 				<h4>Thêm bình luận:</h4>
 				<input type="text" id="namewritter" name="namewritter" value="{{user.name}}"
 					placeholder="Nhập tên của bạn ở đây" required>
 				<div class="input-box">
 					<input type="text" id="context" name="context" placeholder="Nhập nội dung bình luận ở đây..." />
+				</div>
+				<div class="page-no">
+					<p>
+						<ul>
+							<li id="btn_prev"><a href="javascript:prevPage()"><button class="btn" type="button"
+										id="pagePrev" name="PagePrev">Trang trước</button></a></li>
+							Trang:
+							<li><span id="page"></span></li>
+							/
+							<li><span id="numpage"></span></li>
+							<li id="btn_next"><a href="javascript:nextPage()"><button class="btn" type="button"
+										id="pageNext" name="PageNext">Trang sau</button></a></li>
+						</ul>
+					</p>
 				</div>
 				<div class="button"><input type="submit" name="comment" id="comment" value="Thêm bình luận"></div>
 			</div>
@@ -178,13 +192,13 @@
 	{{/if}}
 </div>
 <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+{{!-- Xử lí thêm bình luận --}}
 <script>
 	if ($('#namewritter').val() === "") $('#comment').prop("disabled", true);
 	$("input").change(function () {
 		if ($('#namewritter').val() === "") $('#comment').prop("disabled", true);
 		if ($('#namewritter').val() != "") $('#comment').prop("disabled", false);
 	});
-	//$("#listcomment").replaceWith('<div id="listcomment"> "{{ #if listcomment }}" "{{ #each listcomment }}" <label class="control-label"> "{{ this.writter }}" </label> <div>"{{ this.context }}"</div> "{{/each}}" "{{/if}}" </div>');
 	$(function () {
 		$('#comment').click(function (e) {
 			e.preventDefault();
@@ -202,7 +216,7 @@
 				success: function (context) {
 					console.log('Nhận được data');
 					console.log(context);
-					$('#listcomment').append($('<label class="control-label">{{user.name}}' + data.writter + '</label><div>' + context + '</div>'));
+					$('#listcomment').append($('<label class="control-label">' + data.writter + '</label><div>' + data.context + '</div>'));
 				}
 			});
 			//$.ajax({
@@ -217,4 +231,76 @@
 			//});
 		});
 	});
+</script>
+{{!-- Xử lí load bình luận --}}
+<script>
+	var current_page = 1;
+	var records_per_page = 4;
+
+	var data;
+	// Can be obtained from another source, such as your data variable
+	function prevPage() {
+		if (current_page > 1) {
+			current_page--;
+			changePage(current_page);
+		}
+	}
+
+	function nextPage() {
+		if (current_page < numPages()) {
+			current_page++;
+			changePage(current_page);
+		}
+	}
+
+	function changePage(page) {
+		var btn_next = document.getElementById("btn_next");
+		var btn_prev = document.getElementById("btn_prev");
+		var listing_table = document.getElementById("listcomment");
+		var page_span = document.getElementById("page");
+		var num_page = document.getElementById("numpage").innerHTML = numPages();
+		// Validate page
+		if (page < 1) page = 1;
+		if (page > numPages()) page = numPages();
+
+		page_span.innerHTML = page;
+		listing_table.innerHTML="";
+		for (var i = (page - 1) * records_per_page; i < (page * records_per_page); i++) {
+			if(data[i]!=undefined)
+			listing_table.innerHTML += '<label class="control-label">' + data[i].writter + '</label><div>' + data[i].context + '</div>';
+		}
+
+		if (page == 1) {
+			btn_prev.style.visibility = "hidden";
+		} else {
+			btn_prev.style.visibility = "visible";
+		}
+
+		if (page == numPages()) {
+			btn_next.style.visibility = "hidden";
+		} else {
+			btn_next.style.visibility = "visible";
+		}
+
+	}
+
+	function numPages() {
+		return Math.ceil(data.length / records_per_page);
+	}
+	window.onload = function () {
+		var input = {};
+		input.idproduct = $('#idproduct').val();
+		$.ajax({
+			type: 'POST',
+			data: JSON.stringify(input),
+			contentType: 'application/json',
+			url: 'http://localhost:3000/products/loadcomment',
+			success: function (context) {
+				data = context;
+				console.log('Nhận được data');
+				changePage(1);
+			}
+		});	
+	};
+
 </script>
