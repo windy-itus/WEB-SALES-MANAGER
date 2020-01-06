@@ -154,7 +154,7 @@ class Home {
             res.redirect('/cart')
         }
         else{
-            res.render('delivery', { title: 'thanh toán', sum: data, user: req.user });
+            res.render('info-delivery', { title: 'thanh toán', sum: data, user: req.user });
         }
     }
 }

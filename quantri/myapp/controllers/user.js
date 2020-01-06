@@ -63,6 +63,7 @@ class Account {
         const html = '<p>Bạn vừa thực hiện đăng kí tài khoản tại Đăng Khoa Store, nếu đó là bạn: <p><li><a href="http://localhost:3000/users/activate-account-' + token + '"><b>Nhấn vào đây để kích hoạt tài khoản</b></a></li>'
         const object = '[Đăng Khoa Store]-[KÍCH HOẠT TÀI KHOẢN]';
         MailConfig.SendMail(email, object, html).then((doc) => {
+          console.log(doc);
           if (doc) {
             const success = "Đăng kí thành công. Vui lòng kiểm tra email đã đăng kí để tiến hành kích hoạt tài khoản";
             res.render('login', { success });
