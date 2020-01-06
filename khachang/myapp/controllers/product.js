@@ -189,7 +189,6 @@ class Product {
     });
   }
   AddComment(req, res) {
-    console.log(req.body);
     const context = req.body.context;
     const id_product = req.body.idproduct;
     const writter = req.body.writter;

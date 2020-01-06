@@ -1,11 +1,12 @@
 const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.DATA;
 const mongoose = require('mongoose');
+const { ObjectId } = require('mongodb');
 
 mongoose.connect(uri, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  });
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
 
 var db = mongoose.connection;
 var prodSchema = new mongoose.Schema({
@@ -17,6 +18,7 @@ var prodSchema = new mongoose.Schema({
   status: String,
   amount: Number,
   date: Date,
+  note: String
 }, {
   collection: 'Order'
 });
@@ -30,32 +32,46 @@ module.exports.getOrderByQuery = function (query) {
   });
 }
 
-  module.exports.addOrder=function(order,productsIncart){
-    MongoClient.connect(uri, function (err, db) {
+module.exports.addOrder = function (order, productsIncart) {
+  MongoClient.connect(uri, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("ManagerStore");
+    dbo.collection("Order").insertOne(order, function (err, res) {
       if (err) throw err;
-      var dbo = db.db("ManagerStore");
-      dbo.collection("Order").insertOne(order, function (err, res) {
-          if (err) throw err;
-          db.close();
-      });
+      db.close();
+    });
   });
 
   MongoClient.connect(uri, function (err, db) {
     if (err) throw err;
     var dbo = db.db("ManagerStore");
     dbo.collection("ProductInOrder").insertMany(productsIncart, function (err, res) {
-        if (err) throw err;
-        db.close();
+      if (err) throw err;
+      db.close();
     });
-});
-} 
-module.exports.getOderByIDUserString=function (id) {
-   return new Promise(function(resolve, reject){
-      Order.find({}).then((docs)=>{
-      docs.forEach((doc)=>{
-         if(doc.ID_Usser==id)  resolve(doc);
-       });
-     });
-   });
-  //return Order.find({ID_Usser:id});
+  });
+}
+module.exports.getOderByIDUserString = function (id) {
+  return new Promise(function (resolve, reject) {
+    Order.findOne({ ID_Usser: ObjectId(id) }).then((docs) => {
+      resolve(doc);
+    });
+  });
+}
+module.exports.CheckStatusByQuery = (query,input) => {
+  return new Promise(function (resolve, reject) {
+    Order.updateOne(query,
+      {
+        $set: input
+      }).then(() => {
+        resolve(true);
+      });
+  });
+}
+module.exports.DeleteOrderByQuery = (query) => {
+  return new Promise(function (resolve, reject) {
+    Order.deleteOne(query).then(() => {
+        resolve(true);
+      });
+  });
 }

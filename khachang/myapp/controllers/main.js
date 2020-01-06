@@ -94,6 +94,7 @@ class Home {
         const sdt = req.body.sdt;
         const dc = req.body.address;
         const user = req.user;
+        const note=req.body.note;
         const id = user._id;
         const id_order = ID();
         const stt = 0;
@@ -121,7 +122,8 @@ class Home {
             address: dc,
             status: stt,
             amount: amou,
-            date: Day
+            date: Day,
+            note:note
         };
 
         let productsIncart = [];
@@ -154,44 +156,6 @@ class Home {
         else{
             res.render('delivery', { title: 'thanh toán', sum: data, user: req.user });
         }
-    }
-
-    async showHistory(req, res) {
-        const iduser = req.user._id;
-        let idorder = [];
-        let idproducts = [];
-        let data = [];
-        //console.log(iduser);
-        const orders = await order.find({ ID_Usser: iduser });
-        //console.log(order);
-        orders.forEach(function (doc) {
-            idorder.push(doc._id);
-        });
-
-        const products = await productInOrder.find({ _idOrder: { $in: idorder } });
-
-        products.forEach(function (doc) {
-
-            idproducts.push(doc._idProduct);
-        });
-
-        console.log(idproducts);
-
-        await Product.find({}).then((docs) => {
-            docs.forEach((doc) => {
-
-                idproducts.forEach(function (id) {
-
-                    if (id == doc._id) {
-                        data.push(doc);
-
-                    }
-                });
-            });
-        });
-
-        res.render('viewlistproducts', { data: data });
-
     }
 }
 

@@ -30,8 +30,12 @@ router.get('/info-user',ensureAuthenticated, (req, res, next)=>controller.ShowIn
 router.get('/change-info-user',ensureAuthenticated, (req, res) => controller.ShowChangeInfoUser(req, res));
 router.get('/changepassword',ensureAuthenticated,(req, res, next)=>controller.ShowChangePassword(req, res));
 router.get('/resetpassword-:token', (req,res) => controller.ShowResetPassword(req,res));
-//method post
+router.get('/history', ensureAuthenticated,(req,res)=>controller.showHistory(req,res));
 router.get('/activate-account-:token', (req,res) => controller.ActivateAccount(req,res));
+router.get('/check-order-:id',ensureAuthenticated,(req,res)=> controller.DanhDauDaNhan(req,res));
+router.get('/delete-order-:id',ensureAuthenticated,(req,res)=> controller.HuyDonHang(req,res));
+
+//method post
 router.post('/forgetpassword', (req, res, next)=>controller.SubmitForgetPassword(req, res));
 router.post('/change-info-user',ensureAuthenticated, (req, res) => controller.ChangeInfo(req, res));
 router.post('/changepassword',ensureAuthenticated, (req, res) => controller.ChangePassword(req, res));

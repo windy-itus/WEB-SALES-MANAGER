@@ -28,11 +28,9 @@ class Account {
     if (password != repassword) {
       errors.push({ msg: 'Mật khẩu không khớp' });
     }
-    await account.find({}).then(function (doc) {
-      doc.forEach(function (data) {
-        if (data.username == username) errors.push({ msg: 'Tên tài khoản đã tồn tại' });
-      })
-    });
+    await User.getOneAccount({username:username}).then(function (doc) {
+      if (doc.username == username) errors.push({ msg: 'Tên tài khoản đã tồn tại' });
+  });
     if (errors.length > 0) {
       const info={name:name,username:username,password:password,repassword:repassword,email:email,address:address,phone:phone};
       res.render('login', {
@@ -111,7 +109,7 @@ class Account {
     const email = req.body.email;
     var token;
     var msg = "";
-    await account.findOne({ email: email }).then(function (userdb) {
+    await User.getOneAccount({ email: email }).then(function (userdb) {
       var claims = {
         sub: userdb.username,
         iss: 'localhost:3000',
@@ -154,7 +152,7 @@ class Account {
         res.send("Not found");
       }
       else {
-        await account.findOne({ token: token }).then(function (doc) {
+        await account.getOneAccount({ token: token }).then(function (doc) {
           isexist = true;
         })
           .catch((err) => {

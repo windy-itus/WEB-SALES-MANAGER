@@ -83,7 +83,7 @@
 				<input type="text" id="namewritter" name="namewritter" value="{{user.name}}"
 					placeholder="Nhập tên của bạn ở đây" required>
 				<div class="input-box">
-					<input type="text" id="context" name="context" placeholder="Nhập nội dung bình luận ở đây..." />
+					<input type="text" id="context" name="context" placeholder="Nhập nội dung bình luận ở đây..." value=""/>
 				</div>
 				<div class="page-no">
 					<p>
@@ -206,6 +206,7 @@
 			var data = {};
 			data.idproduct = $('#idproduct').val();
 			data.context = $('#context').val();
+			$('#context').val("");
 			data.writter = $('#namewritter').val();
 
 			$.ajax({
@@ -216,7 +217,7 @@
 				success: function (context) {
 					console.log('Nhận được data');
 					console.log(context);
-					$('#listcomment').append($('<label class="control-label">' + data.writter + '</label><div>' + data.context + '</div>'));
+					$('#listcomment').append($('<label class="control-label">' + data.writter + '</label><div>' + context + '</div>'));
 				}
 			});
 			//$.ajax({

@@ -218,18 +218,30 @@ class Admin {
             });
         }
     }
-    async QLDongHang(req, res) {
+    async QLDonHang(req, res) {
         let data = [];
         data = await modelOrder.getOrderByQuery({});
         let Data = [];
         data.forEach(function (doc) {
+            var status;
             if (doc.status == 0) {
-                doc.status = "Chưa giao hàng";
+                status="Chưa giao hàng"
             }
             else {
-                doc.status = "Đã giao hàng";
+                if(doc.status==1)
+                status = "Đã giao hàng";
+                else status = "Đang giao hàng";
             }
-            Data.push(doc);
+            Data.push({ 
+                id: doc._id,
+                ID_Usser: doc.ID_Usser,
+                recipient: doc.recipient,
+                phone_number: doc.phone_number,
+                address: doc.address,
+                status: status,
+                amount: doc.amount,
+                date: moment(doc.date).format('LL'),
+                note: doc.note});
         })
         res.render('QLdonhang', { Data: Data, user: req.user });
     }
@@ -374,8 +386,12 @@ class Admin {
                     res.send(resultbyYear);
                 }
             }
-        });
-        
+        });  
+    }
+    async GiaoHang(req, res){
+        const id=req.params.id;
+        await modelOrder.CheckStatusByQuery({_id:id},{status:2});
+        res.redirect('/users/delivery');
     }
 }
 

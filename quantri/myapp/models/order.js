@@ -18,6 +18,7 @@ var prodSchema = new mongoose.Schema({
   status: Number,
   amount: Number,
   date: Date,
+  note: String
 }, {
   collection: 'Order'
 });
@@ -48,6 +49,16 @@ module.exports.deleteOrder = function (query) {
           db.close();
       });
     });
+  });
+}
+module.exports.CheckStatusByQuery = (query,input) => {
+  return new Promise(function (resolve, reject) {
+    Order.updateOne(query,
+      {
+        $set: input
+      }).then(() => {
+        resolve(true);
+      });
   });
 }
 

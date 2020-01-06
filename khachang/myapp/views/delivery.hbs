@@ -1,44 +1,40 @@
 <div class="main">
     <div class="content container-fluid">
         <div class="heading">
-            <h3>Thông tin khách hàng</h3>
+            <h3>Thông tin giao hàng</h3>
+            <br>
         </div>
-        {{#if status}}
-        <div style="color: red;">{{status}}</div>
-        {{/if}}
-        {{#if sum}}
-        <form action="/order" method="POST">
-            <div class="content_top col-md-12">
-                <div class="form-group">
-                    <label class="control-label" for="name">Họ và tên</label>
-                    <div class="row">
-                        <div class="col-md-6"><input class="form-control" type="text" id="name" name="name"
-                                value="{{name}}" required></div>
-                    </div>
-                    <label class="control-label" for="sdt">Số điện thoại</label>
-                    <div class="row">
-                        <div class="col-md-6"><input class="form-control" type="text" id="sdt" name="sdt"
-                                value="{{sdt}}" required></div>
-                    </div>
-                    <label class="control-label" for="adress">Địa chỉ nhận</label>
-                    <div class="row">
-                        <div class="col-md-6"><input class="form-control" type="text" id="address" name="address"
-                                value="{{address}}" required></div>
-                    </div>
-                    <label class="control-label" for="adress">Tổng tiền</label>
-                    <div class="row">
-                        <div class="col-md-6"><input class="form-control" type="input" id="sum" name="sum"
-                                value="{{sum}}" readonly /></div>
-                    </div>
-                    <label class="control-label" for="note">Ghi chú</label>
-                    <div class="row">
-                        <div class="col-md-6"><input class="form-control" type="text" id="note" name="note"
-                                placeholder="Điền thông tin giao hàng mà bạn muốn cửa hàng lưu ý"></div>
-                    </div>
-                    <br>
-                    <button class="btn btn-primary btn-sm" type="submit">Xác nhận</button>
-                </div>
-        </form>
-        {{/if}}
+        <div class="clear"></div>
+        <div class=" content_top table-responsive col-md-12">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th><b>Ngày đặt</b></th>
+                        <th><b>Các sản phẩm</b></th>
+                        <th><b>Trạng thái</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#if Data}}
+                    {{#each Data}}
+                    <tr>
+                        <td>{{this.date}}</td>
+                        <td>
+                            {{#each this.listproduct}}
+                                <li>{{this.name}}</li>
+                                <br>
+                            {{/each}}
+                        </td>
+                        <td>{{this.status}}</td>
+                        <td><a href="/users/check-order-{{this.id}}"> <button class="Button" type="submit"> Đánh dấu đã nhận
+                                </button></a></td>
+                        <td><a href="/users/delete-order-{{this.id}}"> <button class="Button" type="submit"> Hủy đơn hàng
+                                </button></a></td>
+                    </tr>
+                    {{/each}}
+                    {{/if}}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

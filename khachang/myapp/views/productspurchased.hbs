@@ -1,38 +1,46 @@
-<div class="main">
-    <div class="content container-fluid">
-        <div class="heading">
-    		<h3>Lịch sử mua hàng</h3>
-    	</div>
-        <div class="content_top col-md-12">
-            <div class="form-inline">
-                <div class="grid images_3_of_2">
-				    <img src="images/preview-img.jpg" alt="" />
-				</div>
-                <div class="form-group">
-                    <label><a href="#">Tivi Samsung 43 inch UA43R600</a></label>
-                    <div><label>Giá: 8.900.000 đ</label></div>
-                    <div><label for="name">Họ và tên</label></div>
-                    <div class="row">
-                        <div class="col-md-3"><input class="form-control" type="text" id="name"></div>  
-                    </div>
-                    <label for="sdt">Số điện thoại</label>
-                    <div class="row">
-                        <div class="col-md-3"><input class="form-control" type="text" id="sdt"></div>  
-                    </div>
-                    <label for="adress">Địa chỉ nhận</label>
-                    <div class="row">
-                        <div class="col-md-3"><input class="form-control" type="text" id="adress"></div>  
-                    </div>
+<h2 class="text-center">Sản phẩm đã mua</h2>
+<div class="container" style="background-color: white;">
 
-                    <label for="status">Trạng thái</label>
-                    <div class="row">
-                        <div class="col-md-3"><input class="form-control" type="text" value="Đã giao" id="status"></div>  
-                    </div>
-                    <br>
-                    <a href="#"><button class="btn btn-primary btn-sm" type="button">Xóa</button></a>
-            </div>
-            </div>
-
-        </div>
-    </div>
+    <table id="cart" class="table table-hover table-condensed">
+        {{#if data}}
+        {{#each data}}
+        <thead>
+            <tr>
+                <th style="width:50%">Tên sản phẩm</th>
+                <th style="width:10%">Giá</th>
+                <th style="width:8%">Số lượng</th>
+                <th style="width:22%" class="text-center">Thành tiền</th>
+                <th style="width:10%"> </th>
+            </tr>
+        </thead>
+        <tbody style="background-color:white;">
+            <form method="POST" action="/delete/{{this._id}}">
+                <tr>
+                    <td data-th="Product">
+                        <div class="row">
+                            <div class="col-sm-2 hidden-xs"><a href="/products/detail/{{this._id}}"><img src="{{this.image_link}}" alt="Sản phẩm 1"
+                                    class="img-responsive" width="100"></a>
+                            </div>
+                            <div class="col-sm-10">
+                                <h4 class="nomargin">{{this.name}}</h4>
+                                <p>{{this.description}}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-th="Price">{{this.price}}</td>
+                    <td data-th="Quantity"><input class="form-control text-center" value="1" type="number">
+                    </td>
+                    <td data-th="Subtotal" class="text-center">{{this.price}}</td>
+                </tr>
+            </form>
+            {{/each}}
+            {{else}} <div class="text-center">Không có gì trong gian hàng</div>
+            {{/if}}
+            <tr>
+                    <td><a href="/home" class="btn btn-warning"><i class="fa fa-angle-left"></i> Tiếp tục mua hàng</a>
+                    </td>
+            </tr>
+            </tfoot>
+        </tbody>
+    </table>
 </div>

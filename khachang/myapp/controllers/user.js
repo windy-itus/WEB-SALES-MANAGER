@@ -5,6 +5,11 @@ var nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const MailConfig = require('../config/mail');
+const modelOrder=require('../models/order');
+const modelProductinOrder=require('../models/product_in_order');
+const modelProduct=require('../models/product');
+const moment = require('moment');
+moment.locale('vi');
 
 
 class Account {
@@ -28,10 +33,8 @@ class Account {
     if (password != repassword) {
       errors.push({ msg: 'Mật khẩu không khớp' });
     }
-    await account.find({}).then(function (doc) {
-      doc.forEach(function (data) {
-        if (data.username == username) errors.push({ msg: 'Tên tài khoản đã tồn tại' });
-      })
+    await User.getOneAccount({username:username}).then(function (doc) {
+        if (doc.username == username) errors.push({ msg: 'Tên tài khoản đã tồn tại' });
     });
     if (errors.length > 0) {
       const info={name:name,username:username,password:password,repassword:repassword,email:email,address:address,phone:phone};
@@ -95,6 +98,17 @@ class Account {
       }
     });
   }
+  async DanhDauDaNhan(req,res){
+    const id=req.params.id;
+    await modelOrder.CheckStatusByQuery({_id:id},{status:1});
+    res.redirect('/users/delivery');
+  }
+  async HuyDonHang(req,res){
+    const id=req.params.id;
+    await modelOrder.DeleteOrderByQuery({_id:id});
+    await modelProductinOrder.deleteProductInOrder({_idOrder:id});
+    res.redirect('/users/delivery');
+  }
   ShowLogin(req, res, msg) {
     res.render('login', { title: 'Đăng nhập/Đăng ký', notice: msg, user:req.user,username:req.params.username});
   }
@@ -105,7 +119,7 @@ class Account {
     const email = req.body.email;
     var token;
     var msg = "";
-    await account.findOne({ email: email }).then(function (userdb) {
+    await User.getOneAccount({ email: email }).then(function (userdb) {
       var claims = {
         sub: userdb.username,
         iss: 'localhost:3000',
@@ -148,7 +162,7 @@ class Account {
         res.send("Not found");
       }
       else {
-        await account.findOne({ token: token }).then(function (doc) {
+        await User.getOneAccount({ token: token }).then(function (doc) {
           isexist = true;
         })
           .catch((err) => {
@@ -193,13 +207,58 @@ class Account {
     }
   }
 
-  ShowDelivery(req, res) {
-    res.render('delivery', { title: 'Thông tin giao hàng', user: req.user });
+  async ShowDelivery(req, res) {
+    var data = [];
+    data = await modelOrder.getOrderByQuery({});
+    var Data = [];
+    for await(var doc of data){
+        if (doc.status != 1) {
+            if(doc.status==0) doc.status="Chưa giao hàng";
+            else doc.status="Đang giao hàng";
+            var listproduct=[];
+            var listidproduct=await modelProductinOrder.getProductInOrderByQuery({_idOrder:doc._id});
+            for await(var id of listidproduct){ 
+              await modelProduct.getProductByIDString(id._idProduct).then((product)=>{
+                listproduct.push(product);
+              });
+            }
+            Data.push({date:doc.date=moment(doc.date).format('LL'),status:doc.status,id:doc._id,listproduct:listproduct});
+        }
+    }
+    res.render('delivery', { title: 'Thông tin giao hàng', Data: Data, user: req.user });
   }
 
-  ShowProductPurchased(req, res) {
-    res.render('productspurchased', { title: 'Lịch sử giao hàng', user: req.user });
-  }
+  async showHistory(req, res) {
+    const iduser = req.user._id;
+    let idorder = [];
+    let idproducts = [];
+    let data = [];
+    //console.log(iduser);
+    const orders = await modelOrder.getOrderByQuery({ ID_Usser: iduser });
+    //console.log(order);
+    orders.forEach(function (doc) {
+        if(doc.status==1)
+        idorder.push(doc._id);
+    });
+
+    const products = await modelProductinOrder.getProductInOrderByQuery({ _idOrder: { $in: idorder } });
+
+    products.forEach(function (doc) {
+        idproducts.push(doc._idProduct);
+    });
+    await modelProduct.getListProductByQuery({}).then((docs) => {
+        docs.forEach((doc) => {
+            idproducts.forEach(function (id) {
+                if (id == doc._id) {
+                    data.push(doc);
+                }
+            });
+        });
+    });
+
+    res.render('productspurchased', { title:'Sản phẩm đã mua',data: data, user:req.user });
+
+}
   ShowInfoUser(req, res) {
     res.render('informationaccount', { title: 'Thông tin tài khoản', user: req.user });
   }
