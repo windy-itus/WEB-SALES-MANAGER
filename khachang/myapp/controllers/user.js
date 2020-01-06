@@ -146,7 +146,7 @@ class Account {
           res.render('forgetpassword', { title: 'Xác thực tài khoản', user: req.user, msg });
         }
         else {
-          errorr = "Hiện tại hệ thống không thể hỗ trợ bạn khôi phục mật khẩu. Bạn có thể thử lại lần sau!";
+          msg = "Hiện tại hệ thống không thể hỗ trợ bạn khôi phục mật khẩu. Bạn có thể thử lại lần sau!";
           res.render('forgetpassword', { title: 'Xác thực tài khoản', user: req.user, msg });
         }
       });

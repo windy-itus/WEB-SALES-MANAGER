@@ -4,7 +4,7 @@ const jwt=require('jsonwebtoken');
 var transporter = nodemailer.createTransport({ // config mail server
     service: 'Gmail',
     auth: {
-      user: 'ad.appcreater@gmail.com',
+      user: 'newwindofitus@gmail.com',
       pass: 'qwertyuiop@123456789'
     }
 });
