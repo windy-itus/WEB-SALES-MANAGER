@@ -34,7 +34,7 @@ class Account {
       errors.push({ msg: 'Mật khẩu không khớp' });
     }
     await User.getOneAccount({username:username}).then(function (doc) {
-        if (doc.username == username) errors.push({ msg: 'Tên tài khoản đã tồn tại' });
+      if (doc!=null||doc!= undefined) errors.push({ msg: 'Tên tài khoản đã tồn tại' });
     });
     if (errors.length > 0) {
       const info={name:name,username:username,password:password,repassword:repassword,email:email,address:address,phone:phone};
