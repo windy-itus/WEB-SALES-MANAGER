@@ -28,11 +28,14 @@ class Account {
     if (password != repassword) {
       errors.push({ msg: 'Mật khẩu không khớp' });
     }
-    await User.getOneAccount({username:username}).then(function (doc) {
-      if (doc!=null||doc!= undefined) errors.push({ msg: 'Tên tài khoản đã tồn tại' });
-  });
+    await User.getOneAccount({ username: username }).then(function (doc) {
+      if (doc != null || doc != undefined) errors.push({ msg: 'Tên tài khoản đã tồn tại' });
+    });
+    await User.getOneAccount({ email: email }).then(function (doc) {
+      if (doc != null || doc != undefined) errors.push({ msg: 'Email của bạn đã được sử dụng' });
+    });
     if (errors.length > 0) {
-      const info={name:name,username:username,password:password,repassword:repassword,email:email,address:address,phone:phone};
+      const info = { name: name, username: username, password: password, repassword: repassword, email: email, address: address, phone: phone };
       res.render('login', {
         data: errors,
         info
@@ -95,13 +98,13 @@ class Account {
     });
   }
   ShowLogin(req, res, msg) {
-    if(req.user!=undefined&&req.user!=null) res.redirect('/admin/home');
-    else res.render('login', { title: 'Đăng nhập/Đăng ký', notice: msg, user:req.user,username:req.params.username});
+    if (req.user != undefined && req.user != null) res.redirect('/admin/home');
+    else res.render('login', { title: 'Đăng nhập/Đăng ký', notice: msg, user: req.user, username: req.params.username });
   }
-  ShowLogOut(req, res){
+  ShowLogOut(req, res) {
     req.logout();
     req.session.destroy();
-    res.render('login', { title: 'Đăng xuất'});
+    res.render('login', { title: 'Đăng xuất' });
   }
   ForGetPassWord(req, res) {
     res.render('forgetpassword', { title: 'Quên mật khẩu', user: req.user });
@@ -153,7 +156,7 @@ class Account {
         res.send("Not found");
       }
       else {
-        await account.getOneAccount({ token: token }).then(function (doc) {
+        await User.getOneAccount({ token: token }).then(function (doc) {
           isexist = true;
         })
           .catch((err) => {
@@ -235,7 +238,7 @@ class Account {
         res.render('changeinfo', { title: 'Thông tin tài khoản', info: user, data: errors, password });
       }
       else {
-        User.UpdateInfoAccount(user, iduser);
+        User.UpdateInfoAccount(user, { _id: iduser });
         var success = "Thay đổi thành công";
         res.render('changeinfo', { title: 'Thông tin tài khoản', info: user, success });
       }
@@ -268,7 +271,7 @@ class Account {
       }
       else {
         await User.hashPassword(newpassword).then(function (doc) {
-          User.UpdateInfoAccount({ password: doc }, iduser);
+          User.UpdateInfoAccount({ password: doc }, { _id: iduser });
           var success = "Thay đổi thành công";
           res.render('changepassword', { title: 'Thay đổi mật khẩu', user: req.user, success });
         });

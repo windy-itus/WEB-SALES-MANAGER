@@ -17,7 +17,7 @@ router.post('/login', function (req, res, next) {
   passport.authenticate('local', { successRedirect: '/admin/home', failureRedirect: '/users/login-fail-'+req.body.username })(req, res, next);
 });
 router.get('/login-fail-:username', (req, res) => controller.ShowLogin(req, res, "Vui lòng nhập đúng tài khoản và mật khẩu đã đăng kí"));
-
+router.get('/login-fail-', (req, res) => controller.ShowLogin(req, res, "Vui lòng nhập đúng tài khoản và mật khẩu đã đăng kí"));
 //Handler register
 router.post('/register-form',(req, res) => controller.Register(req, res));
 

@@ -143,7 +143,7 @@ class Home {
                 mess = success;
                 Order.addOrder(order, productsIncart);
                 await modelCart.deleteManyCart({ id_user: req.user.username }).then(() => {
-                    res.render('delivery', { status: mess, user: req.user });
+                    res.render('info-delivery', { status: mess, user: req.user });
                 });
         }
     }

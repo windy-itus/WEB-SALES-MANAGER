@@ -36,6 +36,9 @@ class Account {
     await User.getOneAccount({username:username}).then(function (doc) {
       if (doc!=null||doc!= undefined) errors.push({ msg: 'Tên tài khoản đã tồn tại' });
     });
+    await User.getOneAccount({ email: email }).then(function (doc) {
+      if (doc != null || doc != undefined) errors.push({ msg: 'Email của bạn đã được sử dụng' });
+    });
     if (errors.length > 0) {
       const info={name:name,username:username,password:password,repassword:repassword,email:email,address:address,phone:phone};
       res.render('login', {
@@ -212,9 +215,10 @@ class Account {
     data = await modelOrder.getOrderByQuery({});
     var Data = [];
     for await(var doc of data){
+      var status="";
         if (doc.status != 1) {
-            if(doc.status==0) doc.status="Chưa giao hàng";
-            else doc.status="Đang giao hàng";
+            if(doc.status==0) status="Chưa giao hàng";
+            else status="Đang giao hàng";
             var listproduct=[];
             var listidproduct=await modelProductinOrder.getProductInOrderByQuery({_idOrder:doc._id});
             for await(var id of listidproduct){ 
@@ -222,7 +226,7 @@ class Account {
                 listproduct.push(product);
               });
             }
-            Data.push({date:doc.date=moment(doc.date).format('LL'),status:doc.status,id:doc._id,listproduct:listproduct});
+            Data.push({date:doc.date=moment(doc.date).format('LL'),status:status,id:doc._id,listproduct:listproduct});
         }
     }
     res.render('delivery', { title: 'Thông tin giao hàng', Data: Data, user: req.user });
@@ -289,7 +293,7 @@ class Account {
         res.render('changeinfo', { title: 'Thông tin tài khoản', info: user, data: errors, password });
       }
       else {
-        User.UpdateInfoAccount(user, iduser);
+        User.UpdateInfoAccount(user, {_id:iduser});
         var success = "Thay đổi thành công";
         res.render('changeinfo', { title: 'Thông tin tài khoản', info: user, success });
       }
@@ -322,7 +326,7 @@ class Account {
       }
       else {
         await User.hashPassword(newpassword).then(function (doc) {
-          User.UpdateInfoAccount({ password: doc }, iduser);
+          User.UpdateInfoAccount({ password: doc }, {_id:iduser});
           var success = "Thay đổi thành công";
           res.render('changepassword', { title: 'Thay đổi mật khẩu', user: req.user, success });
         });

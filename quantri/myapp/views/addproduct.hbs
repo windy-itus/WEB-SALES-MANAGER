@@ -13,7 +13,7 @@
                     <label for="masp" class="col-sm-2 col-form-label">ID loại sản phẩm</label>
                     <div class="col-sm-7">
                         <select id="cate" name="Category">
-                            <option value="0">Chọn loại sản phẩm</option>
+                            <option value="0" disabled>Chọn loại sản phẩm</option>
                             {{#if Categories}}
                             {{#each Categories}}
                             <option value="{{this.id}}">{{this.name}}</option>
@@ -77,7 +77,7 @@
 </div>
 <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
 <script>
-    var typeselected = "{{idcategory}}";
+    var typeselected = "{{idcategorychoose}}";
     document.getElementById("cate").selectedIndex = typeselected;
 </script>
 <script src="/javascripts/import-new-products.js"></script>

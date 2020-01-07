@@ -110,3 +110,19 @@ module.exports.hashPassword = async (password) => {
         throw new Error('Hashing failed', error)
     }
 }
+module.exports.count=function(query){
+  return new Promise(function(resolve, reject){
+    User.count(query).then((docs)=>{
+      resolve(docs);
+    });
+  });
+};
+module.exports.getListUserByIf = function (query, prodPerPage, pageNo) {
+  return new Promise(function (resolve, reject) {
+    User.find(query)
+      .limit(prodPerPage)
+      .skip(prodPerPage * (pageNo - 1)).then((docs) => {
+        resolve(docs);
+      });
+  });
+}

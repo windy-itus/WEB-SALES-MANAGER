@@ -12,25 +12,46 @@ const modelStatistic = require('../models/statistic');
 const moment = require('moment');
 var dateFormat = require('dateformat');
 moment.locale('vi');
+const {ObjectId} = require('mongodb');
 
 const prodPerPage = 6; // product per page
 
 class Admin {
     async ShowListUser(req, res) {
+        //Phân trang
+        var pageNo = 1; // always start at page 1
+        var pageDirect = "";
+        if (!isEmpty(req.query.PageNext)) {
+            pageNo = Number(req.query.PageNext);
+            pageDirect = "page-next";
+        } else if (!isEmpty(req.query.PagePrev)) {
+            pageNo = Number(req.query.PagePrev);
+            pageDirect = "page-prev";
+        }
+        // Count how many products were found
+        const numOfUser = await modelUser.count({});
+        // Total page numbers
+        const totalPageNum = Math.ceil(numOfUser / prodPerPage);
+        // Page number management
+        if (pageDirect === "page-next") {
+            if (pageNo !== totalPageNum) pageNo = pageNo + 1;
+        } else if (pageDirect === "page-prev") {
+            if (pageNo !== 1) pageNo = pageNo - 1;
+        }
         var listuser = [];
-        modelUser.getListAccountByQuery({}).then((docs) => {
+        modelUser.getListUserByIf({},prodPerPage,pageNo).then((docs) => {
             docs.forEach((doc) => {
                 if (doc.username != req.user.username) {
                     listuser.push(doc);
                 }
             });
-            res.render('useraccounts', { title: 'Danh sách tài khoản người dùng', listacc: listuser, user: req.user });
+            res.render('useraccounts', { title: 'Danh sách tài khoản người dùng', listacc: listuser, user: req.user,currentPage: totalPageNum === 0 ? totalPageNum : pageNo,pages: totalPageNum, });
         });
     }
     LockOrUnlock(req, res) {
         const username = req.params.username;
         modelUser.getOneAccount({ username: username }).then((doc) => {
-            modelUser.UpdateInfoAccount({ lock: !doc.lock }, doc._id).then((result) => {
+            modelUser.UpdateInfoAccount({ lock: !doc.lock }, {_id:doc._id}).then((result) => {
                 res.redirect("/admin/user-account");
             });
         });
@@ -38,7 +59,7 @@ class Admin {
     LockOrUnlockDetail(req, res) {
         const username = req.params.username;
         modelUser.getOneAccount({ username: username }).then((doc) => {
-            modelUser.UpdateInfoAccount({ lock: !doc.lock }, doc._id).then((result) => {
+            modelUser.UpdateInfoAccount({ lock: !doc.lock }, {_id:doc._id}).then((result) => {
                 res.redirect("/admin/detail-info-" + username);
             });
         });
@@ -94,11 +115,10 @@ class Admin {
         const data = await modelProduct.getListProductByIf(query, sort, prodPerPage, pageNo);
         // Get category name
         cateName = await modelProduct.getCategoryName(id);
-
         res.render('listproduct', {
             title: 'Sản phẩm gian hàng',
             listproduct: data,
-            idcategory: data[0].id_category,
+            idcategory: id,
             user: req.user,
             selPriceRange: price,
             selectedSort: sortId,
@@ -136,7 +156,7 @@ class Admin {
         var id = req.body.id;
         if (id == undefined || id == null) id = req.params.id;
         modelProduct.getProductByIDString(id).then((result) => {
-            modelProduct.DeleteOneProduct({ _id: result._id }).then((doc) => {
+            modelProduct.DeleteOneProduct({ _id: ObjectId(id)}).then((doc) => {
                 if (doc) console.log("xóa thành công");
                 res.redirect('/admin/products-' + result.id_category);
             });
@@ -203,18 +223,16 @@ class Admin {
             });
         }
         else {
-            modelProduct.getProductByIDString(id).then((result) => {
-                modelProduct.UpdateOneProduct({
-                    name: name,
-                    description: description,
-                    image_link: image,
-                    count: count,
-                    discount: discount,
-                    price: price
-                }, { _id: result._id }).then((doc) => {
-                    if (doc) console.log("Sửa thành công");
-                    res.redirect('/admin/detail-product-' + id);
-                });
+            modelProduct.UpdateOneProduct({
+                name: name,
+                description: description,
+                image_link: image,
+                count: count,
+                discount: discount,
+                price: price
+            }, { _id: ObjectId(id)}).then((doc) => {
+                if (doc) console.log("Sửa thành công");
+                res.redirect('/admin/detail-product-' + id);
             });
         }
     }
@@ -322,7 +340,7 @@ class Admin {
                         ans[value.month] = { time: 'Tháng ' + value.month + ' Năm ' + value.year, count: 0, doanhthu: 0, year: value.year };
                         resultbyMonth.push(ans[value.month]);
                     }
-                    ans[value.month].count++;
+                    ans[value.month].count+=value.count;
                     ans[value.month].doanhthu += value.doanhthu;
                     return ans;
                 }, {});
@@ -335,7 +353,7 @@ class Admin {
                             ans[value.year] = { time: 'Năm ' + value.year, count: 0, doanhthu: 0 };
                             resultbyYear.push(ans[value.year]);
                         }
-                        ans[value.year].count++;
+                        ans[value.year].count+=value.count;
                         ans[value.year].doanhthu += value.doanhthu;
                         return ans;
                     }, {});
@@ -367,7 +385,7 @@ class Admin {
                         ans[value.month] = { time: 'Tháng ' + value.month + ' Năm ' + value.year, count: 0, doanhthu: 0, year: value.year };
                         resultbyMonth.push(ans[value.month]);
                     }
-                    ans[value.month].count++;
+                    ans[value.month].count+=value.count;
                     ans[value.month].doanhthu += value.doanhthu;
                     return ans;
                 }, {});
@@ -379,7 +397,7 @@ class Admin {
                             ans[value.year] = { time: 'Năm ' + value.year, count: 0, doanhthu: 0 };
                             resultbyYear.push(ans[value.year]);
                         }
-                        ans[value.year].count++;
+                        ans[value.year].count+=value.count;
                         ans[value.year].doanhthu += value.doanhthu;
                         return ans;
                     }, {});
@@ -388,10 +406,12 @@ class Admin {
             }
         });  
     }
-    async GiaoHang(req, res){
+    GiaoHang(req, res){
         const id=req.params.id;
-        await modelOrder.CheckStatusByQuery({_id:id},{status:2});
-        res.redirect('/users/delivery');
+        modelOrder.getOneOrderByQuery({_id:id}).then(async (doc)=>{
+            if(doc.status==0) await modelOrder.CheckStatusByQuery({_id:id},{status:2});
+            res.redirect('/admin/qldonhang');
+        });
     }
 }
 

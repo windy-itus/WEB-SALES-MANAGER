@@ -178,7 +178,7 @@ class Product {
     const data = await modelProduct.getListProductByQuery({ name: regex });
     res.render('viewlistproducts', {
       data: data,
-      user: req.session.username,
+      user: req.user,
       priceRange: priceRange,
       sortOpts: sortOpts,
       selPriceRange: 0,
