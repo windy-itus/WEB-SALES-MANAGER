@@ -212,7 +212,7 @@ class Account {
 
   async ShowDelivery(req, res) {
     var data = [];
-    data = await modelOrder.getOrderByQuery({});
+    data = await modelOrder.getOrderByQuery({ID_Usser:req.user._id});
     var Data = [];
     for await(var doc of data){
       var status="";
